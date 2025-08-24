@@ -1,0 +1,16 @@
+<RCC>
+  <qresource prefix="/KeyDash_NX1000/">
+    <file alias="Main.qml">D:/QtProjects/KeyDash_NX1000/Main.qml</file>
+    <file alias="assets/DashBlank.png">D:/QtProjects/KeyDash_NX1000/assets/DashBlank.png</file>
+    <file alias="assets/Tachometer_Full.png">D:/QtProjects/KeyDash_NX1000/assets/Tachometer_Full.png</file>
+    <file alias="assets/ShiftIcon.png">D:/QtProjects/KeyDash_NX1000/assets/ShiftIcon.png</file>
+    <file alias="assets/CEL_On.png">D:/QtProjects/KeyDash_NX1000/assets/CEL_On.png</file>
+    <file alias="assets/TractionControl_On.png">D:/QtProjects/KeyDash_NX1000/assets/TractionControl_On.png</file>
+    <file alias="assets/Headlight_On.png">D:/QtProjects/KeyDash_NX1000/assets/Headlight_On.png</file>
+    <file alias="assets/LeftTurnSignal_On.png">D:/QtProjects/KeyDash_NX1000/assets/LeftTurnSignal_On.png</file>
+    <file alias="assets/RightTurnSignal_On.png">D:/QtProjects/KeyDash_NX1000/assets/RightTurnSignal_On.png</file>
+    <file alias="fonts/NeuropolX_Lite.ttf">D:/QtProjects/KeyDash_NX1000/fonts/NeuropolX_Lite.ttf</file>
+    <file alias="fonts/NeuropolX_Italic.ttf">D:/QtProjects/KeyDash_NX1000/fonts/NeuropolX_Italic.ttf</file>
+  </qresource>
+</RCC>
+

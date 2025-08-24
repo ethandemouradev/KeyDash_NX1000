@@ -1,0 +1,5 @@
+module KeyDash_NX1000
+typeinfo appKeyDash_NX1000.qmltypes
+prefer :/KeyDash_NX1000/
+Main 1.0 Main.qml
+
