@@ -30,7 +30,7 @@ class DashModel : public QObject {
     Q_PROPERTY(double finalDrive READ finalDrive WRITE setFinalDrive NOTIFY finalDriveChanged)
 
 public:
-    explicit DashModel(QObject* parent=nullptr) : QObject(parent) {}
+    explicit DashModel(QObject* parent=nullptr);
 
     // getters
     bool   useMph()     const { return m_useMph; }
