@@ -6,7 +6,20 @@
             "methods": [
                 {
                     "access": "public",
-                    "index": 33,
+                    "arguments": [
+                        {
+                            "name": "gear",
+                            "type": "int"
+                        }
+                    ],
+                    "index": 43,
+                    "isConst": true,
+                    "name": "gearRatio",
+                    "returnType": "double"
+                },
+                {
+                    "access": "public",
+                    "index": 44,
                     "name": "resetTrip",
                     "returnType": "void"
                 }
@@ -252,6 +265,51 @@
                     "type": "bool",
                     "user": false,
                     "write": "setTcsOn"
+                },
+                {
+                    "constant": false,
+                    "designable": true,
+                    "final": false,
+                    "index": 16,
+                    "name": "useMph",
+                    "notify": "useMphChanged",
+                    "read": "useMph",
+                    "required": false,
+                    "scriptable": true,
+                    "stored": true,
+                    "type": "bool",
+                    "user": false,
+                    "write": "setUseMph"
+                },
+                {
+                    "constant": false,
+                    "designable": true,
+                    "final": false,
+                    "index": 17,
+                    "name": "rpmMax",
+                    "notify": "rpmMaxChanged",
+                    "read": "rpmMax",
+                    "required": false,
+                    "scriptable": true,
+                    "stored": true,
+                    "type": "int",
+                    "user": false,
+                    "write": "setRpmMax"
+                },
+                {
+                    "constant": false,
+                    "designable": true,
+                    "final": false,
+                    "index": 18,
+                    "name": "finalDrive",
+                    "notify": "finalDriveChanged",
+                    "read": "finalDrive",
+                    "required": false,
+                    "scriptable": true,
+                    "stored": true,
+                    "type": "double",
+                    "user": false,
+                    "write": "setFinalDrive"
                 }
             ],
             "qualifiedClassName": "DashModel",
@@ -351,6 +409,40 @@
                     "index": 15,
                     "name": "tcsOnChanged",
                     "returnType": "void"
+                },
+                {
+                    "access": "public",
+                    "index": 16,
+                    "name": "useMphChanged",
+                    "returnType": "void"
+                },
+                {
+                    "access": "public",
+                    "index": 17,
+                    "name": "rpmMaxChanged",
+                    "returnType": "void"
+                },
+                {
+                    "access": "public",
+                    "index": 18,
+                    "name": "finalDriveChanged",
+                    "returnType": "void"
+                },
+                {
+                    "access": "public",
+                    "arguments": [
+                        {
+                            "name": "gear",
+                            "type": "int"
+                        },
+                        {
+                            "name": "ratio",
+                            "type": "double"
+                        }
+                    ],
+                    "index": 19,
+                    "name": "gearRatioChanged",
+                    "returnType": "void"
                 }
             ],
             "slots": [
@@ -359,59 +451,11 @@
                     "arguments": [
                         {
                             "name": "v",
-                            "type": "double"
-                        }
-                    ],
-                    "index": 16,
-                    "name": "setSpeed",
-                    "returnType": "void"
-                },
-                {
-                    "access": "public",
-                    "arguments": [
-                        {
-                            "name": "v",
-                            "type": "double"
-                        }
-                    ],
-                    "index": 17,
-                    "name": "setRpm",
-                    "returnType": "void"
-                },
-                {
-                    "access": "public",
-                    "arguments": [
-                        {
-                            "name": "v",
-                            "type": "double"
-                        }
-                    ],
-                    "index": 18,
-                    "name": "setBoost",
-                    "returnType": "void"
-                },
-                {
-                    "access": "public",
-                    "arguments": [
-                        {
-                            "name": "v",
-                            "type": "double"
-                        }
-                    ],
-                    "index": 19,
-                    "name": "setClt",
-                    "returnType": "void"
-                },
-                {
-                    "access": "public",
-                    "arguments": [
-                        {
-                            "name": "v",
-                            "type": "double"
+                            "type": "bool"
                         }
                     ],
                     "index": 20,
-                    "name": "setIat",
+                    "name": "setUseMph",
                     "returnType": "void"
                 },
                 {
@@ -419,11 +463,11 @@
                     "arguments": [
                         {
                             "name": "v",
-                            "type": "double"
+                            "type": "int"
                         }
                     ],
                     "index": 21,
-                    "name": "setVbat",
+                    "name": "setRpmMax",
                     "returnType": "void"
                 },
                 {
@@ -435,7 +479,7 @@
                         }
                     ],
                     "index": 22,
-                    "name": "setAfr",
+                    "name": "setFinalDrive",
                     "returnType": "void"
                 },
                 {
@@ -443,23 +487,23 @@
                     "arguments": [
                         {
                             "name": "v",
-                            "type": "int"
+                            "type": "double"
                         }
                     ],
                     "index": 23,
-                    "name": "setGear",
+                    "name": "setSpeed",
                     "returnType": "void"
                 },
                 {
                     "access": "public",
                     "arguments": [
                         {
-                            "name": "s",
-                            "type": "QString"
+                            "name": "v",
+                            "type": "double"
                         }
                     ],
                     "index": 24,
-                    "name": "setDateTimeString",
+                    "name": "setRpm",
                     "returnType": "void"
                 },
                 {
@@ -471,7 +515,7 @@
                         }
                     ],
                     "index": 25,
-                    "name": "setOdo",
+                    "name": "setBoost",
                     "returnType": "void"
                 },
                 {
@@ -483,6 +527,90 @@
                         }
                     ],
                     "index": 26,
+                    "name": "setClt",
+                    "returnType": "void"
+                },
+                {
+                    "access": "public",
+                    "arguments": [
+                        {
+                            "name": "v",
+                            "type": "double"
+                        }
+                    ],
+                    "index": 27,
+                    "name": "setIat",
+                    "returnType": "void"
+                },
+                {
+                    "access": "public",
+                    "arguments": [
+                        {
+                            "name": "v",
+                            "type": "double"
+                        }
+                    ],
+                    "index": 28,
+                    "name": "setVbat",
+                    "returnType": "void"
+                },
+                {
+                    "access": "public",
+                    "arguments": [
+                        {
+                            "name": "v",
+                            "type": "double"
+                        }
+                    ],
+                    "index": 29,
+                    "name": "setAfr",
+                    "returnType": "void"
+                },
+                {
+                    "access": "public",
+                    "arguments": [
+                        {
+                            "name": "v",
+                            "type": "int"
+                        }
+                    ],
+                    "index": 30,
+                    "name": "setGear",
+                    "returnType": "void"
+                },
+                {
+                    "access": "public",
+                    "arguments": [
+                        {
+                            "name": "s",
+                            "type": "QString"
+                        }
+                    ],
+                    "index": 31,
+                    "name": "setDateTimeString",
+                    "returnType": "void"
+                },
+                {
+                    "access": "public",
+                    "arguments": [
+                        {
+                            "name": "v",
+                            "type": "double"
+                        }
+                    ],
+                    "index": 32,
+                    "name": "setOdo",
+                    "returnType": "void"
+                },
+                {
+                    "access": "public",
+                    "arguments": [
+                        {
+                            "name": "v",
+                            "type": "double"
+                        }
+                    ],
+                    "index": 33,
                     "name": "setTrip",
                     "returnType": "void"
                 },
@@ -494,7 +622,7 @@
                             "type": "bool"
                         }
                     ],
-                    "index": 27,
+                    "index": 34,
                     "name": "setLeftSignal",
                     "returnType": "void"
                 },
@@ -506,7 +634,7 @@
                             "type": "bool"
                         }
                     ],
-                    "index": 28,
+                    "index": 35,
                     "name": "setRightSignal",
                     "returnType": "void"
                 },
@@ -518,7 +646,7 @@
                             "type": "bool"
                         }
                     ],
-                    "index": 29,
+                    "index": 36,
                     "name": "setHeadlightsOn",
                     "returnType": "void"
                 },
@@ -530,7 +658,7 @@
                             "type": "bool"
                         }
                     ],
-                    "index": 30,
+                    "index": 37,
                     "name": "setCelOn",
                     "returnType": "void"
                 },
@@ -542,7 +670,7 @@
                             "type": "bool"
                         }
                     ],
-                    "index": 31,
+                    "index": 38,
                     "name": "setTcsOn",
                     "returnType": "void"
                 },
@@ -582,9 +710,44 @@
                             "type": "int"
                         }
                     ],
-                    "index": 32,
+                    "index": 39,
                     "name": "applySample",
                     "returnType": "void"
+                },
+                {
+                    "access": "public",
+                    "arguments": [
+                        {
+                            "name": "gear",
+                            "type": "int"
+                        },
+                        {
+                            "name": "ratio",
+                            "type": "double"
+                        }
+                    ],
+                    "index": 40,
+                    "name": "setGearRatio",
+                    "returnType": "void"
+                },
+                {
+                    "access": "public",
+                    "arguments": [
+                        {
+                            "name": "path",
+                            "type": "QString"
+                        }
+                    ],
+                    "index": 41,
+                    "name": "loadVehicleConfig",
+                    "returnType": "bool"
+                },
+                {
+                    "access": "public",
+                    "index": 42,
+                    "isCloned": true,
+                    "name": "loadVehicleConfig",
+                    "returnType": "bool"
                 }
             ],
             "superClasses": [

@@ -20,6 +20,7 @@ int main(int argc, char *argv[]) {
     QCoreApplication::setOrganizationName("KeyDash");
     QCoreApplication::setOrganizationDomain("keydash.local");
     QCoreApplication::setApplicationName("KeyDash_NX1000");
+    QGuiApplication::setOverrideCursor(Qt::BlankCursor);
 
     DashModel dash;
     dash.loadVehicleConfig();

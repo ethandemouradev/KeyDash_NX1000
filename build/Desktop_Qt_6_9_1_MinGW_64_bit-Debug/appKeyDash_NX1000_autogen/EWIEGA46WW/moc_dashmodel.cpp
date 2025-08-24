@@ -56,8 +56,17 @@ template <> constexpr inline auto DashModel::qt_create_metaobjectdata<qt_meta_ta
         "headlightsOnChanged",
         "celOnChanged",
         "tcsOnChanged",
-        "setSpeed",
+        "useMphChanged",
+        "rpmMaxChanged",
+        "finalDriveChanged",
+        "gearRatioChanged",
+        "gear",
+        "ratio",
+        "setUseMph",
         "v",
+        "setRpmMax",
+        "setFinalDrive",
+        "setSpeed",
         "setRpm",
         "setBoost",
         "setClt",
@@ -82,7 +91,10 @@ template <> constexpr inline auto DashModel::qt_create_metaobjectdata<qt_meta_ta
         "iat",
         "vbat",
         "afr",
-        "gear",
+        "setGearRatio",
+        "loadVehicleConfig",
+        "path",
+        "gearRatio",
         "resetTrip",
         "speed",
         "dateTimeString",
@@ -92,7 +104,10 @@ template <> constexpr inline auto DashModel::qt_create_metaobjectdata<qt_meta_ta
         "rightSignal",
         "headlightsOn",
         "celOn",
-        "tcsOn"
+        "tcsOn",
+        "useMph",
+        "rpmMax",
+        "finalDrive"
     };
 
     QtMocHelpers::UintData qt_methods {
@@ -128,111 +143,153 @@ template <> constexpr inline auto DashModel::qt_create_metaobjectdata<qt_meta_ta
         QtMocHelpers::SignalData<void()>(16, 2, QMC::AccessPublic, QMetaType::Void),
         // Signal 'tcsOnChanged'
         QtMocHelpers::SignalData<void()>(17, 2, QMC::AccessPublic, QMetaType::Void),
+        // Signal 'useMphChanged'
+        QtMocHelpers::SignalData<void()>(18, 2, QMC::AccessPublic, QMetaType::Void),
+        // Signal 'rpmMaxChanged'
+        QtMocHelpers::SignalData<void()>(19, 2, QMC::AccessPublic, QMetaType::Void),
+        // Signal 'finalDriveChanged'
+        QtMocHelpers::SignalData<void()>(20, 2, QMC::AccessPublic, QMetaType::Void),
+        // Signal 'gearRatioChanged'
+        QtMocHelpers::SignalData<void(int, double)>(21, 2, QMC::AccessPublic, QMetaType::Void, {{
+            { QMetaType::Int, 22 }, { QMetaType::Double, 23 },
+        }}),
+        // Slot 'setUseMph'
+        QtMocHelpers::SlotData<void(bool)>(24, 2, QMC::AccessPublic, QMetaType::Void, {{
+            { QMetaType::Bool, 25 },
+        }}),
+        // Slot 'setRpmMax'
+        QtMocHelpers::SlotData<void(int)>(26, 2, QMC::AccessPublic, QMetaType::Void, {{
+            { QMetaType::Int, 25 },
+        }}),
+        // Slot 'setFinalDrive'
+        QtMocHelpers::SlotData<void(double)>(27, 2, QMC::AccessPublic, QMetaType::Void, {{
+            { QMetaType::Double, 25 },
+        }}),
         // Slot 'setSpeed'
-        QtMocHelpers::SlotData<void(double)>(18, 2, QMC::AccessPublic, QMetaType::Void, {{
-            { QMetaType::Double, 19 },
+        QtMocHelpers::SlotData<void(double)>(28, 2, QMC::AccessPublic, QMetaType::Void, {{
+            { QMetaType::Double, 25 },
         }}),
         // Slot 'setRpm'
-        QtMocHelpers::SlotData<void(double)>(20, 2, QMC::AccessPublic, QMetaType::Void, {{
-            { QMetaType::Double, 19 },
+        QtMocHelpers::SlotData<void(double)>(29, 2, QMC::AccessPublic, QMetaType::Void, {{
+            { QMetaType::Double, 25 },
         }}),
         // Slot 'setBoost'
-        QtMocHelpers::SlotData<void(double)>(21, 2, QMC::AccessPublic, QMetaType::Void, {{
-            { QMetaType::Double, 19 },
+        QtMocHelpers::SlotData<void(double)>(30, 2, QMC::AccessPublic, QMetaType::Void, {{
+            { QMetaType::Double, 25 },
         }}),
         // Slot 'setClt'
-        QtMocHelpers::SlotData<void(double)>(22, 2, QMC::AccessPublic, QMetaType::Void, {{
-            { QMetaType::Double, 19 },
+        QtMocHelpers::SlotData<void(double)>(31, 2, QMC::AccessPublic, QMetaType::Void, {{
+            { QMetaType::Double, 25 },
         }}),
         // Slot 'setIat'
-        QtMocHelpers::SlotData<void(double)>(23, 2, QMC::AccessPublic, QMetaType::Void, {{
-            { QMetaType::Double, 19 },
+        QtMocHelpers::SlotData<void(double)>(32, 2, QMC::AccessPublic, QMetaType::Void, {{
+            { QMetaType::Double, 25 },
         }}),
         // Slot 'setVbat'
-        QtMocHelpers::SlotData<void(double)>(24, 2, QMC::AccessPublic, QMetaType::Void, {{
-            { QMetaType::Double, 19 },
+        QtMocHelpers::SlotData<void(double)>(33, 2, QMC::AccessPublic, QMetaType::Void, {{
+            { QMetaType::Double, 25 },
         }}),
         // Slot 'setAfr'
-        QtMocHelpers::SlotData<void(double)>(25, 2, QMC::AccessPublic, QMetaType::Void, {{
-            { QMetaType::Double, 19 },
+        QtMocHelpers::SlotData<void(double)>(34, 2, QMC::AccessPublic, QMetaType::Void, {{
+            { QMetaType::Double, 25 },
         }}),
         // Slot 'setGear'
-        QtMocHelpers::SlotData<void(int)>(26, 2, QMC::AccessPublic, QMetaType::Void, {{
-            { QMetaType::Int, 19 },
+        QtMocHelpers::SlotData<void(int)>(35, 2, QMC::AccessPublic, QMetaType::Void, {{
+            { QMetaType::Int, 25 },
         }}),
         // Slot 'setDateTimeString'
-        QtMocHelpers::SlotData<void(const QString &)>(27, 2, QMC::AccessPublic, QMetaType::Void, {{
-            { QMetaType::QString, 28 },
+        QtMocHelpers::SlotData<void(const QString &)>(36, 2, QMC::AccessPublic, QMetaType::Void, {{
+            { QMetaType::QString, 37 },
         }}),
         // Slot 'setOdo'
-        QtMocHelpers::SlotData<void(double)>(29, 2, QMC::AccessPublic, QMetaType::Void, {{
-            { QMetaType::Double, 19 },
+        QtMocHelpers::SlotData<void(double)>(38, 2, QMC::AccessPublic, QMetaType::Void, {{
+            { QMetaType::Double, 25 },
         }}),
         // Slot 'setTrip'
-        QtMocHelpers::SlotData<void(double)>(30, 2, QMC::AccessPublic, QMetaType::Void, {{
-            { QMetaType::Double, 19 },
+        QtMocHelpers::SlotData<void(double)>(39, 2, QMC::AccessPublic, QMetaType::Void, {{
+            { QMetaType::Double, 25 },
         }}),
         // Slot 'setLeftSignal'
-        QtMocHelpers::SlotData<void(bool)>(31, 2, QMC::AccessPublic, QMetaType::Void, {{
-            { QMetaType::Bool, 19 },
+        QtMocHelpers::SlotData<void(bool)>(40, 2, QMC::AccessPublic, QMetaType::Void, {{
+            { QMetaType::Bool, 25 },
         }}),
         // Slot 'setRightSignal'
-        QtMocHelpers::SlotData<void(bool)>(32, 2, QMC::AccessPublic, QMetaType::Void, {{
-            { QMetaType::Bool, 19 },
+        QtMocHelpers::SlotData<void(bool)>(41, 2, QMC::AccessPublic, QMetaType::Void, {{
+            { QMetaType::Bool, 25 },
         }}),
         // Slot 'setHeadlightsOn'
-        QtMocHelpers::SlotData<void(bool)>(33, 2, QMC::AccessPublic, QMetaType::Void, {{
-            { QMetaType::Bool, 19 },
+        QtMocHelpers::SlotData<void(bool)>(42, 2, QMC::AccessPublic, QMetaType::Void, {{
+            { QMetaType::Bool, 25 },
         }}),
         // Slot 'setCelOn'
-        QtMocHelpers::SlotData<void(bool)>(34, 2, QMC::AccessPublic, QMetaType::Void, {{
-            { QMetaType::Bool, 19 },
+        QtMocHelpers::SlotData<void(bool)>(43, 2, QMC::AccessPublic, QMetaType::Void, {{
+            { QMetaType::Bool, 25 },
         }}),
         // Slot 'setTcsOn'
-        QtMocHelpers::SlotData<void(bool)>(35, 2, QMC::AccessPublic, QMetaType::Void, {{
-            { QMetaType::Bool, 19 },
+        QtMocHelpers::SlotData<void(bool)>(44, 2, QMC::AccessPublic, QMetaType::Void, {{
+            { QMetaType::Bool, 25 },
         }}),
         // Slot 'applySample'
-        QtMocHelpers::SlotData<void(double, double, double, double, double, double, double, int)>(36, 2, QMC::AccessPublic, QMetaType::Void, {{
-            { QMetaType::Double, 37 }, { QMetaType::Double, 38 }, { QMetaType::Double, 39 }, { QMetaType::Double, 40 },
-            { QMetaType::Double, 41 }, { QMetaType::Double, 42 }, { QMetaType::Double, 43 }, { QMetaType::Int, 44 },
+        QtMocHelpers::SlotData<void(double, double, double, double, double, double, double, int)>(45, 2, QMC::AccessPublic, QMetaType::Void, {{
+            { QMetaType::Double, 46 }, { QMetaType::Double, 47 }, { QMetaType::Double, 48 }, { QMetaType::Double, 49 },
+            { QMetaType::Double, 50 }, { QMetaType::Double, 51 }, { QMetaType::Double, 52 }, { QMetaType::Int, 22 },
+        }}),
+        // Slot 'setGearRatio'
+        QtMocHelpers::SlotData<void(int, double)>(53, 2, QMC::AccessPublic, QMetaType::Void, {{
+            { QMetaType::Int, 22 }, { QMetaType::Double, 23 },
+        }}),
+        // Slot 'loadVehicleConfig'
+        QtMocHelpers::SlotData<bool(const QString &)>(54, 2, QMC::AccessPublic, QMetaType::Bool, {{
+            { QMetaType::QString, 55 },
+        }}),
+        // Slot 'loadVehicleConfig'
+        QtMocHelpers::SlotData<bool()>(54, 2, QMC::AccessPublic | QMC::MethodCloned, QMetaType::Bool),
+        // Method 'gearRatio'
+        QtMocHelpers::MethodData<double(int) const>(56, 2, QMC::AccessPublic, QMetaType::Double, {{
+            { QMetaType::Int, 22 },
         }}),
         // Method 'resetTrip'
-        QtMocHelpers::MethodData<void()>(45, 2, QMC::AccessPublic, QMetaType::Void),
+        QtMocHelpers::MethodData<void()>(57, 2, QMC::AccessPublic, QMetaType::Void),
     };
     QtMocHelpers::UintData qt_properties {
         // property 'speed'
-        QtMocHelpers::PropertyData<double>(46, QMetaType::Double, QMC::DefaultPropertyFlags | QMC::Writable | QMC::StdCppSet, 0),
+        QtMocHelpers::PropertyData<double>(58, QMetaType::Double, QMC::DefaultPropertyFlags | QMC::Writable | QMC::StdCppSet, 0),
         // property 'rpm'
-        QtMocHelpers::PropertyData<double>(37, QMetaType::Double, QMC::DefaultPropertyFlags | QMC::Writable | QMC::StdCppSet, 1),
+        QtMocHelpers::PropertyData<double>(46, QMetaType::Double, QMC::DefaultPropertyFlags | QMC::Writable | QMC::StdCppSet, 1),
         // property 'boost'
-        QtMocHelpers::PropertyData<double>(39, QMetaType::Double, QMC::DefaultPropertyFlags | QMC::Writable | QMC::StdCppSet, 2),
+        QtMocHelpers::PropertyData<double>(48, QMetaType::Double, QMC::DefaultPropertyFlags | QMC::Writable | QMC::StdCppSet, 2),
         // property 'clt'
-        QtMocHelpers::PropertyData<double>(40, QMetaType::Double, QMC::DefaultPropertyFlags | QMC::Writable | QMC::StdCppSet, 3),
+        QtMocHelpers::PropertyData<double>(49, QMetaType::Double, QMC::DefaultPropertyFlags | QMC::Writable | QMC::StdCppSet, 3),
         // property 'iat'
-        QtMocHelpers::PropertyData<double>(41, QMetaType::Double, QMC::DefaultPropertyFlags | QMC::Writable | QMC::StdCppSet, 4),
+        QtMocHelpers::PropertyData<double>(50, QMetaType::Double, QMC::DefaultPropertyFlags | QMC::Writable | QMC::StdCppSet, 4),
         // property 'vbat'
-        QtMocHelpers::PropertyData<double>(42, QMetaType::Double, QMC::DefaultPropertyFlags | QMC::Writable | QMC::StdCppSet, 5),
+        QtMocHelpers::PropertyData<double>(51, QMetaType::Double, QMC::DefaultPropertyFlags | QMC::Writable | QMC::StdCppSet, 5),
         // property 'afr'
-        QtMocHelpers::PropertyData<double>(43, QMetaType::Double, QMC::DefaultPropertyFlags | QMC::Writable | QMC::StdCppSet, 6),
+        QtMocHelpers::PropertyData<double>(52, QMetaType::Double, QMC::DefaultPropertyFlags | QMC::Writable | QMC::StdCppSet, 6),
         // property 'gear'
-        QtMocHelpers::PropertyData<int>(44, QMetaType::Int, QMC::DefaultPropertyFlags | QMC::Writable | QMC::StdCppSet, 7),
+        QtMocHelpers::PropertyData<int>(22, QMetaType::Int, QMC::DefaultPropertyFlags | QMC::Writable | QMC::StdCppSet, 7),
         // property 'dateTimeString'
-        QtMocHelpers::PropertyData<QString>(47, QMetaType::QString, QMC::DefaultPropertyFlags | QMC::Writable | QMC::StdCppSet, 8),
+        QtMocHelpers::PropertyData<QString>(59, QMetaType::QString, QMC::DefaultPropertyFlags | QMC::Writable | QMC::StdCppSet, 8),
         // property 'odo'
-        QtMocHelpers::PropertyData<double>(48, QMetaType::Double, QMC::DefaultPropertyFlags | QMC::Writable | QMC::StdCppSet, 9),
+        QtMocHelpers::PropertyData<double>(60, QMetaType::Double, QMC::DefaultPropertyFlags | QMC::Writable | QMC::StdCppSet, 9),
         // property 'trip'
-        QtMocHelpers::PropertyData<double>(49, QMetaType::Double, QMC::DefaultPropertyFlags | QMC::Writable | QMC::StdCppSet, 10),
+        QtMocHelpers::PropertyData<double>(61, QMetaType::Double, QMC::DefaultPropertyFlags | QMC::Writable | QMC::StdCppSet, 10),
         // property 'leftSignal'
-        QtMocHelpers::PropertyData<bool>(50, QMetaType::Bool, QMC::DefaultPropertyFlags | QMC::Writable | QMC::StdCppSet, 11),
+        QtMocHelpers::PropertyData<bool>(62, QMetaType::Bool, QMC::DefaultPropertyFlags | QMC::Writable | QMC::StdCppSet, 11),
         // property 'rightSignal'
-        QtMocHelpers::PropertyData<bool>(51, QMetaType::Bool, QMC::DefaultPropertyFlags | QMC::Writable | QMC::StdCppSet, 12),
+        QtMocHelpers::PropertyData<bool>(63, QMetaType::Bool, QMC::DefaultPropertyFlags | QMC::Writable | QMC::StdCppSet, 12),
         // property 'headlightsOn'
-        QtMocHelpers::PropertyData<bool>(52, QMetaType::Bool, QMC::DefaultPropertyFlags | QMC::Writable | QMC::StdCppSet, 13),
+        QtMocHelpers::PropertyData<bool>(64, QMetaType::Bool, QMC::DefaultPropertyFlags | QMC::Writable | QMC::StdCppSet, 13),
         // property 'celOn'
-        QtMocHelpers::PropertyData<bool>(53, QMetaType::Bool, QMC::DefaultPropertyFlags | QMC::Writable | QMC::StdCppSet, 14),
+        QtMocHelpers::PropertyData<bool>(65, QMetaType::Bool, QMC::DefaultPropertyFlags | QMC::Writable | QMC::StdCppSet, 14),
         // property 'tcsOn'
-        QtMocHelpers::PropertyData<bool>(54, QMetaType::Bool, QMC::DefaultPropertyFlags | QMC::Writable | QMC::StdCppSet, 15),
+        QtMocHelpers::PropertyData<bool>(66, QMetaType::Bool, QMC::DefaultPropertyFlags | QMC::Writable | QMC::StdCppSet, 15),
+        // property 'useMph'
+        QtMocHelpers::PropertyData<bool>(67, QMetaType::Bool, QMC::DefaultPropertyFlags | QMC::Writable | QMC::StdCppSet, 16),
+        // property 'rpmMax'
+        QtMocHelpers::PropertyData<int>(68, QMetaType::Int, QMC::DefaultPropertyFlags | QMC::Writable | QMC::StdCppSet, 17),
+        // property 'finalDrive'
+        QtMocHelpers::PropertyData<double>(69, QMetaType::Double, QMC::DefaultPropertyFlags | QMC::Writable | QMC::StdCppSet, 18),
     };
     QtMocHelpers::UintData qt_enums {
     };
@@ -270,24 +327,38 @@ void DashModel::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, v
         case 13: _t->headlightsOnChanged(); break;
         case 14: _t->celOnChanged(); break;
         case 15: _t->tcsOnChanged(); break;
-        case 16: _t->setSpeed((*reinterpret_cast< std::add_pointer_t<double>>(_a[1]))); break;
-        case 17: _t->setRpm((*reinterpret_cast< std::add_pointer_t<double>>(_a[1]))); break;
-        case 18: _t->setBoost((*reinterpret_cast< std::add_pointer_t<double>>(_a[1]))); break;
-        case 19: _t->setClt((*reinterpret_cast< std::add_pointer_t<double>>(_a[1]))); break;
-        case 20: _t->setIat((*reinterpret_cast< std::add_pointer_t<double>>(_a[1]))); break;
-        case 21: _t->setVbat((*reinterpret_cast< std::add_pointer_t<double>>(_a[1]))); break;
-        case 22: _t->setAfr((*reinterpret_cast< std::add_pointer_t<double>>(_a[1]))); break;
-        case 23: _t->setGear((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
-        case 24: _t->setDateTimeString((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
-        case 25: _t->setOdo((*reinterpret_cast< std::add_pointer_t<double>>(_a[1]))); break;
-        case 26: _t->setTrip((*reinterpret_cast< std::add_pointer_t<double>>(_a[1]))); break;
-        case 27: _t->setLeftSignal((*reinterpret_cast< std::add_pointer_t<bool>>(_a[1]))); break;
-        case 28: _t->setRightSignal((*reinterpret_cast< std::add_pointer_t<bool>>(_a[1]))); break;
-        case 29: _t->setHeadlightsOn((*reinterpret_cast< std::add_pointer_t<bool>>(_a[1]))); break;
-        case 30: _t->setCelOn((*reinterpret_cast< std::add_pointer_t<bool>>(_a[1]))); break;
-        case 31: _t->setTcsOn((*reinterpret_cast< std::add_pointer_t<bool>>(_a[1]))); break;
-        case 32: _t->applySample((*reinterpret_cast< std::add_pointer_t<double>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[2])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[3])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[4])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[5])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[6])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[7])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[8]))); break;
-        case 33: _t->resetTrip(); break;
+        case 16: _t->useMphChanged(); break;
+        case 17: _t->rpmMaxChanged(); break;
+        case 18: _t->finalDriveChanged(); break;
+        case 19: _t->gearRatioChanged((*reinterpret_cast< std::add_pointer_t<int>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[2]))); break;
+        case 20: _t->setUseMph((*reinterpret_cast< std::add_pointer_t<bool>>(_a[1]))); break;
+        case 21: _t->setRpmMax((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
+        case 22: _t->setFinalDrive((*reinterpret_cast< std::add_pointer_t<double>>(_a[1]))); break;
+        case 23: _t->setSpeed((*reinterpret_cast< std::add_pointer_t<double>>(_a[1]))); break;
+        case 24: _t->setRpm((*reinterpret_cast< std::add_pointer_t<double>>(_a[1]))); break;
+        case 25: _t->setBoost((*reinterpret_cast< std::add_pointer_t<double>>(_a[1]))); break;
+        case 26: _t->setClt((*reinterpret_cast< std::add_pointer_t<double>>(_a[1]))); break;
+        case 27: _t->setIat((*reinterpret_cast< std::add_pointer_t<double>>(_a[1]))); break;
+        case 28: _t->setVbat((*reinterpret_cast< std::add_pointer_t<double>>(_a[1]))); break;
+        case 29: _t->setAfr((*reinterpret_cast< std::add_pointer_t<double>>(_a[1]))); break;
+        case 30: _t->setGear((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
+        case 31: _t->setDateTimeString((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
+        case 32: _t->setOdo((*reinterpret_cast< std::add_pointer_t<double>>(_a[1]))); break;
+        case 33: _t->setTrip((*reinterpret_cast< std::add_pointer_t<double>>(_a[1]))); break;
+        case 34: _t->setLeftSignal((*reinterpret_cast< std::add_pointer_t<bool>>(_a[1]))); break;
+        case 35: _t->setRightSignal((*reinterpret_cast< std::add_pointer_t<bool>>(_a[1]))); break;
+        case 36: _t->setHeadlightsOn((*reinterpret_cast< std::add_pointer_t<bool>>(_a[1]))); break;
+        case 37: _t->setCelOn((*reinterpret_cast< std::add_pointer_t<bool>>(_a[1]))); break;
+        case 38: _t->setTcsOn((*reinterpret_cast< std::add_pointer_t<bool>>(_a[1]))); break;
+        case 39: _t->applySample((*reinterpret_cast< std::add_pointer_t<double>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[2])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[3])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[4])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[5])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[6])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[7])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[8]))); break;
+        case 40: _t->setGearRatio((*reinterpret_cast< std::add_pointer_t<int>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[2]))); break;
+        case 41: { bool _r = _t->loadVehicleConfig((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1])));
+            if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = std::move(_r); }  break;
+        case 42: { bool _r = _t->loadVehicleConfig();
+            if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = std::move(_r); }  break;
+        case 43: { double _r = _t->gearRatio((*reinterpret_cast< std::add_pointer_t<int>>(_a[1])));
+            if (_a[0]) *reinterpret_cast< double*>(_a[0]) = std::move(_r); }  break;
+        case 44: _t->resetTrip(); break;
         default: ;
         }
     }
@@ -324,6 +395,14 @@ void DashModel::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, v
             return;
         if (QtMocHelpers::indexOfMethod<void (DashModel::*)()>(_a, &DashModel::tcsOnChanged, 15))
             return;
+        if (QtMocHelpers::indexOfMethod<void (DashModel::*)()>(_a, &DashModel::useMphChanged, 16))
+            return;
+        if (QtMocHelpers::indexOfMethod<void (DashModel::*)()>(_a, &DashModel::rpmMaxChanged, 17))
+            return;
+        if (QtMocHelpers::indexOfMethod<void (DashModel::*)()>(_a, &DashModel::finalDriveChanged, 18))
+            return;
+        if (QtMocHelpers::indexOfMethod<void (DashModel::*)(int , double )>(_a, &DashModel::gearRatioChanged, 19))
+            return;
     }
     if (_c == QMetaObject::ReadProperty) {
         void *_v = _a[0];
@@ -344,6 +423,9 @@ void DashModel::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, v
         case 13: *reinterpret_cast<bool*>(_v) = _t->headlightsOn(); break;
         case 14: *reinterpret_cast<bool*>(_v) = _t->celOn(); break;
         case 15: *reinterpret_cast<bool*>(_v) = _t->tcsOn(); break;
+        case 16: *reinterpret_cast<bool*>(_v) = _t->useMph(); break;
+        case 17: *reinterpret_cast<int*>(_v) = _t->rpmMax(); break;
+        case 18: *reinterpret_cast<double*>(_v) = _t->finalDrive(); break;
         default: break;
         }
     }
@@ -366,6 +448,9 @@ void DashModel::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, v
         case 13: _t->setHeadlightsOn(*reinterpret_cast<bool*>(_v)); break;
         case 14: _t->setCelOn(*reinterpret_cast<bool*>(_v)); break;
         case 15: _t->setTcsOn(*reinterpret_cast<bool*>(_v)); break;
+        case 16: _t->setUseMph(*reinterpret_cast<bool*>(_v)); break;
+        case 17: _t->setRpmMax(*reinterpret_cast<int*>(_v)); break;
+        case 18: _t->setFinalDrive(*reinterpret_cast<double*>(_v)); break;
         default: break;
         }
     }
@@ -390,20 +475,20 @@ int DashModel::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 34)
+        if (_id < 45)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 34;
+        _id -= 45;
     }
     if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 34)
+        if (_id < 45)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 34;
+        _id -= 45;
     }
     if (_c == QMetaObject::ReadProperty || _c == QMetaObject::WriteProperty
             || _c == QMetaObject::ResetProperty || _c == QMetaObject::BindableProperty
             || _c == QMetaObject::RegisterPropertyMetaType) {
         qt_static_metacall(this, _c, _id, _a);
-        _id -= 16;
+        _id -= 19;
     }
     return _id;
 }
@@ -502,5 +587,29 @@ void DashModel::celOnChanged()
 void DashModel::tcsOnChanged()
 {
     QMetaObject::activate(this, &staticMetaObject, 15, nullptr);
+}
+
+// SIGNAL 16
+void DashModel::useMphChanged()
+{
+    QMetaObject::activate(this, &staticMetaObject, 16, nullptr);
+}
+
+// SIGNAL 17
+void DashModel::rpmMaxChanged()
+{
+    QMetaObject::activate(this, &staticMetaObject, 17, nullptr);
+}
+
+// SIGNAL 18
+void DashModel::finalDriveChanged()
+{
+    QMetaObject::activate(this, &staticMetaObject, 18, nullptr);
+}
+
+// SIGNAL 19
+void DashModel::gearRatioChanged(int _t1, double _t2)
+{
+    QMetaObject::activate<void>(this, &staticMetaObject, 19, nullptr, _t1, _t2);
 }
 QT_WARNING_POP

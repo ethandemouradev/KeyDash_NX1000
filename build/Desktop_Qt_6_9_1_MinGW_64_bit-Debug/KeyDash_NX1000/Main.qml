@@ -22,7 +22,7 @@ Window {
     visible: true
     color: "#081418"
     visibility: Window.Windowed
-    // flags: Qt.FramelessWindowHint
+    flags: Qt.FramelessWindowHint
 
     /* =============================
        Global knobs (persisted below)
@@ -121,8 +121,8 @@ Window {
         anchors.fill: parent
         acceptedButtons: Qt.NoButton
         hoverEnabled: true
-        // cursorShape: Qt.BlankCursor
-        // visible: hideCursor
+        cursorShape: Qt.BlankCursor
+        visible: hideCursor
         z: 10000
     }
 
@@ -845,6 +845,35 @@ Window {
             property alias hideCursor:   root.hideCursor
         }
 
+        // --- wire DashModel defaults at startup ---
+        Item {
+            id: modelInit
+
+            Component.onCompleted: {
+                // If you did NOT call dash.loadVehicleConfig() in C++:
+                // dash.loadVehicleConfig()
+
+                // Mirror prefs -> model on first load
+                dash.setUseMph(prefs.useMph)
+                dash.setRpmMax(prefs.rpmMax)
+
+                // If you don't have an INI yet, set your drivetrain here:
+                dash.setFinalDrive(4.080)
+                dash.setGearRatio(1, 3.321)
+                dash.setGearRatio(2, 1.902)
+                dash.setGearRatio(3, 1.308)
+                dash.setGearRatio(4, 1.000)
+                dash.setGearRatio(5, 0.891)
+            }
+
+            // Keep model in sync if the user changes prefs later
+            Connections {
+                target: prefs
+                function onUseMphChanged() { dash.setUseMph(prefs.useMph) }
+                function onRpmMaxChanged() { dash.setRpmMax(prefs.rpmMax) }
+            }
+        }
+
         /* ===============================
            Service panel (toggle with “S”)
            =============================== */
@@ -871,7 +900,7 @@ Window {
                 Row {
                     spacing: 12
                     Text { text: "Units:"; color: "white"; font.family: neu.name; font.pixelSize: 18; verticalAlignment: Text.AlignVCenter }
-                    Switch { id: units; checked: root.useMph; onToggled: root.useMph = checked }
+                    Switch { id: units; checked: dash.useMph; onToggled: dash.setUseMph(checked) }
                     Text {
                         text: units.checked ? "mph" : "km/h"
                         color: "white"; font.family: neu.name; font.pixelSize: 14
