@@ -6,23 +6,15 @@
                     {
                         "codegenSuccessful": true,
                         "column": 17,
-                        "durationMicroseconds": 218,
+                        "durationMicroseconds": 249,
                         "errorMessage": "",
                         "functionName": "visibility",
                         "line": 24
                     },
                     {
                         "codegenSuccessful": true,
-                        "column": 12,
-                        "durationMicroseconds": 80,
-                        "errorMessage": "",
-                        "functionName": "flags",
-                        "line": 25
-                    },
-                    {
-                        "codegenSuccessful": true,
                         "column": 15,
-                        "durationMicroseconds": 105,
+                        "durationMicroseconds": 126,
                         "errorMessage": "",
                         "functionName": "to",
                         "line": 85
@@ -30,7 +22,7 @@
                     {
                         "codegenSuccessful": false,
                         "column": 19,
-                        "durationMicroseconds": 59,
+                        "durationMicroseconds": 67,
                         "errorMessage": "Cannot access value for name overRevHz",
                         "functionName": "duration",
                         "line": 86
@@ -38,7 +30,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 16,
-                        "durationMicroseconds": 52,
+                        "durationMicroseconds": 54,
                         "errorMessage": "",
                         "functionName": "loops",
                         "line": 87
@@ -46,7 +38,7 @@
                     {
                         "codegenSuccessful": false,
                         "column": 18,
-                        "durationMicroseconds": 44,
+                        "durationMicroseconds": 47,
                         "errorMessage": "Cannot access value for name overRevEnable",
                         "functionName": "running",
                         "line": 88
@@ -54,7 +46,7 @@
                     {
                         "codegenSuccessful": false,
                         "column": 27,
-                        "durationMicroseconds": 32,
+                        "durationMicroseconds": 33,
                         "errorMessage": "Cannot find name overRevPhase",
                         "functionName": "onRunningChanged",
                         "line": 89
@@ -62,7 +54,7 @@
                     {
                         "codegenSuccessful": false,
                         "column": 17,
-                        "durationMicroseconds": 41,
+                        "durationMicroseconds": 44,
                         "errorMessage": "Cannot access value for name dash",
                         "functionName": "target",
                         "line": 95
@@ -70,7 +62,7 @@
                     {
                         "codegenSuccessful": false,
                         "column": 9,
-                        "durationMicroseconds": 134,
+                        "durationMicroseconds": 137,
                         "errorMessage": "Cannot access value for name dash",
                         "functionName": "onRpmChanged",
                         "line": 96
@@ -94,7 +86,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 76,
-                        "durationMicroseconds": 50,
+                        "durationMicroseconds": 52,
                         "errorMessage": "",
                         "functionName": "type",
                         "line": 113
@@ -102,7 +94,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 77,
-                        "durationMicroseconds": 45,
+                        "durationMicroseconds": 48,
                         "errorMessage": "",
                         "functionName": "type",
                         "line": 114
@@ -110,7 +102,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 26,
-                        "durationMicroseconds": 82,
+                        "durationMicroseconds": 77,
                         "errorMessage": "",
                         "functionName": "acceptedButtons",
                         "line": 122
@@ -118,7 +110,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 22,
-                        "durationMicroseconds": 48,
+                        "durationMicroseconds": 61,
                         "errorMessage": "",
                         "functionName": "cursorShape",
                         "line": 124
@@ -134,7 +126,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 23,
-                        "durationMicroseconds": 53,
+                        "durationMicroseconds": 43,
                         "errorMessage": "",
                         "functionName": "fill",
                         "line": 121
@@ -142,7 +134,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 32,
-                        "durationMicroseconds": 239,
+                        "durationMicroseconds": 253,
                         "errorMessage": "",
                         "functionName": "uiScale",
                         "line": 139
@@ -158,7 +150,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 21,
-                        "durationMicroseconds": 50,
+                        "durationMicroseconds": 54,
                         "errorMessage": "",
                         "functionName": "xScale",
                         "line": 143
@@ -166,7 +158,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 21,
-                        "durationMicroseconds": 65,
+                        "durationMicroseconds": 52,
                         "errorMessage": "",
                         "functionName": "yScale",
                         "line": 144
@@ -174,7 +166,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 23,
-                        "durationMicroseconds": 95,
+                        "durationMicroseconds": 107,
                         "errorMessage": "",
                         "functionName": "x",
                         "line": 145
@@ -182,7 +174,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 23,
-                        "durationMicroseconds": 84,
+                        "durationMicroseconds": 99,
                         "errorMessage": "",
                         "functionName": "y",
                         "line": 146
@@ -190,7 +182,7 @@
                     {
                         "codegenSuccessful": false,
                         "column": 22,
-                        "durationMicroseconds": 25,
+                        "durationMicroseconds": 26,
                         "errorMessage": "Cannot access value for name brightness",
                         "functionName": "opacity",
                         "line": 153
@@ -198,7 +190,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 22,
-                        "durationMicroseconds": 96,
+                        "durationMicroseconds": 75,
                         "errorMessage": "",
                         "functionName": "visible",
                         "line": 155
@@ -206,7 +198,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 27,
-                        "durationMicroseconds": 38,
+                        "durationMicroseconds": 36,
                         "errorMessage": "",
                         "functionName": "fill",
                         "line": 151
@@ -214,7 +206,7 @@
                     {
                         "codegenSuccessful": false,
                         "column": 22,
-                        "durationMicroseconds": 100,
+                        "durationMicroseconds": 122,
                         "errorMessage": "Cannot access value for name overRevEnable",
                         "functionName": "opacity",
                         "line": 163
@@ -222,7 +214,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 22,
-                        "durationMicroseconds": 93,
+                        "durationMicroseconds": 71,
                         "errorMessage": "",
                         "functionName": "visible",
                         "line": 167
@@ -230,7 +222,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 101,
-                        "durationMicroseconds": 61,
+                        "durationMicroseconds": 52,
                         "errorMessage": "",
                         "functionName": "fillMode",
                         "line": 171
@@ -238,7 +230,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 31,
-                        "durationMicroseconds": 43,
+                        "durationMicroseconds": 36,
                         "errorMessage": "",
                         "functionName": "fill",
                         "line": 171
@@ -254,7 +246,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 37,
-                        "durationMicroseconds": 54,
+                        "durationMicroseconds": 47,
                         "errorMessage": "",
                         "functionName": "warnLow",
                         "line": 200
@@ -270,7 +262,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 38,
-                        "durationMicroseconds": 61,
+                        "durationMicroseconds": 54,
                         "errorMessage": "",
                         "functionName": "errorLow",
                         "line": 203
@@ -278,7 +270,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 38,
-                        "durationMicroseconds": 37,
+                        "durationMicroseconds": 35,
                         "errorMessage": "",
                         "functionName": "errorHigh",
                         "line": 204
@@ -286,7 +278,7 @@
                     {
                         "codegenSuccessful": false,
                         "column": 19,
-                        "durationMicroseconds": 419,
+                        "durationMicroseconds": 352,
                         "errorMessage": "Cannot generate efficient code for call to untyped JavaScript function",
                         "functionName": "text",
                         "line": 207
@@ -294,7 +286,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 16,
-                        "durationMicroseconds": 115,
+                        "durationMicroseconds": 108,
                         "errorMessage": "",
                         "functionName": "x",
                         "line": 208
@@ -302,7 +294,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 16,
-                        "durationMicroseconds": 77,
+                        "durationMicroseconds": 74,
                         "errorMessage": "",
                         "functionName": "y",
                         "line": 209
@@ -310,7 +302,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 20,
-                        "durationMicroseconds": 465,
+                        "durationMicroseconds": 439,
                         "errorMessage": "",
                         "functionName": "color",
                         "line": 210
@@ -318,7 +310,7 @@
                     {
                         "codegenSuccessful": false,
                         "column": 26,
-                        "durationMicroseconds": 35,
+                        "durationMicroseconds": 27,
                         "errorMessage": "Cannot access value for name neu",
                         "functionName": "family",
                         "line": 213
@@ -326,7 +318,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 29,
-                        "durationMicroseconds": 39,
+                        "durationMicroseconds": 38,
                         "errorMessage": "",
                         "functionName": "pixelSize",
                         "line": 214
@@ -334,7 +326,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 78,
-                        "durationMicroseconds": 55,
+                        "durationMicroseconds": 84,
                         "errorMessage": "",
                         "functionName": "type",
                         "line": 215
@@ -342,7 +334,7 @@
                     {
                         "codegenSuccessful": false,
                         "column": 24,
-                        "durationMicroseconds": 99,
+                        "durationMicroseconds": 103,
                         "errorMessage": "Cannot load property hovered from .",
                         "functionName": "color",
                         "line": 231
@@ -350,7 +342,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 39,
-                        "durationMicroseconds": 39,
+                        "durationMicroseconds": 41,
                         "errorMessage": "",
                         "functionName": "fill",
                         "line": 229
@@ -366,7 +358,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 44,
-                        "durationMicroseconds": 45,
+                        "durationMicroseconds": 44,
                         "errorMessage": "",
                         "functionName": "opacity",
                         "line": 236
@@ -374,7 +366,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 31,
-                        "durationMicroseconds": 34,
+                        "durationMicroseconds": 35,
                         "errorMessage": "",
                         "functionName": "fill",
                         "line": 235
@@ -382,7 +374,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 23,
-                        "durationMicroseconds": 171,
+                        "durationMicroseconds": 175,
                         "errorMessage": "",
                         "functionName": "text",
                         "line": 241
@@ -390,7 +382,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 24,
-                        "durationMicroseconds": 246,
+                        "durationMicroseconds": 324,
                         "errorMessage": "",
                         "functionName": "color",
                         "line": 243
@@ -398,7 +390,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 35,
-                        "durationMicroseconds": 39,
+                        "durationMicroseconds": 117,
                         "errorMessage": "",
                         "functionName": "centerIn",
                         "line": 240
@@ -406,7 +398,7 @@
                     {
                         "codegenSuccessful": false,
                         "column": 30,
-                        "durationMicroseconds": 31,
+                        "durationMicroseconds": 51,
                         "errorMessage": "Cannot access value for name neu",
                         "functionName": "family",
                         "line": 242
@@ -414,7 +406,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 29,
-                        "durationMicroseconds": 180,
+                        "durationMicroseconds": 262,
                         "errorMessage": "",
                         "functionName": "onPressed",
                         "line": 248
@@ -422,7 +414,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 29,
-                        "durationMicroseconds": 145,
+                        "durationMicroseconds": 179,
                         "errorMessage": "",
                         "functionName": "onReleased",
                         "line": 249
@@ -430,7 +422,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 29,
-                        "durationMicroseconds": 153,
+                        "durationMicroseconds": 155,
                         "errorMessage": "",
                         "functionName": "onCanceled",
                         "line": 250
@@ -438,7 +430,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 42,
-                        "durationMicroseconds": 39,
+                        "durationMicroseconds": 49,
                         "errorMessage": "",
                         "functionName": "fill",
                         "line": 247
@@ -446,7 +438,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 30,
-                        "durationMicroseconds": 599,
+                        "durationMicroseconds": 623,
                         "errorMessage": "",
                         "functionName": "onTriggered",
                         "line": 255
@@ -454,7 +446,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 35,
-                        "durationMicroseconds": 95,
+                        "durationMicroseconds": 102,
                         "errorMessage": "",
                         "functionName": "onRunningChanged",
                         "line": 263
@@ -462,7 +454,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 22,
-                        "durationMicroseconds": 146,
+                        "durationMicroseconds": 154,
                         "errorMessage": "",
                         "functionName": "visible",
                         "line": 277
@@ -470,7 +462,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 22,
-                        "durationMicroseconds": 153,
+                        "durationMicroseconds": 166,
                         "errorMessage": "",
                         "functionName": "opacity",
                         "line": 278
@@ -478,7 +470,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 36,
-                        "durationMicroseconds": 244,
+                        "durationMicroseconds": 240,
                         "errorMessage": "",
                         "functionName": "periodMs",
                         "line": 280
@@ -486,7 +478,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 74,
-                        "durationMicroseconds": 55,
+                        "durationMicroseconds": 57,
                         "errorMessage": "",
                         "functionName": "fillMode",
                         "line": 275
@@ -494,7 +486,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 44,
-                        "durationMicroseconds": 39,
+                        "durationMicroseconds": 41,
                         "errorMessage": "",
                         "functionName": "fill",
                         "line": 275
@@ -502,7 +494,7 @@
                     {
                         "codegenSuccessful": false,
                         "column": 26,
-                        "durationMicroseconds": 42,
+                        "durationMicroseconds": 52,
                         "errorMessage": "Cannot access value for name blink",
                         "functionName": "running",
                         "line": 283
@@ -510,7 +502,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 24,
-                        "durationMicroseconds": 49,
+                        "durationMicroseconds": 52,
                         "errorMessage": "",
                         "functionName": "loops",
                         "line": 284
@@ -518,7 +510,7 @@
                     {
                         "codegenSuccessful": false,
                         "column": 35,
-                        "durationMicroseconds": 54,
+                        "durationMicroseconds": 60,
                         "errorMessage": "Cannot access value for name on",
                         "functionName": "onRunningChanged",
                         "line": 287
@@ -534,7 +526,7 @@
                     {
                         "codegenSuccessful": false,
                         "column": 100,
-                        "durationMicroseconds": 25,
+                        "durationMicroseconds": 26,
                         "errorMessage": "Cannot access value for name periodMs",
                         "functionName": "duration",
                         "line": 285
@@ -542,7 +534,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 125,
-                        "durationMicroseconds": 51,
+                        "durationMicroseconds": 50,
                         "errorMessage": "",
                         "functionName": "type",
                         "line": 285
@@ -550,7 +542,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 43,
-                        "durationMicroseconds": 50,
+                        "durationMicroseconds": 48,
                         "errorMessage": "",
                         "functionName": "target",
                         "line": 286
@@ -566,7 +558,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 126,
-                        "durationMicroseconds": 48,
+                        "durationMicroseconds": 47,
                         "errorMessage": "",
                         "functionName": "type",
                         "line": 286
@@ -574,7 +566,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 25,
-                        "durationMicroseconds": 51,
+                        "durationMicroseconds": 53,
                         "errorMessage": "",
                         "functionName": "rightX",
                         "line": 304
@@ -582,7 +574,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 50,
-                        "durationMicroseconds": 215,
+                        "durationMicroseconds": 189,
                         "errorMessage": "",
                         "functionName": "yPos",
                         "line": 304
@@ -590,7 +582,7 @@
                     {
                         "codegenSuccessful": false,
                         "column": 24,
-                        "durationMicroseconds": 213,
+                        "durationMicroseconds": 210,
                         "errorMessage": "Cannot access value for name dash",
                         "functionName": "value",
                         "line": 305
@@ -598,7 +590,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 53,
-                        "durationMicroseconds": 53,
+                        "durationMicroseconds": 52,
                         "errorMessage": "",
                         "functionName": "px",
                         "line": 305
@@ -606,7 +598,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 25,
-                        "durationMicroseconds": 56,
+                        "durationMicroseconds": 49,
                         "errorMessage": "",
                         "functionName": "rightX",
                         "line": 308
@@ -614,7 +606,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 50,
-                        "durationMicroseconds": 137,
+                        "durationMicroseconds": 133,
                         "errorMessage": "",
                         "functionName": "yPos",
                         "line": 308
@@ -622,7 +614,7 @@
                     {
                         "codegenSuccessful": false,
                         "column": 24,
-                        "durationMicroseconds": 184,
+                        "durationMicroseconds": 190,
                         "errorMessage": "Cannot access value for name dash",
                         "functionName": "value",
                         "line": 309
@@ -630,7 +622,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 51,
-                        "durationMicroseconds": 57,
+                        "durationMicroseconds": 52,
                         "errorMessage": "",
                         "functionName": "px",
                         "line": 309
@@ -638,7 +630,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 25,
-                        "durationMicroseconds": 79,
+                        "durationMicroseconds": 51,
                         "errorMessage": "",
                         "functionName": "rightX",
                         "line": 312
@@ -646,7 +638,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 50,
-                        "durationMicroseconds": 150,
+                        "durationMicroseconds": 144,
                         "errorMessage": "",
                         "functionName": "yPos",
                         "line": 312
@@ -654,7 +646,7 @@
                     {
                         "codegenSuccessful": false,
                         "column": 24,
-                        "durationMicroseconds": 173,
+                        "durationMicroseconds": 165,
                         "errorMessage": "Cannot access value for name dash",
                         "functionName": "value",
                         "line": 313
@@ -662,7 +654,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 51,
-                        "durationMicroseconds": 55,
+                        "durationMicroseconds": 51,
                         "errorMessage": "",
                         "functionName": "px",
                         "line": 313
@@ -670,7 +662,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 25,
-                        "durationMicroseconds": 54,
+                        "durationMicroseconds": 52,
                         "errorMessage": "",
                         "functionName": "rightX",
                         "line": 316
@@ -678,7 +670,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 50,
-                        "durationMicroseconds": 137,
+                        "durationMicroseconds": 135,
                         "errorMessage": "",
                         "functionName": "yPos",
                         "line": 316
@@ -686,7 +678,7 @@
                     {
                         "codegenSuccessful": false,
                         "column": 24,
-                        "durationMicroseconds": 254,
+                        "durationMicroseconds": 258,
                         "errorMessage": "Cannot access value for name dash",
                         "functionName": "value",
                         "line": 317
@@ -694,7 +686,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 52,
-                        "durationMicroseconds": 55,
+                        "durationMicroseconds": 53,
                         "errorMessage": "",
                         "functionName": "px",
                         "line": 317
@@ -702,7 +694,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 25,
-                        "durationMicroseconds": 54,
+                        "durationMicroseconds": 52,
                         "errorMessage": "",
                         "functionName": "rightX",
                         "line": 320
@@ -710,7 +702,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 50,
-                        "durationMicroseconds": 230,
+                        "durationMicroseconds": 185,
                         "errorMessage": "",
                         "functionName": "yPos",
                         "line": 320
@@ -718,7 +710,7 @@
                     {
                         "codegenSuccessful": false,
                         "column": 24,
-                        "durationMicroseconds": 254,
+                        "durationMicroseconds": 185,
                         "errorMessage": "Cannot access value for name dash",
                         "functionName": "value",
                         "line": 321
@@ -726,7 +718,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 51,
-                        "durationMicroseconds": 65,
+                        "durationMicroseconds": 51,
                         "errorMessage": "",
                         "functionName": "px",
                         "line": 321
@@ -734,7 +726,7 @@
                     {
                         "codegenSuccessful": false,
                         "column": 25,
-                        "durationMicroseconds": 40,
+                        "durationMicroseconds": 36,
                         "errorMessage": "Cannot access value for name dash",
                         "functionName": "target",
                         "line": 331
@@ -742,7 +734,7 @@
                     {
                         "codegenSuccessful": false,
                         "column": 17,
-                        "durationMicroseconds": 531,
+                        "durationMicroseconds": 567,
                         "errorMessage": "Cannot access value for name dash",
                         "functionName": "onSpeedChanged",
                         "line": 332
@@ -750,7 +742,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 27,
-                        "durationMicroseconds": 159,
+                        "durationMicroseconds": 140,
                         "errorMessage": "",
                         "functionName": "interval",
                         "line": 371
@@ -758,7 +750,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 30,
-                        "durationMicroseconds": 170,
+                        "durationMicroseconds": 142,
                         "errorMessage": "",
                         "functionName": "onTriggered",
                         "line": 372
@@ -766,7 +758,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 20,
-                        "durationMicroseconds": 97,
+                        "durationMicroseconds": 91,
                         "errorMessage": "",
                         "functionName": "width",
                         "line": 380
@@ -774,7 +766,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 21,
-                        "durationMicroseconds": 86,
+                        "durationMicroseconds": 81,
                         "errorMessage": "",
                         "functionName": "height",
                         "line": 381
@@ -782,7 +774,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 22,
-                        "durationMicroseconds": 95,
+                        "durationMicroseconds": 92,
                         "errorMessage": "",
                         "functionName": "opacity",
                         "line": 387
@@ -790,7 +782,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 22,
-                        "durationMicroseconds": 71,
+                        "durationMicroseconds": 189,
                         "errorMessage": "",
                         "functionName": "visible",
                         "line": 388
@@ -798,7 +790,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 81,
-                        "durationMicroseconds": 61,
+                        "durationMicroseconds": 88,
                         "errorMessage": "",
                         "functionName": "type",
                         "line": 389
@@ -806,7 +798,7 @@
                     {
                         "codegenSuccessful": false,
                         "column": 56,
-                        "durationMicroseconds": 47,
+                        "durationMicroseconds": 59,
                         "errorMessage": "Cannot access value for name width",
                         "functionName": "x",
                         "line": 392
@@ -814,7 +806,7 @@
                     {
                         "codegenSuccessful": false,
                         "column": 75,
-                        "durationMicroseconds": 26,
+                        "durationMicroseconds": 38,
                         "errorMessage": "Cannot access value for name height",
                         "functionName": "y",
                         "line": 392
@@ -822,7 +814,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 25,
-                        "durationMicroseconds": 49,
+                        "durationMicroseconds": 74,
                         "errorMessage": "",
                         "functionName": "target",
                         "line": 394
@@ -830,7 +822,7 @@
                     {
                         "codegenSuccessful": false,
                         "column": 17,
-                        "durationMicroseconds": 243,
+                        "durationMicroseconds": 317,
                         "errorMessage": "Cannot generate efficient code for LoadClosure",
                         "functionName": "onZ60PopupChanged",
                         "line": 395
@@ -838,7 +830,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 25,
-                        "durationMicroseconds": 48,
+                        "durationMicroseconds": 60,
                         "errorMessage": "",
                         "functionName": "target",
                         "line": 404
@@ -846,7 +838,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 35,
-                        "durationMicroseconds": 160,
+                        "durationMicroseconds": 201,
                         "errorMessage": "",
                         "functionName": "onRunningChanged",
                         "line": 405
@@ -854,7 +846,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 92,
-                        "durationMicroseconds": 55,
+                        "durationMicroseconds": 70,
                         "errorMessage": "",
                         "functionName": "type",
                         "line": 404
@@ -862,23 +854,23 @@
                     {
                         "codegenSuccessful": true,
                         "column": 35,
-                        "durationMicroseconds": 39,
+                        "durationMicroseconds": 78,
                         "errorMessage": "",
                         "functionName": "centerIn",
                         "line": 410
                     },
                     {
-                        "codegenSuccessful": true,
+                        "codegenSuccessful": false,
                         "column": 27,
-                        "durationMicroseconds": 145,
-                        "errorMessage": "",
+                        "durationMicroseconds": 259,
+                        "errorMessage": "Cannot access value for name dash",
                         "functionName": "text",
                         "line": 414
                     },
                     {
                         "codegenSuccessful": true,
                         "column": 42,
-                        "durationMicroseconds": 54,
+                        "durationMicroseconds": 103,
                         "errorMessage": "",
                         "functionName": "horizontalAlignment",
                         "line": 416
@@ -886,7 +878,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 52,
-                        "durationMicroseconds": 55,
+                        "durationMicroseconds": 57,
                         "errorMessage": "",
                         "functionName": "family",
                         "line": 415
@@ -894,7 +886,7 @@
                     {
                         "codegenSuccessful": false,
                         "column": 27,
-                        "durationMicroseconds": 133,
+                        "durationMicroseconds": 139,
                         "errorMessage": "Cannot generate efficient code for call to untyped JavaScript function",
                         "functionName": "text",
                         "line": 419
@@ -902,7 +894,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 42,
-                        "durationMicroseconds": 52,
+                        "durationMicroseconds": 59,
                         "errorMessage": "",
                         "functionName": "horizontalAlignment",
                         "line": 421
@@ -918,7 +910,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 30,
-                        "durationMicroseconds": 128,
+                        "durationMicroseconds": 103,
                         "errorMessage": "",
                         "functionName": "visible",
                         "line": 425
@@ -926,7 +918,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 42,
-                        "durationMicroseconds": 51,
+                        "durationMicroseconds": 50,
                         "errorMessage": "",
                         "functionName": "horizontalAlignment",
                         "line": 427
@@ -934,7 +926,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 52,
-                        "durationMicroseconds": 65,
+                        "durationMicroseconds": 52,
                         "errorMessage": "",
                         "functionName": "family",
                         "line": 426
@@ -942,7 +934,7 @@
                     {
                         "codegenSuccessful": false,
                         "column": 27,
-                        "durationMicroseconds": 342,
+                        "durationMicroseconds": 326,
                         "errorMessage": "Cannot generate efficient code for call to untyped JavaScript function",
                         "functionName": "text",
                         "line": 430
@@ -950,7 +942,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 42,
-                        "durationMicroseconds": 54,
+                        "durationMicroseconds": 53,
                         "errorMessage": "",
                         "functionName": "horizontalAlignment",
                         "line": 432
@@ -958,7 +950,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 52,
-                        "durationMicroseconds": 111,
+                        "durationMicroseconds": 90,
                         "errorMessage": "",
                         "functionName": "family",
                         "line": 431
@@ -966,7 +958,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 28,
-                        "durationMicroseconds": 124,
+                        "durationMicroseconds": 166,
                         "errorMessage": "",
                         "functionName": "onClicked",
                         "line": 438
@@ -974,7 +966,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 31,
-                        "durationMicroseconds": 41,
+                        "durationMicroseconds": 40,
                         "errorMessage": "",
                         "functionName": "fill",
                         "line": 437
@@ -982,31 +974,31 @@
                     {
                         "codegenSuccessful": false,
                         "column": 23,
-                        "durationMicroseconds": 407,
-                        "errorMessage": "Cannot access value for name useMph",
+                        "durationMicroseconds": 476,
+                        "errorMessage": "Cannot access value for name dash",
                         "functionName": "text",
                         "line": 459
                     },
                     {
                         "codegenSuccessful": true,
                         "column": 24,
-                        "durationMicroseconds": 56,
+                        "durationMicroseconds": 54,
                         "errorMessage": "",
                         "functionName": "style",
-                        "line": 464
+                        "line": 463
                     },
                     {
                         "codegenSuccessful": false,
                         "column": 42,
-                        "durationMicroseconds": 147,
+                        "durationMicroseconds": 139,
                         "errorMessage": "Cannot access value for name dash",
                         "functionName": "lastSpeed",
-                        "line": 468
+                        "line": 467
                     },
                     {
                         "codegenSuccessful": true,
                         "column": 43,
-                        "durationMicroseconds": 74,
+                        "durationMicroseconds": 73,
                         "errorMessage": "",
                         "functionName": "horizontalCenter",
                         "line": 457
@@ -1014,7 +1006,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 30,
-                        "durationMicroseconds": 65,
+                        "durationMicroseconds": 66,
                         "errorMessage": "",
                         "functionName": "top",
                         "line": 458
@@ -1022,7 +1014,7 @@
                     {
                         "codegenSuccessful": true,
                         "column": 30,
-                        "durationMicroseconds": 55,
+                        "durationMicroseconds": 200,
                         "errorMessage": "",
                         "functionName": "family",
                         "line": 461
@@ -1030,233 +1022,249 @@
                     {
                         "codegenSuccessful": true,
                         "column": 33,
-                        "durationMicroseconds": 48,
+                        "durationMicroseconds": 51,
                         "errorMessage": "",
                         "functionName": "pixelSize",
-                        "line": 463
+                        "line": 462
                     },
                     {
                         "codegenSuccessful": true,
                         "column": 62,
-                        "durationMicroseconds": 90,
+                        "durationMicroseconds": 85,
                         "errorMessage": "",
                         "functionName": "x",
-                        "line": 471
+                        "line": 470
                     },
                     {
                         "codegenSuccessful": false,
                         "column": 25,
-                        "durationMicroseconds": 42,
+                        "durationMicroseconds": 36,
                         "errorMessage": "Cannot access value for name dash",
                         "functionName": "target",
-                        "line": 476
+                        "line": 475
                     },
                     {
                         "codegenSuccessful": false,
                         "column": 17,
-                        "durationMicroseconds": 223,
+                        "durationMicroseconds": 221,
                         "errorMessage": "Cannot access value for name dash",
                         "functionName": "onSpeedChanged",
-                        "line": 477
+                        "line": 476
                     },
                     {
                         "codegenSuccessful": true,
                         "column": 35,
-                        "durationMicroseconds": 173,
+                        "durationMicroseconds": 175,
                         "errorMessage": "",
                         "functionName": "onRunningChanged",
-                        "line": 498
+                        "line": 497
                     },
                     {
                         "codegenSuccessful": true,
                         "column": 43,
-                        "durationMicroseconds": 51,
+                        "durationMicroseconds": 103,
                         "errorMessage": "",
                         "functionName": "target",
-                        "line": 496
+                        "line": 495
                     },
                     {
                         "codegenSuccessful": true,
                         "column": 96,
-                        "durationMicroseconds": 51,
+                        "durationMicroseconds": 52,
                         "errorMessage": "",
                         "functionName": "from",
-                        "line": 496
+                        "line": 495
                     },
                     {
                         "codegenSuccessful": true,
                         "column": 116,
-                        "durationMicroseconds": 100,
+                        "durationMicroseconds": 48,
                         "errorMessage": "",
                         "functionName": "to",
-                        "line": 496
+                        "line": 495
                     },
                     {
                         "codegenSuccessful": true,
                         "column": 143,
-                        "durationMicroseconds": 55,
+                        "durationMicroseconds": 51,
+                        "errorMessage": "",
+                        "functionName": "type",
+                        "line": 495
+                    },
+                    {
+                        "codegenSuccessful": true,
+                        "column": 43,
+                        "durationMicroseconds": 49,
+                        "errorMessage": "",
+                        "functionName": "target",
+                        "line": 496
+                    },
+                    {
+                        "codegenSuccessful": true,
+                        "column": 96,
+                        "durationMicroseconds": 49,
+                        "errorMessage": "",
+                        "functionName": "from",
+                        "line": 496
+                    },
+                    {
+                        "codegenSuccessful": true,
+                        "column": 142,
+                        "durationMicroseconds": 47,
                         "errorMessage": "",
                         "functionName": "type",
                         "line": 496
                     },
                     {
-                        "codegenSuccessful": true,
-                        "column": 43,
-                        "durationMicroseconds": 51,
-                        "errorMessage": "",
-                        "functionName": "target",
-                        "line": 497
-                    },
-                    {
-                        "codegenSuccessful": true,
-                        "column": 96,
-                        "durationMicroseconds": 48,
-                        "errorMessage": "",
-                        "functionName": "from",
-                        "line": 497
-                    },
-                    {
-                        "codegenSuccessful": true,
-                        "column": 142,
-                        "durationMicroseconds": 48,
-                        "errorMessage": "",
-                        "functionName": "type",
-                        "line": 497
-                    },
-                    {
                         "codegenSuccessful": false,
                         "column": 23,
-                        "durationMicroseconds": 31,
-                        "errorMessage": "Cannot access value for name useMph",
+                        "durationMicroseconds": 182,
+                        "errorMessage": "Cannot access value for name dash",
                         "functionName": "text",
-                        "line": 506
-                    },
-                    {
-                        "codegenSuccessful": true,
-                        "column": 43,
-                        "durationMicroseconds": 74,
-                        "errorMessage": "",
-                        "functionName": "horizontalCenter",
-                        "line": 503
-                    },
-                    {
-                        "codegenSuccessful": true,
-                        "column": 30,
-                        "durationMicroseconds": 78,
-                        "errorMessage": "",
-                        "functionName": "top",
-                        "line": 504
-                    },
-                    {
-                        "codegenSuccessful": true,
-                        "column": 36,
-                        "durationMicroseconds": 51,
-                        "errorMessage": "",
-                        "functionName": "topMargin",
                         "line": 505
                     },
                     {
                         "codegenSuccessful": true,
+                        "column": 43,
+                        "durationMicroseconds": 111,
+                        "errorMessage": "",
+                        "functionName": "horizontalCenter",
+                        "line": 502
+                    },
+                    {
+                        "codegenSuccessful": true,
                         "column": 30,
-                        "durationMicroseconds": 50,
+                        "durationMicroseconds": 103,
+                        "errorMessage": "",
+                        "functionName": "top",
+                        "line": 503
+                    },
+                    {
+                        "codegenSuccessful": true,
+                        "column": 36,
+                        "durationMicroseconds": 82,
+                        "errorMessage": "",
+                        "functionName": "topMargin",
+                        "line": 504
+                    },
+                    {
+                        "codegenSuccessful": true,
+                        "column": 30,
+                        "durationMicroseconds": 82,
                         "errorMessage": "",
                         "functionName": "family",
-                        "line": 508
+                        "line": 507
                     },
                     {
                         "codegenSuccessful": true,
                         "column": 33,
-                        "durationMicroseconds": 45,
+                        "durationMicroseconds": 72,
                         "errorMessage": "",
                         "functionName": "pixelSize",
-                        "line": 509
+                        "line": 508
                     },
                     {
                         "codegenSuccessful": false,
                         "column": 22,
-                        "durationMicroseconds": 131,
+                        "durationMicroseconds": 191,
                         "errorMessage": "Cannot access value for name dash",
                         "functionName": "visible",
-                        "line": 521
+                        "line": 520
                     },
                     {
                         "codegenSuccessful": true,
                         "column": 22,
-                        "durationMicroseconds": 81,
+                        "durationMicroseconds": 126,
                         "errorMessage": "",
                         "functionName": "opacity",
-                        "line": 522
+                        "line": 521
                     },
                     {
                         "codegenSuccessful": false,
                         "column": 16,
-                        "durationMicroseconds": 22,
+                        "durationMicroseconds": 56,
                         "errorMessage": "Cannot access value for name tachBarX",
                         "functionName": "x",
-                        "line": 532
+                        "line": 531
                     },
                     {
                         "codegenSuccessful": false,
                         "column": 29,
-                        "durationMicroseconds": 14,
+                        "durationMicroseconds": 33,
                         "errorMessage": "Cannot access value for name tachBarY",
                         "functionName": "y",
-                        "line": 532
+                        "line": 531
                     },
                     {
                         "codegenSuccessful": false,
                         "column": 41,
-                        "durationMicroseconds": 246,
+                        "durationMicroseconds": 397,
                         "errorMessage": "Cannot access value for name rpmMin",
                         "functionName": "measuredFrac",
-                        "line": 537
+                        "line": 536
                     },
                     {
                         "codegenSuccessful": true,
                         "column": 13,
-                        "durationMicroseconds": 159,
+                        "durationMicroseconds": 235,
                         "errorMessage": "",
                         "functionName": "startSweep",
-                        "line": 566
+                        "line": 565
                     },
                     {
                         "codegenSuccessful": true,
                         "column": 31,
-                        "durationMicroseconds": 55,
+                        "durationMicroseconds": 134,
                         "errorMessage": "",
                         "functionName": "target",
-                        "line": 560
+                        "line": 559
                     },
                     {
                         "codegenSuccessful": true,
                         "column": 71,
-                        "durationMicroseconds": 103,
+                        "durationMicroseconds": 82,
                         "errorMessage": "",
                         "functionName": "value",
-                        "line": 560
+                        "line": 559
                     },
                     {
                         "codegenSuccessful": true,
                         "column": 98,
-                        "durationMicroseconds": 67,
+                        "durationMicroseconds": 83,
                         "errorMessage": "",
                         "functionName": "when",
-                        "line": 560
+                        "line": 559
                     },
                     {
                         "codegenSuccessful": false,
                         "column": 40,
-                        "durationMicroseconds": 102,
+                        "durationMicroseconds": 128,
                         "errorMessage": "Cannot generate efficient code for internal conversion with incompatible or ambiguous types: bool stored as QVariant -> QQmlScriptString stored as QVariant",
                         "functionName": "script",
-                        "line": 576
+                        "line": 575
                     },
                     {
                         "codegenSuccessful": true,
                         "column": 42,
-                        "durationMicroseconds": 43,
+                        "durationMicroseconds": 46,
                         "errorMessage": "",
                         "functionName": "target",
+                        "line": 576
+                    },
+                    {
+                        "codegenSuccessful": true,
+                        "column": 43,
+                        "durationMicroseconds": 42,
+                        "errorMessage": "",
+                        "functionName": "target",
+                        "line": 577
+                    },
+                    {
+                        "codegenSuccessful": true,
+                        "column": 111,
+                        "durationMicroseconds": 55,
+                        "errorMessage": "",
+                        "functionName": "type",
                         "line": 577
                     },
                     {
@@ -1270,167 +1278,167 @@
                     {
                         "codegenSuccessful": true,
                         "column": 111,
-                        "durationMicroseconds": 49,
+                        "durationMicroseconds": 51,
                         "errorMessage": "",
                         "functionName": "type",
                         "line": 578
                     },
                     {
-                        "codegenSuccessful": true,
-                        "column": 43,
-                        "durationMicroseconds": 41,
-                        "errorMessage": "",
-                        "functionName": "target",
-                        "line": 579
-                    },
-                    {
-                        "codegenSuccessful": true,
-                        "column": 111,
-                        "durationMicroseconds": 46,
-                        "errorMessage": "",
-                        "functionName": "type",
-                        "line": 579
-                    },
-                    {
                         "codegenSuccessful": false,
                         "column": 40,
-                        "durationMicroseconds": 100,
+                        "durationMicroseconds": 103,
                         "errorMessage": "Cannot generate efficient code for internal conversion with incompatible or ambiguous types: bool stored as QVariant -> QQmlScriptString stored as QVariant",
                         "functionName": "script",
-                        "line": 580
+                        "line": 579
                     },
                     {
                         "codegenSuccessful": true,
                         "column": 24,
-                        "durationMicroseconds": 143,
+                        "durationMicroseconds": 154,
                         "errorMessage": "",
                         "functionName": "width",
-                        "line": 588
-                    },
-                    {
-                        "codegenSuccessful": true,
-                        "column": 31,
-                        "durationMicroseconds": 68,
-                        "errorMessage": "",
-                        "functionName": "left",
-                        "line": 585
-                    },
-                    {
-                        "codegenSuccessful": true,
-                        "column": 30,
-                        "durationMicroseconds": 61,
-                        "errorMessage": "",
-                        "functionName": "top",
-                        "line": 586
-                    },
-                    {
-                        "codegenSuccessful": true,
-                        "column": 33,
-                        "durationMicroseconds": 59,
-                        "errorMessage": "",
-                        "functionName": "bottom",
                         "line": 587
                     },
                     {
                         "codegenSuccessful": true,
-                        "column": 28,
-                        "durationMicroseconds": 51,
-                        "errorMessage": "",
-                        "functionName": "width",
-                        "line": 593
-                    },
-                    {
-                        "codegenSuccessful": true,
-                        "column": 29,
-                        "durationMicroseconds": 47,
-                        "errorMessage": "",
-                        "functionName": "height",
-                        "line": 594
-                    },
-                    {
-                        "codegenSuccessful": true,
                         "column": 31,
-                        "durationMicroseconds": 48,
+                        "durationMicroseconds": 69,
                         "errorMessage": "",
-                        "functionName": "fillMode",
-                        "line": 596
-                    },
-                    {
-                        "codegenSuccessful": false,
-                        "column": 23,
-                        "durationMicroseconds": 328,
-                        "errorMessage": "Cannot access value for name dash",
-                        "functionName": "text",
-                        "line": 612
-                    },
-                    {
-                        "codegenSuccessful": true,
-                        "column": 35,
-                        "durationMicroseconds": 40,
-                        "errorMessage": "",
-                        "functionName": "centerIn",
-                        "line": 611
+                        "functionName": "left",
+                        "line": 584
                     },
                     {
                         "codegenSuccessful": true,
                         "column": 30,
-                        "durationMicroseconds": 54,
+                        "durationMicroseconds": 62,
                         "errorMessage": "",
-                        "functionName": "family",
-                        "line": 614
+                        "functionName": "top",
+                        "line": 585
                     },
                     {
                         "codegenSuccessful": true,
-                        "column": 61,
-                        "durationMicroseconds": 133,
+                        "column": 33,
+                        "durationMicroseconds": 61,
                         "errorMessage": "",
-                        "functionName": "x",
-                        "line": 616
+                        "functionName": "bottom",
+                        "line": 586
                     },
                     {
                         "codegenSuccessful": true,
-                        "column": 89,
-                        "durationMicroseconds": 109,
+                        "column": 28,
+                        "durationMicroseconds": 52,
                         "errorMessage": "",
-                        "functionName": "y",
-                        "line": 616
+                        "functionName": "width",
+                        "line": 592
                     },
                     {
                         "codegenSuccessful": true,
-                        "column": 82,
-                        "durationMicroseconds": 58,
+                        "column": 29,
+                        "durationMicroseconds": 48,
                         "errorMessage": "",
-                        "functionName": "type",
-                        "line": 617
+                        "functionName": "height",
+                        "line": 593
+                    },
+                    {
+                        "codegenSuccessful": true,
+                        "column": 31,
+                        "durationMicroseconds": 51,
+                        "errorMessage": "",
+                        "functionName": "fillMode",
+                        "line": 595
                     },
                     {
                         "codegenSuccessful": false,
-                        "column": 25,
-                        "durationMicroseconds": 38,
+                        "column": 23,
+                        "durationMicroseconds": 353,
                         "errorMessage": "Cannot access value for name dash",
-                        "functionName": "target",
-                        "line": 620
-                    },
-                    {
-                        "codegenSuccessful": false,
-                        "column": 17,
-                        "durationMicroseconds": 194,
-                        "errorMessage": "Cannot generate efficient code for LoadClosure",
-                        "functionName": "onGearChanged",
-                        "line": 621
+                        "functionName": "text",
+                        "line": 611
                     },
                     {
                         "codegenSuccessful": true,
                         "column": 35,
-                        "durationMicroseconds": 170,
+                        "durationMicroseconds": 41,
+                        "errorMessage": "",
+                        "functionName": "centerIn",
+                        "line": 610
+                    },
+                    {
+                        "codegenSuccessful": true,
+                        "column": 30,
+                        "durationMicroseconds": 106,
+                        "errorMessage": "",
+                        "functionName": "family",
+                        "line": 613
+                    },
+                    {
+                        "codegenSuccessful": true,
+                        "column": 61,
+                        "durationMicroseconds": 94,
+                        "errorMessage": "",
+                        "functionName": "x",
+                        "line": 615
+                    },
+                    {
+                        "codegenSuccessful": true,
+                        "column": 89,
+                        "durationMicroseconds": 114,
+                        "errorMessage": "",
+                        "functionName": "y",
+                        "line": 615
+                    },
+                    {
+                        "codegenSuccessful": true,
+                        "column": 82,
+                        "durationMicroseconds": 55,
+                        "errorMessage": "",
+                        "functionName": "type",
+                        "line": 616
+                    },
+                    {
+                        "codegenSuccessful": false,
+                        "column": 25,
+                        "durationMicroseconds": 40,
+                        "errorMessage": "Cannot access value for name dash",
+                        "functionName": "target",
+                        "line": 619
+                    },
+                    {
+                        "codegenSuccessful": false,
+                        "column": 17,
+                        "durationMicroseconds": 200,
+                        "errorMessage": "Cannot generate efficient code for LoadClosure",
+                        "functionName": "onGearChanged",
+                        "line": 620
+                    },
+                    {
+                        "codegenSuccessful": true,
+                        "column": 35,
+                        "durationMicroseconds": 165,
                         "errorMessage": "",
                         "functionName": "onRunningChanged",
-                        "line": 631
+                        "line": 630
                     },
                     {
                         "codegenSuccessful": true,
                         "column": 43,
-                        "durationMicroseconds": 47,
+                        "durationMicroseconds": 49,
+                        "errorMessage": "",
+                        "functionName": "target",
+                        "line": 628
+                    },
+                    {
+                        "codegenSuccessful": true,
+                        "column": 112,
+                        "durationMicroseconds": 51,
+                        "errorMessage": "",
+                        "functionName": "type",
+                        "line": 628
+                    },
+                    {
+                        "codegenSuccessful": true,
+                        "column": 43,
+                        "durationMicroseconds": 46,
                         "errorMessage": "",
                         "functionName": "target",
                         "line": 629
@@ -1445,35 +1453,19 @@
                     },
                     {
                         "codegenSuccessful": true,
-                        "column": 43,
-                        "durationMicroseconds": 44,
-                        "errorMessage": "",
-                        "functionName": "target",
-                        "line": 630
-                    },
-                    {
-                        "codegenSuccessful": true,
-                        "column": 112,
-                        "durationMicroseconds": 46,
-                        "errorMessage": "",
-                        "functionName": "type",
-                        "line": 630
-                    },
-                    {
-                        "codegenSuccessful": true,
                         "column": 36,
-                        "durationMicroseconds": 317,
+                        "durationMicroseconds": 309,
                         "errorMessage": "",
                         "functionName": "periodMs",
-                        "line": 684
+                        "line": 683
                     },
                     {
                         "codegenSuccessful": true,
                         "column": 29,
-                        "durationMicroseconds": 889,
+                        "durationMicroseconds": 880,
                         "errorMessage": "",
                         "functionName": "onPressed",
-                        "line": 652
+                        "line": 651
                     },
                     {
                         "codegenSuccessful": true,
@@ -1481,47 +1473,167 @@
                         "durationMicroseconds": 34,
                         "errorMessage": "",
                         "functionName": "onPressed",
-                        "line": 652
+                        "line": 651
                     },
                     {
                         "codegenSuccessful": false,
                         "column": 25,
-                        "durationMicroseconds": 42,
+                        "durationMicroseconds": 41,
                         "errorMessage": "Cannot access value for name dash",
                         "functionName": "target",
-                        "line": 663
+                        "line": 662
                     },
                     {
                         "codegenSuccessful": false,
                         "column": 17,
-                        "durationMicroseconds": 154,
+                        "durationMicroseconds": 160,
                         "errorMessage": "Cannot access value for name dash",
                         "functionName": "onRpmChanged",
-                        "line": 664
+                        "line": 663
                     },
                     {
                         "codegenSuccessful": true,
                         "column": 25,
-                        "durationMicroseconds": 73,
+                        "durationMicroseconds": 75,
                         "errorMessage": "",
                         "functionName": "source",
+                        "line": 677
+                    },
+                    {
+                        "codegenSuccessful": false,
+                        "column": 26,
+                        "durationMicroseconds": 226,
+                        "errorMessage": "Cannot access value for name dash",
+                        "functionName": "visible",
                         "line": 678
                     },
                     {
                         "codegenSuccessful": false,
                         "column": 26,
-                        "durationMicroseconds": 167,
+                        "durationMicroseconds": 147,
                         "errorMessage": "Cannot access value for name dash",
-                        "functionName": "visible",
+                        "functionName": "opacity",
                         "line": 679
                     },
                     {
-                        "codegenSuccessful": false,
+                        "codegenSuccessful": true,
+                        "column": 31,
+                        "durationMicroseconds": 46,
+                        "errorMessage": "",
+                        "functionName": "fill",
+                        "line": 676
+                    },
+                    {
+                        "codegenSuccessful": true,
                         "column": 26,
-                        "durationMicroseconds": 184,
+                        "durationMicroseconds": 127,
+                        "errorMessage": "",
+                        "functionName": "running",
+                        "line": 686
+                    },
+                    {
+                        "codegenSuccessful": true,
+                        "column": 24,
+                        "durationMicroseconds": 61,
+                        "errorMessage": "",
+                        "functionName": "loops",
+                        "line": 687
+                    },
+                    {
+                        "codegenSuccessful": false,
+                        "column": 35,
+                        "durationMicroseconds": 107,
                         "errorMessage": "Cannot access value for name dash",
-                        "functionName": "opacity",
-                        "line": 680
+                        "functionName": "onRunningChanged",
+                        "line": 690
+                    },
+                    {
+                        "codegenSuccessful": true,
+                        "column": 43,
+                        "durationMicroseconds": 55,
+                        "errorMessage": "",
+                        "functionName": "target",
+                        "line": 688
+                    },
+                    {
+                        "codegenSuccessful": true,
+                        "column": 105,
+                        "durationMicroseconds": 97,
+                        "errorMessage": "",
+                        "functionName": "duration",
+                        "line": 688
+                    },
+                    {
+                        "codegenSuccessful": true,
+                        "column": 139,
+                        "durationMicroseconds": 57,
+                        "errorMessage": "",
+                        "functionName": "type",
+                        "line": 688
+                    },
+                    {
+                        "codegenSuccessful": true,
+                        "column": 43,
+                        "durationMicroseconds": 57,
+                        "errorMessage": "",
+                        "functionName": "target",
+                        "line": 689
+                    },
+                    {
+                        "codegenSuccessful": true,
+                        "column": 106,
+                        "durationMicroseconds": 109,
+                        "errorMessage": "",
+                        "functionName": "duration",
+                        "line": 689
+                    },
+                    {
+                        "codegenSuccessful": true,
+                        "column": 140,
+                        "durationMicroseconds": 55,
+                        "errorMessage": "",
+                        "functionName": "type",
+                        "line": 689
+                    },
+                    {
+                        "codegenSuccessful": true,
+                        "column": 38,
+                        "durationMicroseconds": 57,
+                        "errorMessage": "",
+                        "functionName": "horizontalAlignment",
+                        "line": 701
+                    },
+                    {
+                        "codegenSuccessful": true,
+                        "column": 36,
+                        "durationMicroseconds": 48,
+                        "errorMessage": "",
+                        "functionName": "verticalAlignment",
+                        "line": 702
+                    },
+                    {
+                        "codegenSuccessful": true,
+                        "column": 29,
+                        "durationMicroseconds": 46,
+                        "errorMessage": "",
+                        "functionName": "textFormat",
+                        "line": 703
+                    },
+                    {
+                        "codegenSuccessful": true,
+                        "column": 27,
+                        "durationMicroseconds": 46,
+                        "errorMessage": "",
+                        "functionName": "wrapMode",
+                        "line": 704
+                    },
+                    {
+                        "codegenSuccessful": false,
+                        "column": 23,
+                        "durationMicroseconds": 202,
+                        "errorMessage": "Cannot access value for name dash",
+                        "functionName": "text",
+                        "line": 705
                     },
                     {
                         "codegenSuccessful": true,
@@ -1529,316 +1641,204 @@
                         "durationMicroseconds": 42,
                         "errorMessage": "",
                         "functionName": "fill",
-                        "line": 677
-                    },
-                    {
-                        "codegenSuccessful": true,
-                        "column": 26,
-                        "durationMicroseconds": 102,
-                        "errorMessage": "",
-                        "functionName": "running",
-                        "line": 687
-                    },
-                    {
-                        "codegenSuccessful": true,
-                        "column": 24,
-                        "durationMicroseconds": 52,
-                        "errorMessage": "",
-                        "functionName": "loops",
-                        "line": 688
-                    },
-                    {
-                        "codegenSuccessful": false,
-                        "column": 35,
-                        "durationMicroseconds": 89,
-                        "errorMessage": "Cannot access value for name dash",
-                        "functionName": "onRunningChanged",
-                        "line": 691
-                    },
-                    {
-                        "codegenSuccessful": true,
-                        "column": 43,
-                        "durationMicroseconds": 51,
-                        "errorMessage": "",
-                        "functionName": "target",
-                        "line": 689
-                    },
-                    {
-                        "codegenSuccessful": true,
-                        "column": 105,
-                        "durationMicroseconds": 90,
-                        "errorMessage": "",
-                        "functionName": "duration",
-                        "line": 689
-                    },
-                    {
-                        "codegenSuccessful": true,
-                        "column": 139,
-                        "durationMicroseconds": 51,
-                        "errorMessage": "",
-                        "functionName": "type",
-                        "line": 689
-                    },
-                    {
-                        "codegenSuccessful": true,
-                        "column": 43,
-                        "durationMicroseconds": 51,
-                        "errorMessage": "",
-                        "functionName": "target",
-                        "line": 690
-                    },
-                    {
-                        "codegenSuccessful": true,
-                        "column": 106,
-                        "durationMicroseconds": 95,
-                        "errorMessage": "",
-                        "functionName": "duration",
-                        "line": 690
-                    },
-                    {
-                        "codegenSuccessful": true,
-                        "column": 140,
-                        "durationMicroseconds": 50,
-                        "errorMessage": "",
-                        "functionName": "type",
-                        "line": 690
-                    },
-                    {
-                        "codegenSuccessful": true,
-                        "column": 38,
-                        "durationMicroseconds": 51,
-                        "errorMessage": "",
-                        "functionName": "horizontalAlignment",
-                        "line": 702
-                    },
-                    {
-                        "codegenSuccessful": true,
-                        "column": 36,
-                        "durationMicroseconds": 45,
-                        "errorMessage": "",
-                        "functionName": "verticalAlignment",
-                        "line": 703
-                    },
-                    {
-                        "codegenSuccessful": true,
-                        "column": 29,
-                        "durationMicroseconds": 43,
-                        "errorMessage": "",
-                        "functionName": "textFormat",
-                        "line": 704
-                    },
-                    {
-                        "codegenSuccessful": true,
-                        "column": 27,
-                        "durationMicroseconds": 44,
-                        "errorMessage": "",
-                        "functionName": "wrapMode",
-                        "line": 705
-                    },
-                    {
-                        "codegenSuccessful": false,
-                        "column": 23,
-                        "durationMicroseconds": 160,
-                        "errorMessage": "Cannot access value for name dash",
-                        "functionName": "text",
-                        "line": 706
-                    },
-                    {
-                        "codegenSuccessful": true,
-                        "column": 31,
-                        "durationMicroseconds": 39,
-                        "errorMessage": "",
-                        "functionName": "fill",
-                        "line": 701
+                        "line": 700
                     },
                     {
                         "codegenSuccessful": true,
                         "column": 48,
-                        "durationMicroseconds": 54,
+                        "durationMicroseconds": 61,
                         "errorMessage": "",
                         "functionName": "family",
-                        "line": 707
+                        "line": 706
                     },
                     {
                         "codegenSuccessful": false,
                         "column": 23,
-                        "durationMicroseconds": 341,
-                        "errorMessage": "Cannot access value for name useMph",
+                        "durationMicroseconds": 713,
+                        "errorMessage": "Cannot access value for name dash",
                         "functionName": "text",
-                        "line": 714
-                    },
-                    {
-                        "codegenSuccessful": true,
-                        "column": 35,
-                        "durationMicroseconds": 40,
-                        "errorMessage": "",
-                        "functionName": "centerIn",
                         "line": 713
                     },
                     {
                         "codegenSuccessful": true,
+                        "column": 35,
+                        "durationMicroseconds": 48,
+                        "errorMessage": "",
+                        "functionName": "centerIn",
+                        "line": 712
+                    },
+                    {
+                        "codegenSuccessful": true,
                         "column": 48,
-                        "durationMicroseconds": 56,
+                        "durationMicroseconds": 60,
                         "errorMessage": "",
                         "functionName": "family",
-                        "line": 715
+                        "line": 714
                     },
                     {
                         "codegenSuccessful": false,
                         "column": 23,
-                        "durationMicroseconds": 337,
-                        "errorMessage": "Cannot access value for name useMph",
+                        "durationMicroseconds": 621,
+                        "errorMessage": "Cannot access value for name dash",
                         "functionName": "text",
+                        "line": 721
+                    },
+                    {
+                        "codegenSuccessful": true,
+                        "column": 35,
+                        "durationMicroseconds": 45,
+                        "errorMessage": "",
+                        "functionName": "centerIn",
+                        "line": 720
+                    },
+                    {
+                        "codegenSuccessful": true,
+                        "column": 48,
+                        "durationMicroseconds": 60,
+                        "errorMessage": "",
+                        "functionName": "family",
                         "line": 722
+                    },
+                    {
+                        "codegenSuccessful": false,
+                        "column": 22,
+                        "durationMicroseconds": 133,
+                        "errorMessage": "Cannot access value for name dash",
+                        "functionName": "visible",
+                        "line": 733
+                    },
+                    {
+                        "codegenSuccessful": false,
+                        "column": 22,
+                        "durationMicroseconds": 110,
+                        "errorMessage": "Cannot access value for name dash",
+                        "functionName": "opacity",
+                        "line": 734
+                    },
+                    {
+                        "codegenSuccessful": true,
+                        "column": 30,
+                        "durationMicroseconds": 53,
+                        "errorMessage": "",
+                        "functionName": "transformOrigin",
+                        "line": 735
                     },
                     {
                         "codegenSuccessful": true,
                         "column": 35,
                         "durationMicroseconds": 41,
                         "errorMessage": "",
-                        "functionName": "centerIn",
-                        "line": 721
-                    },
-                    {
-                        "codegenSuccessful": true,
-                        "column": 48,
-                        "durationMicroseconds": 73,
-                        "errorMessage": "",
-                        "functionName": "family",
-                        "line": 723
-                    },
-                    {
-                        "codegenSuccessful": false,
-                        "column": 22,
-                        "durationMicroseconds": 129,
-                        "errorMessage": "Cannot access value for name dash",
-                        "functionName": "visible",
-                        "line": 734
-                    },
-                    {
-                        "codegenSuccessful": false,
-                        "column": 22,
-                        "durationMicroseconds": 118,
-                        "errorMessage": "Cannot access value for name dash",
-                        "functionName": "opacity",
-                        "line": 735
-                    },
-                    {
-                        "codegenSuccessful": true,
-                        "column": 30,
-                        "durationMicroseconds": 52,
-                        "errorMessage": "",
-                        "functionName": "transformOrigin",
-                        "line": 736
-                    },
-                    {
-                        "codegenSuccessful": true,
-                        "column": 35,
-                        "durationMicroseconds": 39,
-                        "errorMessage": "",
                         "functionName": "fill",
-                        "line": 738
+                        "line": 737
                     },
                     {
                         "codegenSuccessful": true,
                         "column": 25,
-                        "durationMicroseconds": 42,
+                        "durationMicroseconds": 47,
                         "errorMessage": "",
                         "functionName": "target",
+                        "line": 739
+                    },
+                    {
+                        "codegenSuccessful": true,
+                        "column": 17,
+                        "durationMicroseconds": 236,
+                        "errorMessage": "",
+                        "functionName": "onVisibleChanged",
                         "line": 740
                     },
                     {
                         "codegenSuccessful": true,
-                        "column": 17,
-                        "durationMicroseconds": 251,
-                        "errorMessage": "",
-                        "functionName": "onVisibleChanged",
-                        "line": 741
-                    },
-                    {
-                        "codegenSuccessful": true,
                         "column": 55,
-                        "durationMicroseconds": 44,
+                        "durationMicroseconds": 49,
                         "errorMessage": "",
                         "functionName": "target",
-                        "line": 749
+                        "line": 748
                     },
                     {
                         "codegenSuccessful": true,
                         "column": 121,
-                        "durationMicroseconds": 49,
+                        "durationMicroseconds": 82,
                         "errorMessage": "",
                         "functionName": "type",
-                        "line": 749
+                        "line": 748
                     },
                     {
                         "codegenSuccessful": false,
                         "column": 22,
-                        "durationMicroseconds": 126,
+                        "durationMicroseconds": 229,
                         "errorMessage": "Cannot access value for name dash",
                         "functionName": "visible",
-                        "line": 756
+                        "line": 755
                     },
                     {
                         "codegenSuccessful": false,
                         "column": 22,
-                        "durationMicroseconds": 106,
+                        "durationMicroseconds": 240,
                         "errorMessage": "Cannot access value for name dash",
                         "functionName": "opacity",
-                        "line": 757
+                        "line": 756
                     },
                     {
                         "codegenSuccessful": true,
                         "column": 30,
-                        "durationMicroseconds": 114,
+                        "durationMicroseconds": 79,
                         "errorMessage": "",
                         "functionName": "transformOrigin",
-                        "line": 758
+                        "line": 757
                     },
                     {
                         "codegenSuccessful": true,
                         "column": 35,
-                        "durationMicroseconds": 39,
+                        "durationMicroseconds": 62,
                         "errorMessage": "",
                         "functionName": "fill",
-                        "line": 760
+                        "line": 759
                     },
                     {
                         "codegenSuccessful": true,
                         "column": 25,
-                        "durationMicroseconds": 48,
+                        "durationMicroseconds": 69,
                         "errorMessage": "",
                         "functionName": "target",
-                        "line": 762
+                        "line": 761
                     },
                     {
                         "codegenSuccessful": true,
                         "column": 17,
-                        "durationMicroseconds": 267,
+                        "durationMicroseconds": 384,
                         "errorMessage": "",
                         "functionName": "onVisibleChanged",
-                        "line": 763
+                        "line": 762
                     },
                     {
                         "codegenSuccessful": true,
                         "column": 55,
-                        "durationMicroseconds": 44,
+                        "durationMicroseconds": 67,
                         "errorMessage": "",
                         "functionName": "target",
-                        "line": 771
+                        "line": 770
                     },
                     {
                         "codegenSuccessful": true,
                         "column": 122,
-                        "durationMicroseconds": 56,
+                        "durationMicroseconds": 91,
                         "errorMessage": "",
                         "functionName": "type",
-                        "line": 771
+                        "line": 770
                     },
                     {
                         "codegenSuccessful": false,
                         "column": 136,
-                        "durationMicroseconds": 123,
+                        "durationMicroseconds": 219,
+                        "errorMessage": "Cannot access value for name dash",
+                        "functionName": "on",
+                        "line": 774
+                    },
+                    {
+                        "codegenSuccessful": false,
+                        "column": 136,
+                        "durationMicroseconds": 171,
                         "errorMessage": "Cannot access value for name dash",
                         "functionName": "on",
                         "line": 775
@@ -1846,154 +1846,170 @@
                     {
                         "codegenSuccessful": false,
                         "column": 136,
-                        "durationMicroseconds": 109,
+                        "durationMicroseconds": 137,
                         "errorMessage": "Cannot access value for name dash",
                         "functionName": "on",
                         "line": 776
                     },
                     {
                         "codegenSuccessful": false,
-                        "column": 136,
-                        "durationMicroseconds": 104,
-                        "errorMessage": "Cannot access value for name dash",
-                        "functionName": "on",
-                        "line": 777
-                    },
-                    {
-                        "codegenSuccessful": false,
                         "column": 21,
-                        "durationMicroseconds": 32,
+                        "durationMicroseconds": 44,
                         "errorMessage": "Cannot access value for name dash",
                         "functionName": "target",
-                        "line": 783
+                        "line": 782
                     },
                     {
                         "codegenSuccessful": false,
                         "column": 13,
-                        "durationMicroseconds": 88,
+                        "durationMicroseconds": 150,
                         "errorMessage": "Cannot access value for name dash",
                         "functionName": "onCltChanged",
-                        "line": 784
+                        "line": 783
                     },
                     {
                         "codegenSuccessful": true,
                         "column": 60,
-                        "durationMicroseconds": 73,
+                        "durationMicroseconds": 126,
                         "errorMessage": "",
                         "functionName": "onTriggered",
-                        "line": 788
+                        "line": 787
                     },
                     {
                         "codegenSuccessful": true,
                         "column": 22,
-                        "durationMicroseconds": 95,
+                        "durationMicroseconds": 151,
                         "errorMessage": "",
                         "functionName": "opacity",
+                        "line": 792
+                    },
+                    {
+                        "codegenSuccessful": true,
+                        "column": 22,
+                        "durationMicroseconds": 120,
+                        "errorMessage": "",
+                        "functionName": "visible",
                         "line": 793
                     },
                     {
                         "codegenSuccessful": true,
-                        "column": 22,
-                        "durationMicroseconds": 74,
-                        "errorMessage": "",
-                        "functionName": "visible",
-                        "line": 794
-                    },
-                    {
-                        "codegenSuccessful": true,
                         "column": 39,
-                        "durationMicroseconds": 68,
+                        "durationMicroseconds": 76,
                         "errorMessage": "",
                         "functionName": "horizontalCenter",
-                        "line": 790
+                        "line": 789
                     },
                     {
                         "codegenSuccessful": false,
                         "column": 23,
-                        "durationMicroseconds": 184,
+                        "durationMicroseconds": 261,
                         "errorMessage": "Cannot access value for name dash",
                         "functionName": "text",
-                        "line": 799
-                    },
-                    {
-                        "codegenSuccessful": true,
-                        "column": 35,
-                        "durationMicroseconds": 40,
-                        "errorMessage": "",
-                        "functionName": "centerIn",
                         "line": 798
                     },
                     {
                         "codegenSuccessful": true,
+                        "column": 35,
+                        "durationMicroseconds": 43,
+                        "errorMessage": "",
+                        "functionName": "centerIn",
+                        "line": 797
+                    },
+                    {
+                        "codegenSuccessful": true,
                         "column": 46,
-                        "durationMicroseconds": 101,
+                        "durationMicroseconds": 57,
                         "errorMessage": "",
                         "functionName": "family",
-                        "line": 800
+                        "line": 799
                     },
                     {
                         "codegenSuccessful": false,
                         "column": 36,
-                        "durationMicroseconds": 595,
+                        "durationMicroseconds": 633,
                         "errorMessage": "Cannot access value for name dash",
                         "functionName": "onCompleted",
-                        "line": 852
+                        "line": 851
                     },
                     {
                         "codegenSuccessful": true,
                         "column": 25,
-                        "durationMicroseconds": 47,
+                        "durationMicroseconds": 55,
                         "errorMessage": "",
                         "functionName": "target",
+                        "line": 870
+                    },
+                    {
+                        "codegenSuccessful": false,
+                        "column": 17,
+                        "durationMicroseconds": 58,
+                        "errorMessage": "Cannot access value for name dash",
+                        "functionName": "onUseMphChanged",
                         "line": 871
                     },
                     {
                         "codegenSuccessful": false,
                         "column": 17,
-                        "durationMicroseconds": 45,
+                        "durationMicroseconds": 40,
                         "errorMessage": "Cannot access value for name dash",
-                        "functionName": "onUseMphChanged",
+                        "functionName": "onRpmMaxChanged",
                         "line": 872
                     },
                     {
                         "codegenSuccessful": false,
-                        "column": 17,
-                        "durationMicroseconds": 38,
+                        "column": 25,
+                        "durationMicroseconds": 31,
                         "errorMessage": "Cannot access value for name dash",
-                        "functionName": "onRpmMaxChanged",
-                        "line": 873
+                        "functionName": "target",
+                        "line": 877
+                    },
+                    {
+                        "codegenSuccessful": false,
+                        "column": 17,
+                        "durationMicroseconds": 82,
+                        "errorMessage": "Cannot access value for name dash",
+                        "functionName": "onUseMphChanged",
+                        "line": 878
                     },
                     {
                         "codegenSuccessful": true,
                         "column": 44,
-                        "durationMicroseconds": 78,
+                        "durationMicroseconds": 87,
                         "errorMessage": "",
                         "functionName": "context",
-                        "line": 881
+                        "line": 889
                     },
                     {
                         "codegenSuccessful": false,
                         "column": 81,
-                        "durationMicroseconds": 35,
+                        "durationMicroseconds": 37,
                         "errorMessage": "Cannot access value for name serviceOpen",
                         "functionName": "onActivated",
-                        "line": 881
+                        "line": 889
                     },
                     {
                         "codegenSuccessful": true,
-                        "column": 33,
-                        "durationMicroseconds": 54,
+                        "column": 31,
+                        "durationMicroseconds": 57,
                         "errorMessage": "",
                         "functionName": "height",
-                        "line": 886
+                        "line": 894
                     },
                     {
                         "codegenSuccessful": true,
-                        "column": 22,
+                        "column": 20,
+                        "durationMicroseconds": 135,
+                        "errorMessage": "",
+                        "functionName": "visible",
+                        "line": 896
+                    },
+                    {
+                        "codegenSuccessful": true,
+                        "column": 20,
                         "durationMicroseconds": 50,
                         "errorMessage": "",
                         "functionName": "enabled",
-                        "line": 889
+                        "line": 897
                     },
                     {
                         "codegenSuccessful": true,
@@ -2001,79 +2017,79 @@
                         "durationMicroseconds": 40,
                         "errorMessage": "",
                         "functionName": "fill",
-                        "line": 893
+                        "line": 901
                     },
                     {
                         "codegenSuccessful": true,
                         "column": 60,
-                        "durationMicroseconds": 53,
+                        "durationMicroseconds": 55,
                         "errorMessage": "",
                         "functionName": "family",
-                        "line": 897
-                    },
-                    {
-                        "codegenSuccessful": true,
-                        "column": 122,
-                        "durationMicroseconds": 58,
-                        "errorMessage": "",
-                        "functionName": "verticalAlignment",
-                        "line": 902
-                    },
-                    {
-                        "codegenSuccessful": true,
-                        "column": 73,
-                        "durationMicroseconds": 54,
-                        "errorMessage": "",
-                        "functionName": "family",
-                        "line": 902
-                    },
-                    {
-                        "codegenSuccessful": false,
-                        "column": 50,
-                        "durationMicroseconds": 0,
-                        "errorMessage": "Could not find property \"checked\".",
-                        "functionName": "checked",
-                        "line": 903
-                    },
-                    {
-                        "codegenSuccessful": false,
-                        "column": 74,
-                        "durationMicroseconds": 0,
-                        "errorMessage": "Could not find signal \"toggled\".",
-                        "functionName": "onToggled",
-                        "line": 903
-                    },
-                    {
-                        "codegenSuccessful": false,
-                        "column": 31,
-                        "durationMicroseconds": 35,
-                        "errorMessage": "Cannot retrieve a non-object type by ID: units",
-                        "functionName": "text",
                         "line": 905
                     },
                     {
                         "codegenSuccessful": true,
-                        "column": 54,
+                        "column": 122,
                         "durationMicroseconds": 56,
                         "errorMessage": "",
+                        "functionName": "verticalAlignment",
+                        "line": 910
+                    },
+                    {
+                        "codegenSuccessful": true,
+                        "column": 73,
+                        "durationMicroseconds": 67,
+                        "errorMessage": "",
                         "functionName": "family",
-                        "line": 906
+                        "line": 910
+                    },
+                    {
+                        "codegenSuccessful": false,
+                        "column": 34,
+                        "durationMicroseconds": 0,
+                        "errorMessage": "Could not find property \"checked\".",
+                        "functionName": "checked",
+                        "line": 913
+                    },
+                    {
+                        "codegenSuccessful": false,
+                        "column": 36,
+                        "durationMicroseconds": 0,
+                        "errorMessage": "Could not find signal \"toggled\".",
+                        "functionName": "onToggled",
+                        "line": 914
+                    },
+                    {
+                        "codegenSuccessful": false,
+                        "column": 31,
+                        "durationMicroseconds": 43,
+                        "errorMessage": "Cannot retrieve a non-object type by ID: units",
+                        "functionName": "text",
+                        "line": 920
+                    },
+                    {
+                        "codegenSuccessful": true,
+                        "column": 54,
+                        "durationMicroseconds": 58,
+                        "errorMessage": "",
+                        "functionName": "family",
+                        "line": 921
                     },
                     {
                         "codegenSuccessful": false,
                         "column": 49,
-                        "durationMicroseconds": 24,
+                        "durationMicroseconds": 26,
                         "errorMessage": "Cannot retrieve a non-object type by ID: units",
                         "functionName": "verticalCenter",
-                        "line": 907
+                        "line": 922
                     },
                     {
                         "codegenSuccessful": true,
                         "column": 76,
-                        "durationMicroseconds": 54,
+                        "durationMicroseconds": 117,
                         "errorMessage": "",
                         "functionName": "family",
-                        "line": 915
+                        "line": 930
                     },
                     {
                         "codegenSuccessful": false,
@@ -2081,7 +2097,7 @@
                         "durationMicroseconds": 0,
                         "errorMessage": "Could not find property \"checked\".",
                         "functionName": "checked",
-                        "line": 916
+                        "line": 931
                     },
                     {
                         "codegenSuccessful": false,
@@ -2089,167 +2105,15 @@
                         "durationMicroseconds": 0,
                         "errorMessage": "Could not find signal \"toggled\".",
                         "functionName": "onToggled",
-                        "line": 916
-                    },
-                    {
-                        "codegenSuccessful": true,
-                        "column": 30,
-                        "durationMicroseconds": 174,
-                        "errorMessage": "",
-                        "functionName": "text",
-                        "line": 920
-                    },
-                    {
-                        "codegenSuccessful": true,
-                        "column": 111,
-                        "durationMicroseconds": 62,
-                        "errorMessage": "",
-                        "functionName": "family",
-                        "line": 920
-                    },
-                    {
-                        "codegenSuccessful": false,
-                        "column": 52,
-                        "durationMicroseconds": 0,
-                        "errorMessage": "Could not find property \"value\".",
-                        "functionName": "value",
-                        "line": 921
-                    },
-                    {
-                        "codegenSuccessful": false,
-                        "column": 101,
-                        "durationMicroseconds": 0,
-                        "errorMessage": "Could not find signal \"valueChanged\".",
-                        "functionName": "onValueChanged",
-                        "line": 921
-                    },
-                    {
-                        "codegenSuccessful": true,
-                        "column": 30,
-                        "durationMicroseconds": 159,
-                        "errorMessage": "",
-                        "functionName": "text",
-                        "line": 924
-                    },
-                    {
-                        "codegenSuccessful": true,
-                        "column": 101,
-                        "durationMicroseconds": 54,
-                        "errorMessage": "",
-                        "functionName": "family",
-                        "line": 924
-                    },
-                    {
-                        "codegenSuccessful": false,
-                        "column": 42,
-                        "durationMicroseconds": 0,
-                        "errorMessage": "Could not find property \"to\".",
-                        "functionName": "to",
-                        "line": 925
-                    },
-                    {
-                        "codegenSuccessful": false,
-                        "column": 72,
-                        "durationMicroseconds": 0,
-                        "errorMessage": "Could not find property \"value\".",
-                        "functionName": "value",
-                        "line": 925
-                    },
-                    {
-                        "codegenSuccessful": false,
-                        "column": 112,
-                        "durationMicroseconds": 0,
-                        "errorMessage": "Could not find signal \"valueChanged\".",
-                        "functionName": "onValueChanged",
-                        "line": 925
-                    },
-                    {
-                        "codegenSuccessful": true,
-                        "column": 30,
-                        "durationMicroseconds": 93,
-                        "errorMessage": "",
-                        "functionName": "text",
-                        "line": 926
-                    },
-                    {
-                        "codegenSuccessful": true,
-                        "column": 102,
-                        "durationMicroseconds": 54,
-                        "errorMessage": "",
-                        "functionName": "family",
-                        "line": 926
-                    },
-                    {
-                        "codegenSuccessful": false,
-                        "column": 42,
-                        "durationMicroseconds": 0,
-                        "errorMessage": "Could not find property \"to\".",
-                        "functionName": "to",
-                        "line": 927
-                    },
-                    {
-                        "codegenSuccessful": false,
-                        "column": 72,
-                        "durationMicroseconds": 0,
-                        "errorMessage": "Could not find property \"value\".",
-                        "functionName": "value",
-                        "line": 927
-                    },
-                    {
-                        "codegenSuccessful": false,
-                        "column": 113,
-                        "durationMicroseconds": 0,
-                        "errorMessage": "Could not find signal \"valueChanged\".",
-                        "functionName": "onValueChanged",
-                        "line": 927
-                    },
-                    {
-                        "codegenSuccessful": false,
-                        "column": 30,
-                        "durationMicroseconds": 27,
-                        "errorMessage": "Cannot access value for name overRevThreshold",
-                        "functionName": "text",
-                        "line": 930
-                    },
-                    {
-                        "codegenSuccessful": true,
-                        "column": 98,
-                        "durationMicroseconds": 55,
-                        "errorMessage": "",
-                        "functionName": "family",
-                        "line": 930
-                    },
-                    {
-                        "codegenSuccessful": false,
-                        "column": 42,
-                        "durationMicroseconds": 0,
-                        "errorMessage": "Could not find property \"to\".",
-                        "functionName": "to",
-                        "line": 931
-                    },
-                    {
-                        "codegenSuccessful": false,
-                        "column": 72,
-                        "durationMicroseconds": 0,
-                        "errorMessage": "Could not find property \"value\".",
-                        "functionName": "value",
-                        "line": 931
-                    },
-                    {
-                        "codegenSuccessful": false,
-                        "column": 106,
-                        "durationMicroseconds": 0,
-                        "errorMessage": "Could not find signal \"valueChanged\".",
-                        "functionName": "onValueChanged",
                         "line": 931
                     },
                     {
                         "codegenSuccessful": true,
                         "column": 80,
-                        "durationMicroseconds": 55,
+                        "durationMicroseconds": 76,
                         "errorMessage": "",
                         "functionName": "family",
-                        "line": 936
+                        "line": 937
                     },
                     {
                         "codegenSuccessful": false,
@@ -2257,7 +2121,7 @@
                         "durationMicroseconds": 0,
                         "errorMessage": "Could not find property \"checked\".",
                         "functionName": "checked",
-                        "line": 937
+                        "line": 938
                     },
                     {
                         "codegenSuccessful": false,
@@ -2265,27 +2129,27 @@
                         "durationMicroseconds": 0,
                         "errorMessage": "Could not find signal \"toggled\".",
                         "functionName": "onToggled",
-                        "line": 937
-                    },
-                    {
-                        "codegenSuccessful": false,
-                        "column": 30,
-                        "durationMicroseconds": 234,
-                        "errorMessage": "Cannot generate efficient code for call to untyped JavaScript function",
-                        "functionName": "text",
-                        "line": 939
+                        "line": 938
                     },
                     {
                         "codegenSuccessful": true,
-                        "column": 114,
-                        "durationMicroseconds": 74,
+                        "column": 30,
+                        "durationMicroseconds": 205,
+                        "errorMessage": "",
+                        "functionName": "text",
+                        "line": 942
+                    },
+                    {
+                        "codegenSuccessful": true,
+                        "column": 111,
+                        "durationMicroseconds": 56,
                         "errorMessage": "",
                         "functionName": "family",
-                        "line": 939
+                        "line": 942
                     },
                     {
                         "codegenSuccessful": false,
-                        "column": 28,
+                        "column": 52,
                         "durationMicroseconds": 0,
                         "errorMessage": "Could not find property \"value\".",
                         "functionName": "value",
@@ -2293,35 +2157,187 @@
                     },
                     {
                         "codegenSuccessful": false,
-                        "column": 37,
+                        "column": 101,
                         "durationMicroseconds": 0,
                         "errorMessage": "Could not find signal \"valueChanged\".",
                         "functionName": "onValueChanged",
-                        "line": 945
-                    },
-                    {
-                        "codegenSuccessful": false,
-                        "column": 78,
-                        "durationMicroseconds": 156,
-                        "errorMessage": "Cannot access value for name dash",
-                        "functionName": "onActivated",
-                        "line": 949
+                        "line": 943
                     },
                     {
                         "codegenSuccessful": true,
-                        "column": 56,
-                        "durationMicroseconds": 88,
+                        "column": 30,
+                        "durationMicroseconds": 99,
                         "errorMessage": "",
-                        "functionName": "when",
-                        "line": 954
+                        "functionName": "text",
+                        "line": 946
+                    },
+                    {
+                        "codegenSuccessful": true,
+                        "column": 101,
+                        "durationMicroseconds": 55,
+                        "errorMessage": "",
+                        "functionName": "family",
+                        "line": 946
+                    },
+                    {
+                        "codegenSuccessful": false,
+                        "column": 42,
+                        "durationMicroseconds": 0,
+                        "errorMessage": "Could not find property \"to\".",
+                        "functionName": "to",
+                        "line": 947
+                    },
+                    {
+                        "codegenSuccessful": false,
+                        "column": 72,
+                        "durationMicroseconds": 0,
+                        "errorMessage": "Could not find property \"value\".",
+                        "functionName": "value",
+                        "line": 947
+                    },
+                    {
+                        "codegenSuccessful": false,
+                        "column": 112,
+                        "durationMicroseconds": 0,
+                        "errorMessage": "Could not find signal \"valueChanged\".",
+                        "functionName": "onValueChanged",
+                        "line": 947
+                    },
+                    {
+                        "codegenSuccessful": true,
+                        "column": 30,
+                        "durationMicroseconds": 97,
+                        "errorMessage": "",
+                        "functionName": "text",
+                        "line": 948
                     },
                     {
                         "codegenSuccessful": true,
                         "column": 102,
-                        "durationMicroseconds": 64,
+                        "durationMicroseconds": 55,
+                        "errorMessage": "",
+                        "functionName": "family",
+                        "line": 948
+                    },
+                    {
+                        "codegenSuccessful": false,
+                        "column": 42,
+                        "durationMicroseconds": 0,
+                        "errorMessage": "Could not find property \"to\".",
+                        "functionName": "to",
+                        "line": 949
+                    },
+                    {
+                        "codegenSuccessful": false,
+                        "column": 72,
+                        "durationMicroseconds": 0,
+                        "errorMessage": "Could not find property \"value\".",
+                        "functionName": "value",
+                        "line": 949
+                    },
+                    {
+                        "codegenSuccessful": false,
+                        "column": 113,
+                        "durationMicroseconds": 0,
+                        "errorMessage": "Could not find signal \"valueChanged\".",
+                        "functionName": "onValueChanged",
+                        "line": 949
+                    },
+                    {
+                        "codegenSuccessful": false,
+                        "column": 30,
+                        "durationMicroseconds": 37,
+                        "errorMessage": "Cannot access value for name overRevThreshold",
+                        "functionName": "text",
+                        "line": 952
+                    },
+                    {
+                        "codegenSuccessful": true,
+                        "column": 98,
+                        "durationMicroseconds": 123,
+                        "errorMessage": "",
+                        "functionName": "family",
+                        "line": 952
+                    },
+                    {
+                        "codegenSuccessful": false,
+                        "column": 42,
+                        "durationMicroseconds": 0,
+                        "errorMessage": "Could not find property \"to\".",
+                        "functionName": "to",
+                        "line": 953
+                    },
+                    {
+                        "codegenSuccessful": false,
+                        "column": 72,
+                        "durationMicroseconds": 0,
+                        "errorMessage": "Could not find property \"value\".",
+                        "functionName": "value",
+                        "line": 953
+                    },
+                    {
+                        "codegenSuccessful": false,
+                        "column": 106,
+                        "durationMicroseconds": 0,
+                        "errorMessage": "Could not find signal \"valueChanged\".",
+                        "functionName": "onValueChanged",
+                        "line": 953
+                    },
+                    {
+                        "codegenSuccessful": false,
+                        "column": 30,
+                        "durationMicroseconds": 293,
+                        "errorMessage": "Cannot generate efficient code for call to untyped JavaScript function",
+                        "functionName": "text",
+                        "line": 956
+                    },
+                    {
+                        "codegenSuccessful": true,
+                        "column": 114,
+                        "durationMicroseconds": 92,
+                        "errorMessage": "",
+                        "functionName": "family",
+                        "line": 956
+                    },
+                    {
+                        "codegenSuccessful": false,
+                        "column": 28,
+                        "durationMicroseconds": 0,
+                        "errorMessage": "Could not find property \"value\".",
+                        "functionName": "value",
+                        "line": 960
+                    },
+                    {
+                        "codegenSuccessful": false,
+                        "column": 37,
+                        "durationMicroseconds": 0,
+                        "errorMessage": "Could not find signal \"valueChanged\".",
+                        "functionName": "onValueChanged",
+                        "line": 962
+                    },
+                    {
+                        "codegenSuccessful": false,
+                        "column": 78,
+                        "durationMicroseconds": 240,
+                        "errorMessage": "Cannot access value for name dash",
+                        "functionName": "onActivated",
+                        "line": 966
+                    },
+                    {
+                        "codegenSuccessful": true,
+                        "column": 56,
+                        "durationMicroseconds": 226,
+                        "errorMessage": "",
+                        "functionName": "when",
+                        "line": 971
+                    },
+                    {
+                        "codegenSuccessful": true,
+                        "column": 102,
+                        "durationMicroseconds": 72,
                         "errorMessage": "",
                         "functionName": "target",
-                        "line": 954
+                        "line": 971
                     },
                     {
                         "codegenSuccessful": false,
@@ -2329,119 +2345,119 @@
                         "durationMicroseconds": 0,
                         "errorMessage": "Could not find property \"x\". You may want use ID-based grouped properties here.",
                         "functionName": "x",
-                        "line": 954
+                        "line": 971
                     },
                     {
                         "codegenSuccessful": true,
                         "column": 56,
-                        "durationMicroseconds": 80,
+                        "durationMicroseconds": 84,
                         "errorMessage": "",
                         "functionName": "when",
-                        "line": 953
+                        "line": 970
                     },
                     {
                         "codegenSuccessful": true,
                         "column": 102,
-                        "durationMicroseconds": 61,
+                        "durationMicroseconds": 69,
                         "errorMessage": "",
                         "functionName": "target",
-                        "line": 953
+                        "line": 970
                     },
                     {
                         "codegenSuccessful": true,
                         "column": 116,
-                        "durationMicroseconds": 83,
+                        "durationMicroseconds": 90,
                         "errorMessage": "",
                         "functionName": "type",
-                        "line": 956
+                        "line": 973
                     },
                     {
                         "codegenSuccessful": true,
                         "column": 20,
-                        "durationMicroseconds": 72,
+                        "durationMicroseconds": 85,
                         "errorMessage": "",
                         "functionName": "width",
-                        "line": 966
+                        "line": 983
                     },
                     {
                         "codegenSuccessful": false,
                         "column": 20,
-                        "durationMicroseconds": 227,
+                        "durationMicroseconds": 287,
                         "errorMessage": "Cannot access value for name dash",
                         "functionName": "color",
-                        "line": 967
+                        "line": 984
                     },
                     {
                         "codegenSuccessful": false,
                         "column": 22,
-                        "durationMicroseconds": 144,
+                        "durationMicroseconds": 174,
                         "errorMessage": "Cannot access value for name dash",
                         "functionName": "opacity",
-                        "line": 968
+                        "line": 985
                     },
                     {
                         "codegenSuccessful": true,
                         "column": 22,
-                        "durationMicroseconds": 104,
+                        "durationMicroseconds": 127,
                         "errorMessage": "",
                         "functionName": "visible",
-                        "line": 969
+                        "line": 986
                     },
                     {
                         "codegenSuccessful": true,
                         "column": 26,
-                        "durationMicroseconds": 100,
+                        "durationMicroseconds": 82,
                         "errorMessage": "",
                         "functionName": "top",
-                        "line": 965
+                        "line": 982
                     },
                     {
                         "codegenSuccessful": false,
                         "column": 52,
-                        "durationMicroseconds": 282,
+                        "durationMicroseconds": 190,
                         "errorMessage": "Cannot access value for name dash",
                         "functionName": "text",
-                        "line": 970
+                        "line": 987
                     },
                     {
                         "codegenSuccessful": true,
                         "column": 38,
-                        "durationMicroseconds": 56,
+                        "durationMicroseconds": 46,
                         "errorMessage": "",
                         "functionName": "centerIn",
-                        "line": 970
+                        "line": 987
                     },
                     {
                         "codegenSuccessful": true,
                         "column": 125,
-                        "durationMicroseconds": 75,
+                        "durationMicroseconds": 63,
                         "errorMessage": "",
                         "functionName": "family",
-                        "line": 970
+                        "line": 987
                     },
                     {
                         "codegenSuccessful": true,
                         "column": 78,
-                        "durationMicroseconds": 166,
+                        "durationMicroseconds": 132,
                         "errorMessage": "",
                         "functionName": "onClicked",
-                        "line": 982
+                        "line": 999
                     },
                     {
                         "codegenSuccessful": true,
                         "column": 39,
-                        "durationMicroseconds": 53,
+                        "durationMicroseconds": 42,
                         "errorMessage": "",
                         "functionName": "fill",
-                        "line": 982
+                        "line": 999
                     },
                     {
                         "codegenSuccessful": true,
                         "column": 35,
-                        "durationMicroseconds": 57,
+                        "durationMicroseconds": 56,
                         "errorMessage": "",
                         "functionName": "factor",
-                        "line": 995
+                        "line": 1012
                     },
                     {
                         "codegenSuccessful": false,
@@ -2449,247 +2465,271 @@
                         "durationMicroseconds": 0,
                         "errorMessage": "Functions without type annotations won't be compiled",
                         "functionName": "setGroupOpacity",
-                        "line": 1015
+                        "line": 1031
                     },
                     {
                         "codegenSuccessful": true,
                         "column": 27,
-                        "durationMicroseconds": 38,
+                        "durationMicroseconds": 44,
                         "errorMessage": "",
                         "functionName": "fill",
-                        "line": 990
+                        "line": 1007
                     },
                     {
                         "codegenSuccessful": true,
                         "column": 52,
-                        "durationMicroseconds": 36,
+                        "durationMicroseconds": 39,
                         "errorMessage": "",
                         "functionName": "fill",
-                        "line": 998
+                        "line": 1015
                     },
                     {
                         "codegenSuccessful": true,
                         "column": 43,
-                        "durationMicroseconds": 84,
+                        "durationMicroseconds": 73,
                         "errorMessage": "",
                         "functionName": "horizontalCenter",
-                        "line": 1004
+                        "line": 1021
                     },
                     {
                         "codegenSuccessful": true,
                         "column": 30,
-                        "durationMicroseconds": 55,
+                        "durationMicroseconds": 211,
                         "errorMessage": "",
                         "functionName": "family",
-                        "line": 1008
+                        "line": 1025
                     },
                     {
                         "codegenSuccessful": true,
                         "column": 62,
-                        "durationMicroseconds": 89,
+                        "durationMicroseconds": 145,
                         "errorMessage": "",
                         "functionName": "x",
-                        "line": 1011
-                    },
-                    {
-                        "codegenSuccessful": true,
-                        "column": 94,
-                        "durationMicroseconds": 81,
-                        "errorMessage": "",
-                        "functionName": "y",
-                        "line": 1011
-                    },
-                    {
-                        "codegenSuccessful": false,
-                        "column": 36,
-                        "durationMicroseconds": 247,
-                        "errorMessage": "Cannot generate efficient code for call to untyped JavaScript function",
-                        "functionName": "onCompleted",
                         "line": 1027
                     },
                     {
                         "codegenSuccessful": true,
+                        "column": 94,
+                        "durationMicroseconds": 85,
+                        "errorMessage": "",
+                        "functionName": "y",
+                        "line": 1027
+                    },
+                    {
+                        "codegenSuccessful": false,
+                        "column": 36,
+                        "durationMicroseconds": 235,
+                        "errorMessage": "Cannot generate efficient code for call to untyped JavaScript function",
+                        "functionName": "onCompleted",
+                        "line": 1043
+                    },
+                    {
+                        "codegenSuccessful": true,
                         "column": 47,
-                        "durationMicroseconds": 51,
+                        "durationMicroseconds": 54,
                         "errorMessage": "",
                         "functionName": "target",
-                        "line": 1042
+                        "line": 1058
                     },
                     {
                         "codegenSuccessful": true,
                         "column": 109,
-                        "durationMicroseconds": 180,
+                        "durationMicroseconds": 151,
                         "errorMessage": "",
                         "functionName": "duration",
-                        "line": 1042
+                        "line": 1058
                     },
                     {
                         "codegenSuccessful": true,
                         "column": 161,
-                        "durationMicroseconds": 56,
+                        "durationMicroseconds": 94,
                         "errorMessage": "",
                         "functionName": "type",
-                        "line": 1042
+                        "line": 1058
                     },
                     {
                         "codegenSuccessful": true,
                         "column": 47,
-                        "durationMicroseconds": 93,
+                        "durationMicroseconds": 65,
                         "errorMessage": "",
                         "functionName": "target",
-                        "line": 1043
+                        "line": 1059
                     },
                     {
                         "codegenSuccessful": true,
                         "column": 110,
-                        "durationMicroseconds": 134,
+                        "durationMicroseconds": 178,
                         "errorMessage": "",
                         "functionName": "duration",
-                        "line": 1043
+                        "line": 1059
                     },
                     {
                         "codegenSuccessful": true,
                         "column": 33,
-                        "durationMicroseconds": 52,
+                        "durationMicroseconds": 58,
                         "errorMessage": "",
                         "functionName": "target",
-                        "line": 1045
+                        "line": 1061
                     },
                     {
                         "codegenSuccessful": true,
                         "column": 35,
-                        "durationMicroseconds": 127,
+                        "durationMicroseconds": 175,
                         "errorMessage": "",
                         "functionName": "duration",
-                        "line": 1046
+                        "line": 1062
                     },
                     {
                         "codegenSuccessful": true,
                         "column": 43,
-                        "durationMicroseconds": 172,
+                        "durationMicroseconds": 238,
                         "errorMessage": "",
                         "functionName": "onRunningChanged",
-                        "line": 1047
+                        "line": 1063
                     },
                     {
                         "codegenSuccessful": true,
                         "column": 87,
-                        "durationMicroseconds": 54,
+                        "durationMicroseconds": 58,
                         "errorMessage": "",
                         "functionName": "type",
-                        "line": 1046
+                        "line": 1062
                     },
                     {
                         "codegenSuccessful": true,
                         "column": 43,
-                        "durationMicroseconds": 50,
+                        "durationMicroseconds": 59,
                         "errorMessage": "",
                         "functionName": "target",
-                        "line": 1050
+                        "line": 1066
                     },
                     {
                         "codegenSuccessful": true,
                         "column": 93,
-                        "durationMicroseconds": 134,
+                        "durationMicroseconds": 151,
                         "errorMessage": "",
                         "functionName": "duration",
-                        "line": 1050
+                        "line": 1066
                     },
                     {
                         "codegenSuccessful": false,
                         "column": 29,
-                        "durationMicroseconds": 263,
+                        "durationMicroseconds": 276,
                         "errorMessage": "Cannot generate efficient code for internal conversion with incompatible or ambiguous types: call to method start, returning void -> QQmlScriptString stored as QVariant",
                         "functionName": "script",
-                        "line": 1054
+                        "line": 1070
                     },
                     {
                         "codegenSuccessful": true,
                         "column": 43,
-                        "durationMicroseconds": 47,
-                        "errorMessage": "",
-                        "functionName": "target",
-                        "line": 1065
-                    },
-                    {
-                        "codegenSuccessful": true,
-                        "column": 104,
-                        "durationMicroseconds": 127,
-                        "errorMessage": "",
-                        "functionName": "duration",
-                        "line": 1065
-                    },
-                    {
-                        "codegenSuccessful": true,
-                        "column": 156,
-                        "durationMicroseconds": 65,
-                        "errorMessage": "",
-                        "functionName": "type",
-                        "line": 1065
-                    },
-                    {
-                        "codegenSuccessful": true,
-                        "column": 47,
                         "durationMicroseconds": 49,
                         "errorMessage": "",
                         "functionName": "target",
-                        "line": 1067
+                        "line": 1081
                     },
                     {
                         "codegenSuccessful": true,
-                        "column": 108,
-                        "durationMicroseconds": 133,
+                        "column": 104,
+                        "durationMicroseconds": 146,
                         "errorMessage": "",
                         "functionName": "duration",
-                        "line": 1067
+                        "line": 1081
                     },
                     {
                         "codegenSuccessful": true,
-                        "column": 160,
-                        "durationMicroseconds": 65,
+                        "column": 156,
+                        "durationMicroseconds": 59,
                         "errorMessage": "",
                         "functionName": "type",
-                        "line": 1067
+                        "line": 1081
                     },
                     {
                         "codegenSuccessful": true,
                         "column": 47,
-                        "durationMicroseconds": 47,
+                        "durationMicroseconds": 59,
                         "errorMessage": "",
                         "functionName": "target",
-                        "line": 1068
+                        "line": 1083
                     },
                     {
                         "codegenSuccessful": true,
                         "column": 108,
-                        "durationMicroseconds": 132,
-                        "errorMessage": "",
-                        "functionName": "duration",
-                        "line": 1068
-                    },
-                    {
-                        "codegenSuccessful": true,
-                        "column": 160,
-                        "durationMicroseconds": 52,
-                        "errorMessage": "",
-                        "functionName": "type",
-                        "line": 1068
-                    },
-                    {
-                        "codegenSuccessful": true,
-                        "column": 43,
-                        "durationMicroseconds": 57,
-                        "errorMessage": "",
-                        "functionName": "target",
-                        "line": 1070
-                    },
-                    {
-                        "codegenSuccessful": true,
-                        "column": 103,
                         "durationMicroseconds": 130,
                         "errorMessage": "",
                         "functionName": "duration",
-                        "line": 1070
+                        "line": 1083
+                    },
+                    {
+                        "codegenSuccessful": true,
+                        "column": 160,
+                        "durationMicroseconds": 53,
+                        "errorMessage": "",
+                        "functionName": "type",
+                        "line": 1083
+                    },
+                    {
+                        "codegenSuccessful": true,
+                        "column": 47,
+                        "durationMicroseconds": 55,
+                        "errorMessage": "",
+                        "functionName": "target",
+                        "line": 1084
+                    },
+                    {
+                        "codegenSuccessful": true,
+                        "column": 108,
+                        "durationMicroseconds": 220,
+                        "errorMessage": "",
+                        "functionName": "duration",
+                        "line": 1084
+                    },
+                    {
+                        "codegenSuccessful": true,
+                        "column": 160,
+                        "durationMicroseconds": 53,
+                        "errorMessage": "",
+                        "functionName": "type",
+                        "line": 1084
+                    },
+                    {
+                        "codegenSuccessful": true,
+                        "column": 43,
+                        "durationMicroseconds": 48,
+                        "errorMessage": "",
+                        "functionName": "target",
+                        "line": 1086
+                    },
+                    {
+                        "codegenSuccessful": true,
+                        "column": 103,
+                        "durationMicroseconds": 136,
+                        "errorMessage": "",
+                        "functionName": "duration",
+                        "line": 1086
+                    },
+                    {
+                        "codegenSuccessful": true,
+                        "column": 155,
+                        "durationMicroseconds": 55,
+                        "errorMessage": "",
+                        "functionName": "type",
+                        "line": 1086
+                    },
+                    {
+                        "codegenSuccessful": true,
+                        "column": 43,
+                        "durationMicroseconds": 47,
+                        "errorMessage": "",
+                        "functionName": "target",
+                        "line": 1087
+                    },
+                    {
+                        "codegenSuccessful": true,
+                        "column": 103,
+                        "durationMicroseconds": 139,
+                        "errorMessage": "",
+                        "functionName": "duration",
+                        "line": 1087
                     },
                     {
                         "codegenSuccessful": true,
@@ -2697,111 +2737,87 @@
                         "durationMicroseconds": 52,
                         "errorMessage": "",
                         "functionName": "type",
-                        "line": 1070
-                    },
-                    {
-                        "codegenSuccessful": true,
-                        "column": 43,
-                        "durationMicroseconds": 136,
-                        "errorMessage": "",
-                        "functionName": "target",
-                        "line": 1071
-                    },
-                    {
-                        "codegenSuccessful": true,
-                        "column": 103,
-                        "durationMicroseconds": 137,
-                        "errorMessage": "",
-                        "functionName": "duration",
-                        "line": 1071
-                    },
-                    {
-                        "codegenSuccessful": true,
-                        "column": 155,
-                        "durationMicroseconds": 53,
-                        "errorMessage": "",
-                        "functionName": "type",
-                        "line": 1071
+                        "line": 1087
                     },
                     {
                         "codegenSuccessful": true,
                         "column": 47,
-                        "durationMicroseconds": 47,
+                        "durationMicroseconds": 48,
                         "errorMessage": "",
                         "functionName": "target",
-                        "line": 1073
+                        "line": 1089
                     },
                     {
                         "codegenSuccessful": true,
                         "column": 104,
-                        "durationMicroseconds": 145,
+                        "durationMicroseconds": 142,
                         "errorMessage": "",
                         "functionName": "duration",
-                        "line": 1073
+                        "line": 1089
                     },
                     {
                         "codegenSuccessful": true,
                         "column": 156,
-                        "durationMicroseconds": 77,
+                        "durationMicroseconds": 60,
                         "errorMessage": "",
                         "functionName": "type",
-                        "line": 1073
+                        "line": 1089
                     },
                     {
                         "codegenSuccessful": true,
                         "column": 47,
-                        "durationMicroseconds": 47,
+                        "durationMicroseconds": 46,
                         "errorMessage": "",
                         "functionName": "target",
-                        "line": 1074
+                        "line": 1090
                     },
                     {
                         "codegenSuccessful": true,
                         "column": 104,
-                        "durationMicroseconds": 128,
+                        "durationMicroseconds": 185,
                         "errorMessage": "",
                         "functionName": "duration",
-                        "line": 1074
+                        "line": 1090
                     },
                     {
                         "codegenSuccessful": true,
                         "column": 156,
-                        "durationMicroseconds": 51,
+                        "durationMicroseconds": 52,
                         "errorMessage": "",
                         "functionName": "type",
-                        "line": 1074
+                        "line": 1090
                     },
                     {
                         "codegenSuccessful": true,
                         "column": 47,
-                        "durationMicroseconds": 47,
+                        "durationMicroseconds": 46,
                         "errorMessage": "",
                         "functionName": "target",
-                        "line": 1075
+                        "line": 1091
                     },
                     {
                         "codegenSuccessful": true,
                         "column": 104,
-                        "durationMicroseconds": 127,
+                        "durationMicroseconds": 139,
                         "errorMessage": "",
                         "functionName": "duration",
-                        "line": 1075
+                        "line": 1091
                     },
                     {
                         "codegenSuccessful": true,
                         "column": 156,
-                        "durationMicroseconds": 56,
+                        "durationMicroseconds": 50,
                         "errorMessage": "",
                         "functionName": "type",
-                        "line": 1075
+                        "line": 1091
                     },
                     {
                         "codegenSuccessful": false,
                         "column": 40,
-                        "durationMicroseconds": 108,
+                        "durationMicroseconds": 112,
                         "errorMessage": "Cannot generate efficient code for internal conversion with incompatible or ambiguous types: bool stored as QVariant -> QQmlScriptString stored as QVariant",
                         "functionName": "script",
-                        "line": 1079
+                        "line": 1095
                     }
                 ],
                 "filePath": "D:/QtProjects/KeyDash_NX1000/Main.qml"

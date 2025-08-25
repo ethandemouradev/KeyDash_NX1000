@@ -22,7 +22,7 @@ Window {
     visible: true
     color: "#081418"
     visibility: Window.Windowed
-    flags: Qt.FramelessWindowHint
+    //flags: Qt.FramelessWindowHint
 
     /* =============================
        Global knobs (persisted below)
@@ -330,9 +330,9 @@ Window {
             Connections {
                 target: dash
                 function onSpeedChanged() {
-                    const s = root.useMph ? dash.speed : dash.speed * 1.60934
-                    const target = root.useMph ? 60.0 : 100.0
-                    const startThresh = root.useMph
+                    const s = dash.useMph ? dash.speed : dash.speed * 1.60934
+                    const target = dash.useMph ? 60.0 : 100.0
+                    const startThresh = dash.useMph
                         ? root.z60StartThresholdMph
                         : root.z60StartThresholdMph * 1.60934
 
@@ -411,7 +411,7 @@ Window {
                 spacing: 4
 
                 Text {
-                    text: root.useMph ? "0–60 mph" : "0–100 km/h"
+                    text: dash.useMph ? "0–60 mph" : "0–100 km/h"
                     color: "#ffcc00"; font.family: neu.name; font.pixelSize: 20
                     horizontalAlignment: Text.AlignHCenter
                 }
@@ -456,10 +456,9 @@ Window {
                 id: speedText
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.top: parent.top
-                text: Math.round(useMph ? dash.speed : dash.speed * 1.60934)
+                text: Math.round(dash.useMph ? dash.speed : dash.speed * 1.60934)
                 color: "#7ee6ff"
-                font.family: neu.name
-                font.styleName: "Italic"
+                font.family: neu_italic.status === FontLoader.Ready ? neu_italic.name : neu.name
                 font.pixelSize: speedBox.fontPx
                 style: Text.Outline
                 styleColor: "#00000099"
@@ -503,7 +502,7 @@ Window {
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.top: speedText.bottom
                 anchors.topMargin: speedBox.gap
-                text: useMph ? "mph" : "km/h"
+                text: dash.useMph ? "mph" : "km/h"
                 color: "#ffcc00"
                 font.family: neu.name
                 font.pixelSize: speedBox.mphPx
@@ -711,7 +710,7 @@ Window {
             id: odoBox; x: 1985; y: 320; width: 300; height: 60
             Text {
                 anchors.centerIn: parent
-                text: Math.round(useMph ? dash.odo : dash.odo * 1.60934) + (useMph ? " mi." : " km")
+                text: Math.round(dash.useMph ? dash.odo : dash.odo * 1.60934) + (dash.useMph ? " mi." : " km")
                 color: "#7ee6ff"; font.family: neu.name; font.pixelSize: 50
             }
         }
@@ -719,7 +718,7 @@ Window {
             id: tripBox; x: 1995; y: 470; width: 300; height: 60
             Text {
                 anchors.centerIn: parent
-                text: (useMph ? dash.trip : dash.trip * 1.60934).toFixed(1) + (useMph ? " mi." : " km")
+                text: (dash.useMph ? dash.trip : dash.trip * 1.60934).toFixed(1) + (dash.useMph ? " mi." : " km")
                 color: "#7ee6ff"; font.family: neu.name; font.pixelSize: 50
             }
         }
@@ -872,6 +871,15 @@ Window {
                 function onUseMphChanged() { dash.setUseMph(prefs.useMph) }
                 function onRpmMaxChanged() { dash.setRpmMax(prefs.rpmMax) }
             }
+
+            // Keep prefs updated if the model changes units elsewhere (e.g., C++)
+            Connections {
+                target: dash
+                function onUseMphChanged() {
+                    if (prefs.useMph !== dash.useMph)
+                        prefs.useMph = dash.useMph
+                }
+            }
         }
 
         /* ===============================
@@ -880,14 +888,14 @@ Window {
         property bool serviceOpen: false
         Shortcut { sequence: "S"; context: Qt.ApplicationShortcut; onActivated: serviceOpen = !serviceOpen }
 
-        Rectangle {
-            id: servicePanel
-            x: 2320; y: 110
-            width: 380; height: parent.height
-            color: "#141b1fcc"; radius: 12; z: 9000
-            visible: true
-            enabled: stage.serviceOpen
-            clip: true
+        Item {
+          id: servicePanel
+          x: 2320; y: 110
+          width: 380; height: parent.height
+          z: 9000
+          visible: stage.serviceOpen || opacity > 0.01
+          enabled: stage.serviceOpen
+          clip: true
 
             Column {
                 anchors.fill: parent
@@ -900,7 +908,14 @@ Window {
                 Row {
                     spacing: 12
                     Text { text: "Units:"; color: "white"; font.family: neu.name; font.pixelSize: 18; verticalAlignment: Text.AlignVCenter }
-                    Switch { id: units; checked: dash.useMph; onToggled: dash.setUseMph(checked) }
+                    Switch {
+                        id: units
+                        checked: prefs.useMph
+                        onToggled: {
+                            prefs.useMph = checked
+                            dash.setUseMph(checked)
+                        }
+                    }
                     Text {
                         text: units.checked ? "mph" : "km/h"
                         color: "white"; font.family: neu.name; font.pixelSize: 14
@@ -914,6 +929,13 @@ Window {
                     spacing: 12
                     Text { text: "Rev flash"; color: "white"; font.family: neu.name; font.pixelSize: 18 }
                     Switch { id: ovSwitch; checked: prefs.ovEnable; onToggled: prefs.ovEnable = checked }
+                }
+
+                // Intro toggle
+                Row {
+                    spacing: 12
+                    Text { text: "Intro on boot"; color: "white"; font.family: neu.name; font.pixelSize: 18 }
+                    Switch { checked: prefs.introEnable; onToggled: prefs.introEnable = checked }
                 }
 
                 // Brightness
@@ -930,12 +952,7 @@ Window {
                 Text { text: "Over Rev Flash: " + overRevThreshold; color: "white"; font.family: neu.name; font.pixelSize: 16 }
                 Slider { from: 4000; to: rpmMax; stepSize: 100; value: overRevThreshold; onValueChanged: overRevThreshold = Math.round(value) }
 
-                // Intro toggles
-                Row {
-                    spacing: 12
-                    Text { text: "Intro on boot"; color: "white"; font.family: neu.name; font.pixelSize: 18 }
-                    Switch { checked: prefs.introEnable; onToggled: prefs.introEnable = checked }
-                }
+                // Intro length
                 Text { text: "Intro length: " + prefs.introFactor.toFixed(1) + "s"; color: "white"; font.family: neu.name; font.pixelSize: 18 }
                 Slider {
                     id: introLen
@@ -1005,8 +1022,7 @@ Window {
                 y: 330
                 opacity: 0
                 color: "#ffcc00"
-                font.family: neu.name
-                font.styleName: "Italic"
+                font.family: neu_italic.status === FontLoader.Ready ? neu_italic.name : neu.name
                 font.pixelSize: 130
                 transform: Scale { id: titleScale; origin.x: introTitle.width / 2; origin.y: introTitle.height / 2; xScale: 1; yScale: 1 }
             }
