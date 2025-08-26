@@ -458,7 +458,8 @@ Window {
                 anchors.top: parent.top
                 text: Math.round(dash.useMph ? dash.speed : dash.speed * 1.60934)
                 color: "#7ee6ff"
-                font.family: neu_italic.status === FontLoader.Ready ? neu_italic.name : neu.name
+                font.family: neu.name                 // common family
+                font.italic: neu_italic.status === FontLoader.Ready
                 font.pixelSize: speedBox.fontPx
                 style: Text.Outline
                 styleColor: "#00000099"
@@ -1022,7 +1023,8 @@ Window {
                 y: 330
                 opacity: 0
                 color: "#ffcc00"
-                font.family: neu_italic.status === FontLoader.Ready ? neu_italic.name : neu.name
+                font.family: neu.name                 // common family
+                font.italic: neu_italic.status === FontLoader.Ready
                 font.pixelSize: 130
                 transform: Scale { id: titleScale; origin.x: introTitle.width / 2; origin.y: introTitle.height / 2; xScale: 1; yScale: 1 }
             }
