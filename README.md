@@ -2,8 +2,8 @@
 
 Welcome to the official **KeyDash NX1000** docs.
 
-- 🚀 [Getting Started](./Setup.md)  
-- 📊 [Using the Dashboard](./tabs/Device.md)  
-- ⚠️ [Troubleshooting](./Errors.md)  
-- 🎨 [Customization](./customization/Customization.md)  
+- 🚀 [Getting Started](./docs/Setup.md)  
+- 📊 [Using the Dashboard](./docs/tabs/Device.md)  
+- ⚠️ [Troubleshooting](./docs/Errors.md)  
+- 🎨 [Customization](./docs/customization/Customization.md)  
 ---
