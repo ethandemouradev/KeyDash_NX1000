@@ -929,7 +929,7 @@ Item {
                                 property string selectedAddress: ""
                             }
 
-                            // ===== OVERLAY error banner (no layout shift; click to dismiss; handles same-text repeats; shows code) =====
+                            // ===== OVERLAY error banner (stable measuring; 1 line → maxWidth → 2 lines → widen) =====
                             Rectangle {
                                 id: errorOverlay
                                 z: 300
@@ -937,128 +937,140 @@ Item {
                                 border.color: "#7a3030"
                                 radius: 8
 
-                                // Internal state
-                                property bool dismissed: false
+                                // -------- Tunables --------
                                 property int pad: 8
                                 property int marginY: 6
-                                property int maxWidth: 420
-                                property int lastSeqHandled: -1
+                                property int maxWidth: 420        // preferred max single-line width (outer, incl. padding)
+                                property int fontPx: 16           // font size
+                                property string fontFamily: ""    // "" = system default, or dashFontName()
+
+                                // One font object used everywhere (prevents any measuring drift)
+                                property var overlayFont: Qt.font({ pixelSize: fontPx, family: fontFamily })
+                                onFontPxChanged: overlayFont = Qt.font({ pixelSize: fontPx, family: fontFamily })
+                                onFontFamilyChanged: overlayFont = Qt.font({ pixelSize: fontPx, family: fontFamily })
+
+                                // Internal state
+                                property bool dismissed: false
+                                property int  lastSeqHandled: -1
 
                                 // Read from deviceTab
                                 readonly property string msg: deviceTab.lastError || ""
                                 readonly property string code: deviceTab.lastErrorCode || ""
-                                readonly property int seq: deviceTab.errorSeq || 0
+                                readonly property int    seq: deviceTab.errorSeq || 0
 
-                                // --- Helper function to format codes as hex ---
-                                 function fmtCode(c) {
-                                     if (c === undefined || c === null || c === "") return ""
-                                     if (typeof c === "number") return "0x" + c.toString(16).toUpperCase()
-                                     const s = String(c).trim()
-                                     if (/^0x[0-9a-f]+$/i.test(s)) return s.toUpperCase()
-                                     if (/^\d+$/.test(s)) return "0x" + Number(s).toString(16).toUpperCase()
-                                     return s
-                                 }
+                                function fmtCode(c) {
+                                    if (c === undefined || c === null || c === "") return ""
+                                    if (typeof c === "number") return "0x" + c.toString(16).toUpperCase()
+                                    const s = String(c).trim()
+                                    if (/^0x[0-9a-f]+$/i.test(s)) return s.toUpperCase()
+                                    if (/^\d+$/.test(s)) return "0x" + Number(s).toString(16).toUpperCase()
+                                    return s
+                                }
 
-                                // Public method to show/reposition (call when a new ECU event occurs)
                                 function show() {
                                     dismissed = false
                                     opacity = 1
                                     visible = true
                                     lastSeqHandled = seq
-                                    reposition()
+                                    Qt.callLater(reposition)  // ensure polished before measuring
                                 }
 
-                                // Visibility/fade
                                 visible: (msg.length > 0) && !dismissed
                                 opacity: visible ? 1 : 0
                                 Behavior on opacity { NumberAnimation { duration: 160 } }
 
-                                // --- hidden measurer to get single-line width (no wrapping) ---
+                                // Hidden measurer (single-line natural width)
                                 Text {
                                     id: errMeasure
                                     visible: false
-                                    text: (errorOverlay.code.length
-                                           ? ("Error " + errorOverlay.fmtCode(errorOverlay.code) + ": ")
-                                           : "") + errorOverlay.msg
-                                    font.pixelSize: 18
-                                    font.family: dashFontName()
+                                    text: (errorOverlay.code.length ? ("[" + errorOverlay.fmtCode(errorOverlay.code) + "] ") : "") + errorOverlay.msg
+                                    font: errorOverlay.overlayFont
                                     wrapMode: Text.NoWrap
+                                    onTextChanged: Qt.callLater(errorOverlay.reposition)
                                 }
 
-                                // --- hidden probe to test wrapped height at arbitrary widths ---
+                                // Hidden probe (wrapped height at arbitrary widths)
                                 Text {
                                     id: errProbe
                                     visible: false
                                     text: errMeasure.text
-                                    font.pixelSize: 18
-                                    font.family: dashFontName()
+                                    font: errorOverlay.overlayFont
                                     wrapMode: Text.WordWrap
                                     maximumLineCount: 2
-                                    elide: Text.ElideRight
-                                    // this width will be set dynamically in reposition(); this is inner text width (excludes padding)
+                                    elide: Text.ElideNone
                                     width: 0
                                 }
 
-                                // --- the visible text (wrap to 2 lines max, elide only at 2-line limit) ---
+                                // Visible text
                                 Text {
                                     id: errText
+                                    anchors.margins: errorOverlay.pad
                                     anchors.left: parent.left
                                     anchors.top: parent.top
-                                    anchors.margins: errorOverlay.pad
 
                                     text: errMeasure.text
                                     color: "#ffaaaa"
-                                    font.pixelSize: 18
-                                    font.family: dashFontName()
+                                    font: errorOverlay.overlayFont
 
                                     wrapMode: Text.WordWrap
                                     maximumLineCount: 2
-                                    elide: Text.ElideRight
+                                    elide: Text.ElideNone
+                                    verticalAlignment: Text.AlignVCenter
 
-                                    // fill overlay's inner area
                                     width: Math.max(0, errorOverlay.width - errorOverlay.pad*2)
 
                                     onImplicitWidthChanged: errorOverlay.reposition()
                                     onImplicitHeightChanged: errorOverlay.reposition()
                                 }
 
-                                // --- width/height + position logic (find the MIN width that fits in ≤ 2 lines) ---
                                 function reposition() {
                                     if (!btAddrLabel || !deviceCenter) return
 
-                                    var minW = 280
-                                    var maxW = Math.max(minW, deviceCenter.width - 20)  // cap so we don't overflow the column
+                                    const pad2 = errorOverlay.pad * 2
+                                    const minW = 200
 
-                                    // Line-height estimate for 2 lines
-                                    var lineH = errText.font.pixelSize * 1.3
-                                    var maxH = Math.round(errorOverlay.pad*2 + lineH * 2)
+                                    // 1) Natural single-line outer width with the current font
+                                    const singleLineOuter = Math.ceil(errMeasure.paintedWidth) + pad2
 
-                                    // Helper to measure total height (including padding) for a given outer width
-                                    function heightForOuterWidth(w) {
-                                        var inner = Math.max(0, w - errorOverlay.pad*2)
-                                        errProbe.width = inner
-                                        // implicitHeight is the content height for that width
-                                        return errProbe.implicitHeight + errorOverlay.pad*2
-                                    }
-
-                                    // If even at min width we already fit, keep it compact
-                                    var hAtMin = heightForOuterWidth(minW)
-                                    if (hAtMin <= maxH) {
-                                        errorOverlay.width = minW
+                                    // 2) Preferred: keep single line if it fits within maxWidth
+                                    if (singleLineOuter <= errorOverlay.maxWidth) {
+                                        errorOverlay.width = Math.max(minW, singleLineOuter)
+                                        // set height to the wrapped height at that width (should be one line)
+                                        errProbe.width = Math.max(0, errorOverlay.width - pad2)
+                                        errorOverlay.height = errProbe.implicitHeight + pad2
                                     } else {
-                                        // Find the smallest width in [minW, maxW] that achieves height ≤ maxH
-                                        var lo = minW, hi = maxW
-                                        for (var i = 0; i < 8; ++i) { // a few iterations are enough
-                                            var mid = Math.round((lo + hi) / 2)
-                                            var h = heightForOuterWidth(mid)
-                                            if (h <= maxH) hi = mid; else lo = mid + 1
-                                        }
-                                        errorOverlay.width = Math.min(hi, maxW)
-                                    }
+                                        // 3) Otherwise, wrap to at most 2 lines at maxWidth and
+                                        //    then widen towards singleLineOuter until height <= 2 lines.
+                                        //    Two-line cap is derived from probe height at "very wide".
+                                        //    (We don't need FontMetrics; probe’s layout gives exact height.)
+                                        const twoLineTargetH = (function() {
+                                            // Give probe a huge width to get 1 line height, then double it.
+                                            errProbe.width = 9999
+                                            const oneLineH = errProbe.implicitHeight
+                                            return oneLineH * 2 + (0) // already excludes padding
+                                        })()
 
-                                    // Now compute final height (will be ≤ 2 lines)
-                                    var naturalH = heightForOuterWidth(errorOverlay.width)
-                                    errorOverlay.height = Math.min(naturalH, maxH)
+                                        // Binary search between maxWidth and singleLineOuter for the smallest width
+                                        // that yields height <= two lines.
+                                        let lo = Math.max(minW, errorOverlay.maxWidth)
+                                        let hi = Math.max(lo, singleLineOuter)
+                                        let best = hi
+                                        for (let i = 0; i < 14; ++i) {
+                                            const mid = Math.round((lo + hi) / 2)
+                                            errProbe.width = Math.max(0, mid - pad2)
+                                            const h = errProbe.implicitHeight
+                                            if (h <= twoLineTargetH) {
+                                                best = mid
+                                                hi = mid - 1
+                                            } else {
+                                                lo = mid + 1
+                                            }
+                                        }
+
+                                        errorOverlay.width = best
+                                        errProbe.width = Math.max(0, errorOverlay.width - pad2)
+                                        errorOverlay.height = errProbe.implicitHeight + pad2
+                                    }
 
                                     // Position above the Bluetooth Address label
                                     const p = btAddrLabel.mapToItem(deviceCenter, 0, 0)
@@ -1066,8 +1078,7 @@ Item {
                                     errorOverlay.y = p.y - errorOverlay.height - errorOverlay.marginY
                                 }
 
-                                // keep it positioned as things move/change
-                                Component.onCompleted: reposition()
+                                Component.onCompleted: Qt.callLater(reposition)
                                 onWidthChanged: reposition()
                                 onHeightChanged: reposition()
                                 Connections { target: btAddrLabel; function onXChanged(){ errorOverlay.reposition() } }
@@ -1078,17 +1089,14 @@ Item {
                                 Connections { target: deviceCenter; function onHeightChanged(){ errorOverlay.reposition() } }
                                 Connections {
                                     target: deviceTab
-                                    function onLastErrorChanged()      { errorOverlay.reposition() }
-                                    function onLastErrorCodeChanged()  { errorOverlay.reposition() }
-                                    function onErrorSeqChanged()       { errorOverlay.reposition() }
+                                    function onLastErrorChanged()      { Qt.callLater(errorOverlay.reposition) }
+                                    function onLastErrorCodeChanged()  { Qt.callLater(errorOverlay.reposition) }
+                                    function onErrorSeqChanged()       { Qt.callLater(errorOverlay.reposition) }
                                 }
 
                                 MouseArea {
                                     anchors.fill: parent
-                                    onClicked: {
-                                        errorOverlay.dismissed = true     // hide until next ECU event
-                                        errorOverlay.opacity = 0
-                                    }
+                                    onClicked: { errorOverlay.dismissed = true; errorOverlay.opacity = 0 }
                                 }
                             }
                             // ===== /OVERLAY error banner =====
