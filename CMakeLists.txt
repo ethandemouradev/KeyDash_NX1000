@@ -68,7 +68,7 @@ qt_add_qml_module(appKeyDash_NX1000
         docs/customization/Preferences.md
         docs/Glossary.md
         docs/SUMMARY.md
-        SOURCES pages/servicepage.h pages/servicepage.cpp
+        SOURCES
 )
 
 # Headers for moc (PUBLIC so moc sees them)

@@ -1153,12 +1153,6 @@
 			"MU",
 			"EWIEGA46WW/moc_ecu_reader.cpp",
 			null
-		],
-		[
-			"D:/QtProjects/KeyDash_NX1000/pages/servicepage.h",
-			"MU",
-			"P2WXERC3RM/moc_servicepage.cpp",
-			null
 		]
 	],
 	"HEADER_EXTENSIONS" : [ "h", "hh", "h++", "hm", "hpp", "hxx", "in", "txx" ],
@@ -1269,8 +1263,7 @@
 	[
 		[ "D:/QtProjects/KeyDash_NX1000/dashmodel.cpp", "MU", null ],
 		[ "D:/QtProjects/KeyDash_NX1000/ecu_reader.cpp", "MU", null ],
-		[ "D:/QtProjects/KeyDash_NX1000/main.cpp", "MU", null ],
-		[ "D:/QtProjects/KeyDash_NX1000/pages/servicepage.cpp", "MU", null ]
+		[ "D:/QtProjects/KeyDash_NX1000/main.cpp", "MU", null ]
 	],
 	"UIC_OPTIONS" : [],
 	"UIC_SEARCH_PATHS" : [],
