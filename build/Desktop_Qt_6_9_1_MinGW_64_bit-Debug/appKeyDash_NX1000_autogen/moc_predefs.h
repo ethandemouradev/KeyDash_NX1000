@@ -33,6 +33,7 @@
 #define __cpp_binary_literals 201304L
 #define __FLT64_DECIMAL_DIG__ 17
 #define __cpp_noexcept_function_type 201510L
+#define QT_BLUETOOTH_LIB 1
 #define __GCC_ATOMIC_CHAR32_T_LOCK_FREE 2
 #define __cpp_variadic_templates 200704L
 #define __UINT_FAST64_MAX__ 0xffffffffffffffffULL
@@ -177,6 +178,7 @@
 #define __PTRDIFF_MAX__ 0x7fffffffffffffffLL
 #define __amd64 1
 #define __tune_core2__ 1
+#define QT_XML_LIB 1
 #define __ATOMIC_HLE_ACQUIRE 65536
 #define __GNUG__ 13
 #define __LONG_LONG_MAX__ 0x7fffffffffffffffLL
@@ -264,7 +266,6 @@
 #define __INT_LEAST16_TYPE__ short int
 #define __LDBL_EPSILON__ 1.08420217248550443400745280086994171e-19L
 #define __UINTMAX_C(c) c ## ULL
-#define HAVE_SERIALPORT 1
 #define __FLT16_DIG__ 3
 #define __FLT32X_MIN__ 2.22507385850720138309023271733240406e-308F32x
 #define __SIG_ATOMIC_MAX__ 0x7fffffff
@@ -437,7 +438,6 @@
 #define __INT32_MAX__ 0x7fffffff
 #define __UINT_FAST32_TYPE__ unsigned int
 #define _ENABLE_EXTENDED_ALIGNED_STORAGE 1
-#define QT_SERIALPORT_LIB 1
 #define __FLT16_MANT_DIG__ 11
 #define __FLT32X_NORM_MAX__ 1.79769313486231570814527423731704357e+308F32x
 #define __CHAR32_TYPE__ unsigned int

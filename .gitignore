@@ -1,0 +1,19 @@
+# Qt/Build
+build/
+.rcc/
+.qt/
+.qtc_*/
+.qtc_clangd/
+*.user
+*.aotstats
+*.qmldir.user
+*.pro.user
+*.qmake.stash
+
+# IDE
+.vs/
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db

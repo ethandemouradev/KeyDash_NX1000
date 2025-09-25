@@ -1,6 +1,7 @@
 #pragma once
 #include <QObject>
 #include <QString>
+#include <QVector>
 
 class DashModel : public QObject {
     Q_OBJECT
@@ -17,17 +18,22 @@ class DashModel : public QObject {
     Q_PROPERTY(double  odo   READ odo  WRITE setOdo  NOTIFY odoChanged)
     Q_PROPERTY(double  trip  READ trip WRITE setTrip NOTIFY tripChanged)
 
-    // NEW: indicator flags
+    // Indicator flags
     Q_PROPERTY(bool leftSignal   READ leftSignal   WRITE setLeftSignal   NOTIFY leftSignalChanged)
     Q_PROPERTY(bool rightSignal  READ rightSignal  WRITE setRightSignal  NOTIFY rightSignalChanged)
     Q_PROPERTY(bool headlightsOn READ headlightsOn WRITE setHeadlightsOn NOTIFY headlightsOnChanged)
     Q_PROPERTY(bool celOn        READ celOn        WRITE setCelOn        NOTIFY celOnChanged)
     Q_PROPERTY(bool tcsOn        READ tcsOn        WRITE setTcsOn        NOTIFY tcsOnChanged)
 
-    // QML-visible properties
+    // Config
     Q_PROPERTY(bool   useMph     READ useMph     WRITE setUseMph     NOTIFY useMphChanged)
     Q_PROPERTY(int    rpmMax     READ rpmMax     WRITE setRpmMax     NOTIFY rpmMaxChanged)
     Q_PROPERTY(double finalDrive READ finalDrive WRITE setFinalDrive NOTIFY finalDriveChanged)
+
+    Q_PROPERTY(bool z60Popup READ z60Popup WRITE setZ60Popup NOTIFY z60PopupChanged)
+
+    // NEW: ECU connection status for banner
+    Q_PROPERTY(bool connected READ connected WRITE setConnected NOTIFY connectedChanged)
 
 public:
     explicit DashModel(QObject* parent=nullptr);
@@ -52,6 +58,14 @@ public:
     bool    headlightsOn() const { return m_headlightsOn; }
     bool    celOn()        const { return m_celOn; }
     bool    tcsOn()        const { return m_tcsOn; }
+    bool    z60Popup()     const { return m_z60Popup; }
+    bool    connected()    const { return m_connected; }
+
+    void setZ60Popup(bool v) {
+        if (m_z60Popup == v) return;
+        m_z60Popup = v;
+        emit z60PopupChanged();
+    }
 
     Q_INVOKABLE double gearRatio(int gear) const;
 
@@ -76,6 +90,7 @@ public slots:
     void setHeadlightsOn(bool v){ if (v!=m_headlightsOn){ m_headlightsOn=v; emit headlightsOnChanged(); } }
     void setCelOn(bool v){ if (v!=m_celOn){ m_celOn=v; emit celOnChanged(); } }
     void setTcsOn(bool v){ if (v!=m_tcsOn){ m_tcsOn=v; emit tcsOnChanged(); } }
+    void setConnected(bool v){ if (m_connected != v) { m_connected = v; emit connectedChanged(); } }
 
     // helper to update multiple values at once (with light smoothing)
     void applySample(double rpm, double mph, double boost, double clt,
@@ -109,7 +124,6 @@ signals:
     void dateTimeChanged();
     void odoChanged();
     void tripChanged();
-    // NEW signals
     void leftSignalChanged();
     void rightSignalChanged();
     void headlightsOnChanged();
@@ -119,23 +133,27 @@ signals:
     void rpmMaxChanged();
     void finalDriveChanged();
     void gearRatioChanged(int gear, double ratio);
+    void z60PopupChanged();
+    void connectedChanged();
 
 private:
-    double  m_speed=0, m_rpm=0, m_boost=0, m_clt=82, m_iat=27, m_vbat=14.2, m_afr=14.7;
-    int     m_gear=5;
+    double  m_speed=0, m_rpm=0, m_boost=0, m_clt=0, m_iat=0, m_vbat=0, m_afr=0;
+    int     m_gear=0;
     QString m_dt;
-    double  m_odo=13400;
+    double  m_odo=2500;
     double  m_trip=0.0;
     bool   m_useMph     = true;
     int    m_rpmMax     = 8000;
     double m_finalDrive = 4.080;
 
-    // NEW: indicator state
     bool m_leftSignal=false;
     bool m_rightSignal=false;
     bool m_headlightsOn=false;
     bool m_celOn=false;
     bool m_tcsOn=false;
+    bool m_z60Popup = false;
 
-    QVector<double> m_gears; // will size in ctor (e.g., 10 entries)
+    bool m_connected = false;
+
+    QVector<double> m_gears; // implement in .cpp if you use it
 };

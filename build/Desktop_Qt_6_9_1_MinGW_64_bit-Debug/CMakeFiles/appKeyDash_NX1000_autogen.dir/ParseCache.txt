@@ -3,6 +3,7 @@ D:/QtProjects/KeyDash_NX1000/dashmodel.h
  mmc:Q_OBJECT
  mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/QObject
  mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/QString
+ mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/QVector
  mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/q17memory.h
  mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/q20functional.h
  mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/q20memory.h
@@ -103,6 +104,7 @@ D:/QtProjects/KeyDash_NX1000/dashmodel.h
  mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/qtypeinfo.h
  mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/qtypes.h
  mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/qutf8stringview.h
+ mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/qvector.h
  mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/qversiontagging.h
  mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/qxptype_traits.h
  mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/qyieldcpu.h
@@ -312,16 +314,47 @@ D:/QtProjects/KeyDash_NX1000/dashmodel.h
  mdp:D:/Qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/wchar.h
  mdp:D:/QtProjects/KeyDash_NX1000/build/Desktop_Qt_6_9_1_MinGW_64_bit-Debug/appKeyDash_NX1000_autogen/moc_predefs.h
  mdp:D:/QtProjects/KeyDash_NX1000/dashmodel.h
-D:/QtProjects/KeyDash_NX1000/serialworker.h
+D:/QtProjects/KeyDash_NX1000/pages/servicepage.h
+D:/QtProjects/KeyDash_NX1000/ecu_reader.h
  mmc:Q_OBJECT
+ mdp:D:/Qt/6.9.1/mingw_64/include/QtBluetooth/QBluetoothAddress
+ mdp:D:/Qt/6.9.1/mingw_64/include/QtBluetooth/QBluetoothDeviceDiscoveryAgent
+ mdp:D:/Qt/6.9.1/mingw_64/include/QtBluetooth/QBluetoothDeviceInfo
+ mdp:D:/Qt/6.9.1/mingw_64/include/QtBluetooth/QBluetoothHostInfo
+ mdp:D:/Qt/6.9.1/mingw_64/include/QtBluetooth/QBluetoothLocalDevice
+ mdp:D:/Qt/6.9.1/mingw_64/include/QtBluetooth/QBluetoothSocket
+ mdp:D:/Qt/6.9.1/mingw_64/include/QtBluetooth/QBluetoothUuid
+ mdp:D:/Qt/6.9.1/mingw_64/include/QtBluetooth/qbluetooth.h
+ mdp:D:/Qt/6.9.1/mingw_64/include/QtBluetooth/qbluetoothaddress.h
+ mdp:D:/Qt/6.9.1/mingw_64/include/QtBluetooth/qbluetoothdevicediscoveryagent.h
+ mdp:D:/Qt/6.9.1/mingw_64/include/QtBluetooth/qbluetoothdeviceinfo.h
+ mdp:D:/Qt/6.9.1/mingw_64/include/QtBluetooth/qbluetoothhostinfo.h
+ mdp:D:/Qt/6.9.1/mingw_64/include/QtBluetooth/qbluetoothlocaldevice.h
+ mdp:D:/Qt/6.9.1/mingw_64/include/QtBluetooth/qbluetoothserviceinfo.h
+ mdp:D:/Qt/6.9.1/mingw_64/include/QtBluetooth/qbluetoothsocket.h
+ mdp:D:/Qt/6.9.1/mingw_64/include/QtBluetooth/qbluetoothuuid.h
+ mdp:D:/Qt/6.9.1/mingw_64/include/QtBluetooth/qtbluetooth-config.h
+ mdp:D:/Qt/6.9.1/mingw_64/include/QtBluetooth/qtbluetoothexports.h
+ mdp:D:/Qt/6.9.1/mingw_64/include/QtBluetooth/qtbluetoothglobal.h
+ mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/QByteArray
+ mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/QDebug
+ mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/QHash
+ mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/QList
+ mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/QMetaType
  mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/QObject
- mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/QTimer
+ mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/QSharedPointer
+ mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/QString
+ mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/QStringList
+ mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/QUuid
+ mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/QVariant
+ mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/QtGlobal
  mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/q17memory.h
  mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/q20functional.h
  mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/q20iterator.h
  mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/q20memory.h
  mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/q20type_traits.h
- mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/qabstracteventdispatcher.h
+ mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/q20utility.h
+ mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/q23utility.h
  mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/qalgorithms.h
  mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/qanystringview.h
  mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/qarraydata.h
@@ -331,7 +364,6 @@ D:/QtProjects/KeyDash_NX1000/serialworker.h
  mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/qatomic.h
  mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/qatomic_cxx11.h
  mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/qbasicatomic.h
- mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/qbasictimer.h
  mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/qbindingstorage.h
  mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/qbytearray.h
  mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/qbytearrayalgorithms.h
@@ -347,11 +379,11 @@ D:/QtProjects/KeyDash_NX1000/serialworker.h
  mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/qcontainerfwd.h
  mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/qcontainerinfo.h
  mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/qcontainertools_impl.h
+ mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/qcontiguouscache.h
  mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/qdarwinhelpers.h
  mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/qdatastream.h
- mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/qdeadlinetimer.h
- mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/qelapsedtimer.h
- mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/qeventloop.h
+ mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/qdebug.h
+ mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/qendian.h
  mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/qexceptionhandling.h
  mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/qflags.h
  mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/qfloat16.h
@@ -361,6 +393,7 @@ D:/QtProjects/KeyDash_NX1000/serialworker.h
  mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/qgenericatomic.h
  mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/qglobal.h
  mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/qglobalstatic.h
+ mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/qhash.h
  mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/qhashfunctions.h
  mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/qiodevice.h
  mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/qiodevicebase.h
@@ -370,6 +403,7 @@ D:/QtProjects/KeyDash_NX1000/serialworker.h
  mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/qlist.h
  mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/qlogging.h
  mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/qmalloc.h
+ mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/qmap.h
  mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/qmath.h
  mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/qmetacontainer.h
  mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/qmetatype.h
@@ -383,12 +417,14 @@ D:/QtProjects/KeyDash_NX1000/serialworker.h
  mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/qoverload.h
  mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/qpair.h
  mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/qprocessordetection.h
- mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/qproperty.h
- mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/qpropertyprivate.h
  mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/qrefcount.h
  mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/qscopedpointer.h
  mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/qscopeguard.h
+ mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/qset.h
  mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/qshareddata.h
+ mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/qshareddata_impl.h
+ mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/qsharedpointer.h
+ mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/qsharedpointer_impl.h
  mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/qspan.h
  mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/qstdlibdetection.h
  mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/qstring.h
@@ -415,8 +451,8 @@ D:/QtProjects/KeyDash_NX1000/serialworker.h
  mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/qtdeprecationdefinitions.h
  mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/qtdeprecationmarkers.h
  mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/qtenvironmentvariables.h
+ mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/qtextstream.h
  mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/qtformat_impl.h
- mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/qtimer.h
  mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/qtmetamacros.h
  mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/qtnoop.h
  mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/qtpreprocessorsupport.h
@@ -428,13 +464,12 @@ D:/QtProjects/KeyDash_NX1000/serialworker.h
  mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/qtypeinfo.h
  mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/qtypes.h
  mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/qutf8stringview.h
+ mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/quuid.h
+ mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/qvariant.h
+ mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/qvarlengtharray.h
  mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/qversiontagging.h
  mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/qxptype_traits.h
  mdp:D:/Qt/6.9.1/mingw_64/include/QtCore/qyieldcpu.h
- mdp:D:/Qt/6.9.1/mingw_64/include/QtSerialPort/QSerialPort
- mdp:D:/Qt/6.9.1/mingw_64/include/QtSerialPort/qserialport.h
- mdp:D:/Qt/6.9.1/mingw_64/include/QtSerialPort/qserialportglobal.h
- mdp:D:/Qt/6.9.1/mingw_64/include/QtSerialPort/qtserialportexports.h
  mdp:D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/algorithm
  mdp:D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/array
  mdp:D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/atomic
@@ -505,10 +540,12 @@ D:/QtProjects/KeyDash_NX1000/serialworker.h
  mdp:D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/stl_list.h
  mdp:D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/stl_map.h
  mdp:D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/stl_multimap.h
+ mdp:D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/stl_multiset.h
  mdp:D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/stl_numeric.h
  mdp:D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/stl_pair.h
  mdp:D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/stl_raw_storage_iter.h
  mdp:D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/stl_relops.h
+ mdp:D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/stl_set.h
  mdp:D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/stl_tempbuf.h
  mdp:D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/stl_tree.h
  mdp:D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/stl_uninitialized.h
@@ -521,6 +558,7 @@ D:/QtProjects/KeyDash_NX1000/serialworker.h
  mdp:D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/uniform_int_dist.h
  mdp:D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/unique_ptr.h
  mdp:D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/unordered_map.h
+ mdp:D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/unordered_set.h
  mdp:D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/uses_allocator.h
  mdp:D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/uses_allocator_args.h
  mdp:D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/utility.h
@@ -529,6 +567,7 @@ D:/QtProjects/KeyDash_NX1000/serialworker.h
  mdp:D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/cctype
  mdp:D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/cerrno
  mdp:D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/chrono
+ mdp:D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/climits
  mdp:D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/clocale
  mdp:D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/cmath
  mdp:D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/compare
@@ -565,6 +604,7 @@ D:/QtProjects/KeyDash_NX1000/serialworker.h
  mdp:D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/pstl/glue_memory_defs.h
  mdp:D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/pstl/glue_numeric_defs.h
  mdp:D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/ratio
+ mdp:D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/set
  mdp:D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/stdexcept
  mdp:D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/stdlib.h
  mdp:D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/streambuf
@@ -587,6 +627,7 @@ D:/QtProjects/KeyDash_NX1000/serialworker.h
  mdp:D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/type_traits
  mdp:D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/typeinfo
  mdp:D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/unordered_map
+ mdp:D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/unordered_set
  mdp:D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/utility
  mdp:D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/variant
  mdp:D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/vector
@@ -641,7 +682,8 @@ D:/QtProjects/KeyDash_NX1000/serialworker.h
  mdp:D:/Qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/vadefs.h
  mdp:D:/Qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/wchar.h
  mdp:D:/QtProjects/KeyDash_NX1000/build/Desktop_Qt_6_9_1_MinGW_64_bit-Debug/appKeyDash_NX1000_autogen/moc_predefs.h
- mdp:D:/QtProjects/KeyDash_NX1000/serialworker.h
+ mdp:D:/QtProjects/KeyDash_NX1000/ecu_reader.h
 D:/QtProjects/KeyDash_NX1000/dashmodel.cpp
+D:/QtProjects/KeyDash_NX1000/pages/servicepage.cpp
+D:/QtProjects/KeyDash_NX1000/ecu_reader.cpp
 D:/QtProjects/KeyDash_NX1000/main.cpp
-D:/QtProjects/KeyDash_NX1000/serialworker.cpp

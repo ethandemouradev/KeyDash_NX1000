@@ -12,6 +12,48 @@ namespace _0x5f_KeyDash_NX1000_Main_qml {
         reinterpret_cast<const QV4::CompiledData::Unit*>(&qmlData), &aotBuiltFunctions[0], nullptr
     };
 }
+namespace _0x5f_KeyDash_NX1000_pages_DashboardPage_qml { 
+    extern const unsigned char qmlData[];
+    extern const QQmlPrivate::AOTCompiledFunction aotBuiltFunctions[];
+    const QQmlPrivate::CachedQmlUnit unit = {
+        reinterpret_cast<const QV4::CompiledData::Unit*>(&qmlData), &aotBuiltFunctions[0], nullptr
+    };
+}
+namespace _0x5f_KeyDash_NX1000_pages_ServicePage_qml { 
+    extern const unsigned char qmlData[];
+    extern const QQmlPrivate::AOTCompiledFunction aotBuiltFunctions[];
+    const QQmlPrivate::CachedQmlUnit unit = {
+        reinterpret_cast<const QV4::CompiledData::Unit*>(&qmlData), &aotBuiltFunctions[0], nullptr
+    };
+}
+namespace _0x5f_KeyDash_NX1000_style_ThemedSlider_qml { 
+    extern const unsigned char qmlData[];
+    extern const QQmlPrivate::AOTCompiledFunction aotBuiltFunctions[];
+    const QQmlPrivate::CachedQmlUnit unit = {
+        reinterpret_cast<const QV4::CompiledData::Unit*>(&qmlData), &aotBuiltFunctions[0], nullptr
+    };
+}
+namespace _0x5f_KeyDash_NX1000_style_ThemedSwitch_qml { 
+    extern const unsigned char qmlData[];
+    extern const QQmlPrivate::AOTCompiledFunction aotBuiltFunctions[];
+    const QQmlPrivate::CachedQmlUnit unit = {
+        reinterpret_cast<const QV4::CompiledData::Unit*>(&qmlData), &aotBuiltFunctions[0], nullptr
+    };
+}
+namespace _0x5f_KeyDash_NX1000_style_ThemedButton_qml { 
+    extern const unsigned char qmlData[];
+    extern const QQmlPrivate::AOTCompiledFunction aotBuiltFunctions[];
+    const QQmlPrivate::CachedQmlUnit unit = {
+        reinterpret_cast<const QV4::CompiledData::Unit*>(&qmlData), &aotBuiltFunctions[0], nullptr
+    };
+}
+namespace _0x5f_KeyDash_NX1000_errors_Errors_js { 
+    extern const unsigned char qmlData[];
+    extern const QQmlPrivate::AOTCompiledFunction aotBuiltFunctions[];
+    const QQmlPrivate::CachedQmlUnit unit = {
+        reinterpret_cast<const QV4::CompiledData::Unit*>(&qmlData), &aotBuiltFunctions[0], nullptr
+    };
+}
 
 }
 namespace {
@@ -27,6 +69,12 @@ Q_GLOBAL_STATIC(Registry, unitRegistry)
 
 Registry::Registry() {
     resourcePathToCachedUnit.insert(QStringLiteral("/KeyDash_NX1000/Main.qml"), &QmlCacheGeneratedCode::_0x5f_KeyDash_NX1000_Main_qml::unit);
+    resourcePathToCachedUnit.insert(QStringLiteral("/KeyDash_NX1000/pages/DashboardPage.qml"), &QmlCacheGeneratedCode::_0x5f_KeyDash_NX1000_pages_DashboardPage_qml::unit);
+    resourcePathToCachedUnit.insert(QStringLiteral("/KeyDash_NX1000/pages/ServicePage.qml"), &QmlCacheGeneratedCode::_0x5f_KeyDash_NX1000_pages_ServicePage_qml::unit);
+    resourcePathToCachedUnit.insert(QStringLiteral("/KeyDash_NX1000/style/ThemedSlider.qml"), &QmlCacheGeneratedCode::_0x5f_KeyDash_NX1000_style_ThemedSlider_qml::unit);
+    resourcePathToCachedUnit.insert(QStringLiteral("/KeyDash_NX1000/style/ThemedSwitch.qml"), &QmlCacheGeneratedCode::_0x5f_KeyDash_NX1000_style_ThemedSwitch_qml::unit);
+    resourcePathToCachedUnit.insert(QStringLiteral("/KeyDash_NX1000/style/ThemedButton.qml"), &QmlCacheGeneratedCode::_0x5f_KeyDash_NX1000_style_ThemedButton_qml::unit);
+    resourcePathToCachedUnit.insert(QStringLiteral("/KeyDash_NX1000/errors/Errors.js"), &QmlCacheGeneratedCode::_0x5f_KeyDash_NX1000_errors_Errors_js::unit);
     QQmlPrivate::RegisterQmlUnitCacheHook registration;
     registration.structVersion = 0;
     registration.lookupCachedQmlUnit = &lookupCachedUnit;

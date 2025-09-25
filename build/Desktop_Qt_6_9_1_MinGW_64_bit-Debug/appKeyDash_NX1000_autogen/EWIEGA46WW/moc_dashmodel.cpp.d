@@ -2,6 +2,7 @@ D:/QtProjects/KeyDash_NX1000/build/Desktop_Qt_6_9_1_MinGW_64_bit-Debug/appKeyDas
   D:/QtProjects/KeyDash_NX1000/build/Desktop_Qt_6_9_1_MinGW_64_bit-Debug/appKeyDash_NX1000_autogen/moc_predefs.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/QObject \
   D:/Qt/6.9.1/mingw_64/include/QtCore/QString \
+  D:/Qt/6.9.1/mingw_64/include/QtCore/QVector \
   D:/Qt/6.9.1/mingw_64/include/QtCore/q17memory.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/q20functional.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/q20memory.h \
@@ -102,6 +103,7 @@ D:/QtProjects/KeyDash_NX1000/build/Desktop_Qt_6_9_1_MinGW_64_bit-Debug/appKeyDas
   D:/Qt/6.9.1/mingw_64/include/QtCore/qtypeinfo.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qtypes.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qutf8stringview.h \
+  D:/Qt/6.9.1/mingw_64/include/QtCore/qvector.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qversiontagging.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qxptype_traits.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qyieldcpu.h \
