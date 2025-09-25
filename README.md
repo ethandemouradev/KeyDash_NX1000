@@ -1,8 +1,9 @@
-# KeyDash NX1000
-KeyDash NX1000
+# KeyDash NX1000 Documentation
 
-A DIY "Professional Style" Digital Dashboard. Created by Ethan DeMoura
+Welcome to the official **KeyDash NX1000** docs.
 
-Material List:
-- SBC (Single Board Computer)
-- Touch Screen Monitor (2560x720)
+- 🚀 [Getting Started](./Setup.md)  
+- 📊 [Using the Dashboard](./tabs/Device.md)  
+- ⚠️ [Troubleshooting](./Errors.md)  
+- 🎨 [Customization](./customization/Customization.md)  
+---
