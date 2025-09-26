@@ -1,7 +1,7 @@
 // qrc:/KeyDash_NX1000/errors/Errors.js
 .pragma library
 
-// Code ranges (just a suggestion)
+// Code ranges
 // 0x1000–0x10FF : Bluetooth & discovery
 // 0x1100–0x11FF : Connection/session
 // 0x1200–0x12FF : Address/format/input
@@ -25,7 +25,7 @@ var CATALOG = {
   0x1F01: { key: "UNKNOWN", msg: "Unknown error." }
 };
 
-// simple template fill: replaces {name} with params.name
+// replaces {name} with params.name
 function fill(template, params) {
   if (!params) return template;
   return template.replace(/\{(\w+)\}/g, function(_, k){ return (k in params) ? String(params[k]) : "{" + k + "}"; });
@@ -62,11 +62,10 @@ var Codes = {
   UNKNOWN:                     0x1F01
 };
 
-function describe(code) { // helpful for docs/logging
+function describe(code) {
   if (!exists(code)) return { code: code, hex: "0x" + Number(code).toString(16).toUpperCase(), key: "UNRECOGNIZED", msg: "" };
   var c = CATALOG[code];
   return { code: code, hex: "0x" + Number(code).toString(16).toUpperCase(), key: c.key, msg: c.msg };
 }
 
-// make functions accessible to QML
 var API = { text: text, key: key, exists: exists, Codes: Codes, describe: describe };
