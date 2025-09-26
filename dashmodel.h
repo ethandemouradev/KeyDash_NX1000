@@ -2,6 +2,7 @@
 #include <QObject>
 #include <QString>
 #include <QVector>
+#include <QVariantMap>
 
 class DashModel : public QObject {
     Q_OBJECT
@@ -68,6 +69,8 @@ public:
     }
 
     Q_INVOKABLE double gearRatio(int gear) const;
+    Q_INVOKABLE void setReplayMode(bool on);           // pause live source while replaying
+    Q_INVOKABLE void ingestFrame(const QVariantMap &); // main entry from ReplayPage
 
 public slots:
     // setters
@@ -154,6 +157,7 @@ private:
     bool m_z60Popup = false;
 
     bool m_connected = false;
+    bool m_replayMode = false;
 
     QVector<double> m_gears; // implement in .cpp if you use it
 };

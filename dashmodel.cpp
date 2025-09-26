@@ -1,6 +1,7 @@
 #include "dashmodel.h"
 #include <QSettings>
 #include <QtMath>
+#include <QVariantMap>
 
 DashModel::DashModel(QObject* parent)
     : QObject(parent),
@@ -66,4 +67,68 @@ bool DashModel::loadVehicleConfig(const QString& path) {
     }
     ini.endGroup();
     return true;
+}
+
+/* =========================
+   REPLAY SUPPORT
+   ========================= */
+
+// (1) Let UI know we're replaying (optional: also flip connected banner)
+void DashModel::setReplayMode(bool on) {
+    m_replayMode = on;
+    // Choose behavior you prefer:
+    // If you want the ECU banner to show “disconnected” during replay:
+    setConnected(!on);
+    // Otherwise: comment the line above out.
+}
+
+// small helper to read numbers safely
+static inline double getNum(const QVariantMap &m, const char *key, double def = qQNaN()) {
+    auto it = m.constFind(QString::fromLatin1(key));
+    if (it == m.constEnd()) return def;
+    bool ok = false;
+    double v = it.value().toDouble(&ok);
+    return ok ? v : def;
+}
+
+// (2) Main entry called by ReplayPage on every frame
+void DashModel::ingestFrame(const QVariantMap &f) {
+    // Pull commonly-logged fields (these match LogParser.normalizeRow()).
+    const double rpm   = qIsNaN(getNum(f,"rpm"))   ? m_rpm   : getNum(f,"rpm");
+    const double mph   = getNum(f,"speed");        // optional if your log has it
+    const double mapk  = getNum(f,"map");          // kPa (absolute)
+    const double boostLogged = getNum(f,"boost");  // psi (gauge), optional
+    const double clt   = qIsNaN(getNum(f,"clt"))   ? m_clt   : getNum(f,"clt");
+    const double iat   = qIsNaN(getNum(f,"iat"))   ? m_iat   : getNum(f,"iat");
+    const double afr   = qIsNaN(getNum(f,"afr"))   ? m_afr   : getNum(f,"afr");
+    const double vbat  = qIsNaN(getNum(f,"batt"))  ? m_vbat  : getNum(f,"batt");
+    const double gearV = getNum(f,"gear");         // optional if present
+
+    // Derive boost from MAP if needed: boost_psi = max(0, (MAP_kPa - 101.325) * 0.1450377)
+    double boostPsi = boostLogged;
+    if (qIsNaN(boostPsi) && !qIsNaN(mapk)) {
+        boostPsi = qMax(0.0, (mapk - 101.325) * 0.1450377377);
+    } else if (qIsNaN(boostPsi)) {
+        boostPsi = m_boost; // keep prior if neither present
+    }
+
+    const double useMph  = qIsNaN(mph)   ? m_speed : mph;
+    const int    useGear = qIsNaN(gearV) ? m_gear  : int(qRound(gearV));
+
+    // Reuse your existing smoothing + setters so UI reacts exactly like live.
+    applySample(
+        rpm,        // rpm
+        useMph,     // speed
+        boostPsi,   // boost (psi gauge)
+        clt,        // coolant °C
+        iat,        // intake °C
+        vbat,       // volts
+        afr,        // afr
+        useGear     // gear
+        );
+
+    // If your logs carry flags, you can set them here similarly:
+    // setCelOn(f.value("cel").toBool());
+    // setTcsOn(f.value("tcs").toBool());
+    // setHeadlightsOn(f.value("hl").toBool());
 }

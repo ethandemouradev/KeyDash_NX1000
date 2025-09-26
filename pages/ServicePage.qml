@@ -2,7 +2,10 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import Qt.labs.settings 1.1
+import Qt.labs.platform 1.1   // StandardPaths
 import QtMultimedia
+import Qt.labs.folderlistmodel 2.15
+import QtQuick.Dialogs
 import "qrc:/KeyDash_NX1000/style"
 import "qrc:/KeyDash_NX1000/pages"
 import "qrc:/KeyDash_NX1000/errors/Errors.js" as Errors
@@ -10,6 +13,7 @@ import "qrc:/KeyDash_NX1000/errors/Errors.js" as Errors
 Page {
     id: svc
     signal done()
+    signal openReplay(url fileUrl, bool autoPlay)
 
     // Passed in from parent
     required property var prefs
@@ -20,7 +24,7 @@ Page {
     property real offsetTachX: -27
     property real offsetDisplayX: -75
     property real offsetGaugesX: -100
-    property real offsetPerfX: 0
+    property real offsetPerfX: 30
 
     // --------- Background & fonts ----------
     Image { anchors.fill: parent; source: "qrc:/KeyDash_NX1000/assets/BlankBackground.png"; fillMode: Image.Stretch }
@@ -29,6 +33,14 @@ Page {
 
     function dashFontName() {
         return (neu.status === FontLoader.Ready && neu.name.length) ? neu.name : Qt.application.font.family
+    }
+
+    // Top-level helper inside Page { id: svc }
+    function asUrl(path) {
+        if (!path || path.length === 0) return ""
+        const s = String(path)
+        if (s.startsWith("file:/")) return s
+        return "file:///" + s.replace(/\\/g, "/")
     }
 
     // --- debug plumbing for unmapped errors ---
@@ -307,7 +319,7 @@ component HoldButton: Item {
         id: modalDim
         anchors.fill: parent
         color: "black"
-        opacity: (macPad.visible || timePad.visible || numPad.visible) ? 0.5 : 0
+        opacity: (macPad.visible || timePad.visible || numPad.visible || replayPopup.visible || crashLogsPopup.visible) ? 0.5 : 0
         visible: opacity > 0
         z: 12000
         Behavior on opacity { NumberAnimation { duration: 120 } }
@@ -587,6 +599,439 @@ Item {
     }
 }
 
+// =================== Replay Browser Popup ===================
+Popup {
+    id: replayPopup
+    modal: true
+    focus: true
+    closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
+    z: 12100
+    x: Math.round((svc.width - width) / 2)
+    y: Math.round((svc.height - height) / 2)
+    width: Math.min(svc.width * 0.8, 960)
+    height: Math.min(svc.height * 0.8, 560)
+
+    background: Rectangle {
+        radius: 14
+        color: "#0b151a"
+        border.color: "#28424d"
+        border.width: 1
+    }
+
+    // simple state holder
+    QtObject {
+        id: replayPicker
+        property url lastSelection: ""
+        property bool autoPlay: true
+    }
+
+    // keep list in sync with prefs
+    onVisibleChanged: if (visible) logs.folder = asUrl(svc.prefs.logDir)
+
+    ColumnLayout {
+        anchors.fill: parent
+        anchors.margins: 16
+        spacing: 10
+
+        RowLayout {
+            Layout.fillWidth: true
+            Label { text: "Replay Browser"; font.pixelSize: 20; color: "#ffcc00"; font.family: dashFontName() }
+            Item { Layout.fillWidth: true }
+            ThemedButton { text: "✕"; width: 56; height: 40; onClicked: replayPopup.close() }
+        }
+
+        RowLayout {
+            Layout.fillWidth: true
+            spacing: 8
+            TextField {
+                id: folderField
+                Layout.fillWidth: true
+                placeholderText: "Select your logs folder…"
+                text: svc.prefs.logDir
+                onEditingFinished: {
+                    if (text !== svc.prefs.logDir) {
+                        svc.prefs.logDir = text
+                        logs.folder = asUrl(text)
+                    }
+                }
+            }
+            ThemedButton { text: "Browse…"; width: 140; height: 50; onClicked: dirDialog.open() }
+            ThemedButton { text: "Refresh"; width: 140; height: 50; onClicked: logs.folder = asUrl(svc.prefs.logDir) }
+        }
+
+        ColumnLayout {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            spacing: 10
+
+            RowLayout {
+                Layout.fillWidth: true
+                spacing: 8
+                Label {
+                    text: "Replays in: " + (svc.prefs.logDir && svc.prefs.logDir.length ? svc.prefs.logDir : "(not set)")
+                    color: "#9fb0bd"; font.pixelSize: 16
+                    elide: Label.ElideRight
+                    Layout.fillWidth: true
+                }
+            }
+
+            Item {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                clip: true
+
+                Rectangle {
+                    anchors.fill: parent
+                    radius: 10
+                    color: "#0f232b"
+                    border.color: "#2f4b57"
+                    border.width: 1
+                }
+
+                FolderListModel {
+                    id: logs
+                    folder: asUrl(svc.prefs.logDir)
+                    nameFilters: ["*.csv", "*.json"]
+                    showDirs: false
+                    showDotAndDotDot: false
+                    sortField: FolderListModel.Time
+                    sortReversed: true
+                }
+
+                ListView {
+                    id: logList
+                    anchors.fill: parent
+                    clip: true
+                    model: logs
+                    highlight: Rectangle { color: "#244059"; radius: 8; opacity: 0.5 }
+                    ScrollBar.vertical: ScrollBar {}
+
+                    footer: Item {
+                        width: 1; height: logs.count === 0 ? 80 : 0
+                        Rectangle {
+                            anchors.centerIn: parent
+                            width: logList.width - 40
+                            height: 60
+                            radius: 10
+                            color: "#0f232b"; border.color: "#2f4b57"
+                            visible: logs.count === 0
+                            Text {
+                                anchors.centerIn: parent
+                                text: (svc.prefs.logDir && svc.prefs.logDir.length)
+                                      ? "No .csv or .json logs found in this folder."
+                                      : "Choose a log folder in Settings → Performance."
+                                color: "#9fb0bd"; font.pixelSize: 18
+                            }
+                        }
+                    }
+
+                    delegate: ItemDelegate {
+                        width: ListView.view.width
+                        text: fileName
+                        font.pixelSize: 20
+                        background: Rectangle { color: hovered ? "#1b3342" : "transparent" }
+                        onClicked: {
+                            logList.currentIndex = index
+                            replayPicker.lastSelection = logs.get(index, "fileURL")
+                        }
+                        contentItem: Row {
+                            anchors.fill: parent; anchors.margins: 12; spacing: 8
+                            Text {
+                                text: fileName
+                                color: "white"; font.pixelSize: 20
+                                elide: Text.ElideRight
+                                width: parent.width * 0.70
+                            }
+                            Item { Layout.fillWidth: true; width: 1; height: 1 }
+                            Text {
+                                text: Qt.formatDateTime(fileModified, "yyyy-MM-dd  HH:mm")
+                                color: "#9fb0bd"; font.pixelSize: 16
+                                horizontalAlignment: Text.AlignRight
+                                width: parent.width * 0.28
+                            }
+                        }
+                    }
+
+                    Component.onCompleted: {
+                        if (!replayPicker || !replayPicker.lastSelection || !replayPicker.lastSelection.length) {
+                            if (logs.count > 0) currentIndex = 0
+                            return
+                        }
+                        var want = String(replayPicker.lastSelection)
+                        var found = -1
+                        for (var i = 0; i < logs.count; ++i) {
+                            if (String(logs.get(i, "fileURL")) === want) { found = i; break }
+                        }
+                        currentIndex = (found >= 0) ? found : (logs.count > 0 ? 0 : -1)
+                    }
+                }
+            }
+
+            RowLayout {
+                Layout.alignment: Qt.AlignRight
+                spacing: 10
+
+                RowLayout {
+                    spacing: 6
+                    CheckBox {
+                        id: autoPlayCheck
+                        checked: replayPicker.autoPlay
+                        onToggled: replayPicker.autoPlay = checked
+                    }
+                    Label { text: "Auto-play on open"; color: "white"; Layout.alignment: Qt.AlignVCenter }
+                }
+
+                ThemedButton { text: "Cancel"; onClicked: replayPopup.close() }
+                ThemedButton {
+                    text: "Open"
+                    enabled: logs.count > 0 && logList.currentIndex >= 0
+                    onClicked: {
+                        const idx = logList.currentIndex
+                        const fileUrl = logs.get(idx, "fileURL")
+                        replayPicker.lastSelection = fileUrl
+                        svc.openReplay(fileUrl, replayPicker.autoPlay)   // <-- pass it out
+                        replayPopup.close()
+                    }
+                }
+            }
+        }
+    }
+
+    FolderDialog {
+        id: dirDialog
+        title: "Select your logs folder"
+        onAccepted: {
+            folderField.text = selectedFolder
+            svc.prefs.logDir = selectedFolder
+            logs.folder = asUrl(selectedFolder)
+        }
+    }
+}
+
+Popup {
+    id: crashLogsPopup
+    modal: true
+    focus: true
+    closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
+    z: 12100
+    x: Math.round((svc.width - width) / 2)
+    y: Math.round((svc.height - height) / 2)
+    width: Math.min(svc.width * 0.9, 1100)
+    height: Math.min(svc.height * 0.85, 640)
+    background: Rectangle {
+        radius: 14
+        color: "#0b151a"
+        border.color: "#28424d"
+        border.width: 1
+    }
+
+    // where crash logs live (matches CrashLog::init)
+    readonly property string crashDir:
+        StandardPaths.writableLocation(StandardPaths.AppDataLocation) + "/" + Qt.application.name
+
+    // current file in viewer
+    property url viewerFileUrl: ""
+
+    // load file text (kept tiny & synchronous to popup state)
+    QtObject {
+        id: crashTxt
+        property string text: ""
+    }
+
+    ColumnLayout {
+        anchors.fill: parent
+        anchors.margins: 16
+        spacing: 10
+
+        // header
+        RowLayout {
+            Layout.fillWidth: true
+            Label {
+                text: (stack.currentIndex === 0) ? "Crash Logs"
+                     : ("Crash Log — " + decodeURIComponent(String(crashLogsPopup.viewerFileUrl)).replace(/^file:\/\/\//,""))
+                color: "#ffcc00"
+                font.pixelSize: 20
+                font.family: dashFontName()
+                elide: Label.ElideRight
+                Layout.fillWidth: true
+            }
+            ThemedButton {
+                text: (stack.currentIndex === 0) ? "Close" : "Back"
+                width: 120; height: 44
+                onClicked: {
+                    if (stack.currentIndex === 0) crashLogsPopup.close()
+                    else { stack.currentIndex = 0; crashLogsPopup.viewerFileUrl = "" ; crashTxt.text = "" }
+                }
+            }
+        }
+
+        StackLayout {
+            id: stack
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            currentIndex: 0    // 0=list, 1=viewer
+
+            // ---------- Page 0: LIST ----------
+            Item {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+
+                ColumnLayout {
+                    anchors.fill: parent
+                    spacing: 10
+
+                    // top row: folder + actions
+                    RowLayout {
+                        Layout.fillWidth: true
+                        Label {
+                            text: "Folder: " + crashLogsPopup.crashDir
+                            color: "#9fb0bd"; font.pixelSize: 14; elide: Label.ElideRight
+                            Layout.fillWidth: true
+                        }
+                        ThemedButton {
+                            text: "Open Folder"
+                            width: 150; height: 40; font.pixelSize: 16
+                            onClicked: Qt.openUrlExternally(asUrl(crashLogsPopup.crashDir))
+                        }
+                        ThemedButton {
+                            text: "Refresh"
+                            width: 120; height: 40; font.pixelSize: 16
+                            onClicked: crashlogs.folder = asUrl(crashLogsPopup.crashDir)
+                        }
+                    }
+
+                    // LIST container (no Control background customization)
+                    Item {
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                        clip: true
+
+                        // dark card behind the ListView
+                        Rectangle {
+                            anchors.fill: parent
+                            radius: 10
+                            color: "#0f232b"
+                            border.color: "#2f4b57"
+                            border.width: 1
+                        }
+
+                        // keep your model as-is
+                        FolderListModel {
+                            id: crashlogs
+                            folder: asUrl(crashLogsPopup.crashDir)
+                            nameFilters: ["crashlog*.txt"]
+                            showDirs: false
+                            showDotAndDotDot: false
+                            sortField: FolderListModel.Time
+                            sortReversed: true
+                        }
+
+                        ListView {
+                            id: crashlogList
+                            anchors.fill: parent
+                            clip: true
+                            model: crashlogs
+                            highlight: Rectangle { color: "#244059"; radius: 8; opacity: 0.5 }
+                            ScrollBar.vertical: ScrollBar {}
+
+                            delegate: ItemDelegate {
+                                width: ListView.view.width
+                                text: fileName
+                                font.pixelSize: 20
+
+                                background: Rectangle { color: hovered ? "#1b3342" : "transparent" }
+                                contentItem: Text {
+                                    text: fileName
+                                    color: "white"
+                                    font.pixelSize: 20
+                                    elide: Text.ElideRight
+                                    verticalAlignment: Text.AlignVCenter
+                                }
+
+                                onClicked: {
+                                    crashlogList.currentIndex = index
+                                    const url = crashlogs.get(index, "fileURL")    // this is usually a QUrl already
+                                    crashLogsPopup.viewerFileUrl = url
+
+                                    // Ensure we pass a QUrl to the invokable (wrap if it’s a string)
+                                    crashTxt.text = Fs.readTextUrl(typeof url === "string" ? Qt.resolvedUrl(url) : url)
+
+                                    stack.currentIndex = 1
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            // ---------- Page 1: VIEWER ----------
+            Item {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+
+                ColumnLayout {
+                    anchors.fill: parent
+                    spacing: 10
+
+                    // Container with dark underlay (no Control.background customization)
+                    Item {
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                        clip: true
+
+                        // dark card behind the scroll area
+                        Rectangle {
+                            anchors.fill: parent
+                            radius: 10
+                            color: "#0f232b"
+                            border.color: "#2f4b57"
+                            border.width: 1
+                            z: 0
+                        }
+
+                        // scrolling text viewer
+                        ScrollView {
+                            anchors.fill: parent
+                            clip: true
+                            z: 1
+
+                            // IMPORTANT: do NOT set ScrollView.background on native style
+
+                            TextArea {
+                                id: logTextArea
+                                readOnly: true
+                                wrapMode: TextArea.NoWrap
+                                text: crashTxt.text
+
+                                // readable on dark bg
+                                color: "#e6f2f8"
+                                selectionColor: "#244059"
+                                selectedTextColor: "#ffffff"
+                                font.family: "monospace"
+                                font.pixelSize: 14
+
+                                // transparent, so the dark underlay shows through
+                                background: null
+                            }
+                        }
+                    }
+
+                    RowLayout {
+                        Layout.alignment: Qt.AlignRight
+                        spacing: 10
+                        ThemedButton {
+                            text: "Open in Editor"
+                            width: 160; height: 40; font.pixelSize: 16
+                            enabled: !!crashLogsPopup.viewerFileUrl
+                            onClicked: Qt.openUrlExternally(crashLogsPopup.viewerFileUrl)
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 // --------- Area below the status bar ----------
 Item {
     id: safe
@@ -604,70 +1049,73 @@ Item {
         spacing: 14
 
         // --- centered tabs + underline (wrapper reports TabBar's size)
-               Item {
-                   id: tabBox
-                    width: tabs.implicitWidth
-                    x: Math.round((svc.width - width) / 2)
-                   implicitWidth:  tabs.implicitWidth
-                   implicitHeight: tabs.implicitHeight
+        Item {
+            id: tabBox
+            anchors.horizontalCenter: parent.horizontalCenter   // <— center properly
+            // Use the ListView's contentWidth when available so we don't include extra gutters
+            width: tabs.contentItem ? tabs.contentItem.contentWidth : tabs.implicitWidth
+            implicitWidth: width
+            implicitHeight: tabs.implicitHeight
 
-                   QtObject {
-                       id: tabMetrics
-                       property real maxPainted: 0
-                       property bool equalize: true
-                   }
+            QtObject {
+                id: tabMetrics
+                property real maxPainted: 0
+                property bool equalize: true
+            }
 
-                   // underline geometry
-                   property real ulX: 0
-                   property real ulW: 0
+            // underline geometry
+            property real ulX: 0
+            property real ulW: 0
 
-                   TabBar {
-                       id: tabs
-                       anchors.horizontalCenter: parent.horizontalCenter
-                       background: Item {}
-                       height: 72
-                       spacing: 32
+            TabBar {
+                id: tabs
+                anchors.horizontalCenter: parent.horizontalCenter
+                background: Item {}
+                height: 72
+                spacing: 32
+                leftPadding: 0        // <— kills default left gutter
+                rightPadding: 0       // <— kills default right gutter
 
-                       StyledTab { text: "Device";      metrics: tabMetrics }
-                       StyledTab { text: "Tachometer";  metrics: tabMetrics }
-                       StyledTab { text: "Display";     metrics: tabMetrics }
-                       StyledTab { text: "Gauges";      metrics: tabMetrics }
-                       StyledTab { text: "Performance"; metrics: tabMetrics }
-                   }
+                StyledTab { text: "Device";      metrics: tabMetrics }
+                StyledTab { text: "Tachometer";  metrics: tabMetrics }
+                StyledTab { text: "Display";     metrics: tabMetrics }
+                StyledTab { text: "Gauges";      metrics: tabMetrics }
+                StyledTab { text: "Performance"; metrics: tabMetrics }
+            }
 
-                   Rectangle {
-                       id: underline
-                       anchors.bottom: tabs.bottom
-                       anchors.bottomMargin: 2
-                       height: 4
-                       radius: 2
-                       color: "#ffcc00"
-                       x: tabBox.ulX
-                       width: tabBox.ulW
-                       Behavior on x     { NumberAnimation { duration: 160; easing.type: Easing.OutCubic } }
-                       Behavior on width { NumberAnimation { duration: 160; easing.type: Easing.OutCubic } }
-                   }
+            Rectangle {
+                id: underline
+                anchors.bottom: tabs.bottom
+                anchors.bottomMargin: 2
+                height: 4
+                radius: 2
+                color: "#ffcc00"
+                x: tabBox.ulX
+                width: tabBox.ulW
+                Behavior on x     { NumberAnimation { duration: 160; easing.type: Easing.OutCubic } }
+                Behavior on width { NumberAnimation { duration: 160; easing.type: Easing.OutCubic } }
+            }
 
-                   function updateUnderline() {
-                       const list = tabs.contentItem
-                       if (!list) return
-                       const btn = list.itemAtIndex ? list.itemAtIndex(tabs.currentIndex) : null
-                       if (!btn || !btn.contentItem) return
+            function updateUnderline() {
+                const list = tabs.contentItem
+                if (!list) return
+                const btn = list.itemAtIndex ? list.itemAtIndex(tabs.currentIndex) : null
+                if (!btn || !btn.contentItem) return
 
-                       const txt = btn.contentItem
-                       const p = txt.mapToItem(tabBox, 0, 0)
-                       const glyphW = (txt.paintedWidth && txt.paintedWidth > 0) ? txt.paintedWidth : txt.implicitWidth
-                       tabBox.ulW = glyphW
-                       tabBox.ulX = p.x + (txt.width - glyphW) / 2
-                   }
+                const txt = btn.contentItem
+                const p = txt.mapToItem(tabBox, 0, 0)
+                const glyphW = (txt.paintedWidth && txt.paintedWidth > 0) ? txt.paintedWidth : txt.implicitWidth
+                tabBox.ulW = glyphW
+                tabBox.ulX = p.x + (txt.width - glyphW) / 2
+            }
 
-                   Component.onCompleted: tabBox.updateUnderline()
-                   Connections { target: tabs;             function onCurrentIndexChanged(){ tabBox.updateUnderline() } }
-                   Connections { target: tabs;             function onWidthChanged(){ tabBox.updateUnderline() } }
-                   Connections { target: tabs.contentItem; function onContentWidthChanged(){ tabBox.updateUnderline() } }
-                   Connections { target: neu;              function onStatusChanged(){ tabBox.updateUnderline() } }
-                   Connections { target: tabMetrics;       function onMaxPaintedChanged(){ tabBox.updateUnderline() } }
-               }
+            Component.onCompleted: tabBox.updateUnderline()
+            Connections { target: tabs;             function onCurrentIndexChanged(){ tabBox.updateUnderline() } }
+            Connections { target: tabs;             function onWidthChanged(){ tabBox.updateUnderline() } }
+            Connections { target: tabs.contentItem; function onContentWidthChanged(){ tabBox.updateUnderline() } }
+            Connections { target: neu;              function onStatusChanged(){ tabBox.updateUnderline() } }
+            Connections { target: tabMetrics;       function onMaxPaintedChanged(){ tabBox.updateUnderline() } }
+        }
 
         // Card container (centered, sized within viewport)
         Rectangle {
@@ -728,7 +1176,7 @@ Item {
                                 Text {
                                     text: "Windows tip: pair ECUMaster in Bluetooth Settings first, then Connect here."
                                     visible: Qt.platform.os === "windows" && (!ecu || !ecu.isConnected || !ecu.isConnected())
-                                    color: "#cccccc"; font.pixelSize: 18; font.family: dashFontName()
+                                    color: "#cccccc"; font.pixelSize: 18
                                 }
 
                                 Row {
@@ -775,7 +1223,7 @@ Item {
                                         Text {
                                             id: btAddrLabel
                                             text: "Bluetooth Address (AA:BB:CC:DD:EE:FF)"
-                                            color: "#ddd"; font.pixelSize: 18; font.family: dashFontName()
+                                            color: "#ddd"; font.pixelSize: 16;
                                             // If the label moves due to layout, keep the overlay aligned:
                                             onYChanged: errorOverlay.reposition()
                                             onXChanged: errorOverlay.reposition()
@@ -859,7 +1307,7 @@ Item {
                                         Row {
                                             spacing: 14
                                             enabled: (svc.prefs.autoReconnectTries ?? 0) > 0
-                                            Text { text: "Max tries"; color: "white"; font.pixelSize: 20; font.family: dashFontName() }
+                                            Text { text: "Max tries"; color: "white"; font.pixelSize: 20  }
                                             ThemedButton {
                                                 width: 140; height: 50; font.pixelSize: 20
                                                 text: String(svc.prefs.autoReconnectTries ?? 5)
@@ -872,7 +1320,7 @@ Item {
                                                     numPad.visible = true
                                                 }
                                             }
-                                            Text { text: "Backoff (ms)"; color: "white"; font.pixelSize: 20; font.family: dashFontName() }
+                                            Text { text: "Backoff (ms)"; color: "white"; font.pixelSize: 20 }
                                             ThemedButton {
                                                 width: 160; height: 50; font.pixelSize: 20
                                                 text: String(svc.prefs.autoReconnectBackoffMs ?? 750) + " ms"
@@ -892,20 +1340,20 @@ Item {
                                 // RSSI
                                 Text {
                                     text: "RSSI: " + ((ecu && ecu.rssi !== undefined) ? ecu.rssi : "—") + " dBm"
-                                    color: "#cccccc"; font.pixelSize: 12; font.family: dashFontName()
+                                    color: "#cccccc"; font.pixelSize: 12
                                 }
 
                                 // Bottom switches
                                 Row {
                                     spacing: 14
-                                    Text { text: "Auto-reconnect"; color: "white"; font.pixelSize: 20; font.family: dashFontName() }
+                                    Text { text: "Auto-reconnect"; color: "white"; font.pixelSize: 20 }
                                     ThemedSwitch {
                                         checked: (svc.prefs.autoReconnectTries ?? 0) > 0
                                         width: 90; height: 50
                                         onToggled: svc.prefs.autoReconnectTries = checked ? (svc.prefs.autoReconnectTries || 5) : 0
                                     }
 
-                                    Text { text: "Reconnect on wake"; color: "white"; font.pixelSize: 20; font.family: dashFontName() }
+                                    Text { text: "Reconnect on wake"; color: "white"; font.pixelSize: 20 }
                                     ThemedSwitch {
                                         checked: !!(svc.prefs.reconnectOnWake ?? true)
                                         width: 90; height: 50
@@ -917,6 +1365,7 @@ Item {
                                 Connections {
                                     target: ecu
                                     function onErrorChanged(msg, code) {
+                                        if (replayPopup && replayPopup.visible) return;
                                         var mapped = classifyEcuError(msg, code)
                                         showError(mapped.code, mapped.params, mapped.overrideText)
                                         errorOverlay.dismissed = false
@@ -1406,10 +1855,34 @@ Item {
                                     Text { text: "Session logging"; color: "white"; font.pixelSize: 22 }
                                     ThemedSwitch { checked: !!(svc.prefs.loggingEnabled ?? false); width: 90; height: 50; onToggled: svc.prefs.loggingEnabled = checked }
                                 }
+                                // === Replays ===
+                                Row {
+                                    spacing: 16
+                                    Text { text: "Replays"; color: "white"; font.pixelSize: 22 }
+                                    ThemedButton {
+                                        text: "Open Replay Browser…"
+                                        width: 260; height: 56; font.pixelSize: 20
+                                        onClicked: replayPopup.open()
+                                    }
+                                }
+
+                                Row {
+                                    spacing: 16
+                                    Text { text: "Crash logs"; color: "white"; font.pixelSize: 22 }
+                                    ThemedButton {
+                                        text: "Browse…"
+                                        width: 220; height: 56; font.pixelSize: 20
+                                        onClicked: crashLogsPopup.open()
+                                    }
+                                }
 
                                 HoldButton {
                                     label: "Hold to Reset Trip"; holdMs: 1200
-                                    onActivated: if (svc.dashController && svc.dashController.resetTrip) svc.dashController.resetTrip()
+                                    onActivated: {
+                                        if (svc.dashController && svc.dashController.resetTrip)
+                                            svc.dashController.resetTrip()
+                                        if (svc.prefs) svc.prefs.tripBackupKm = 0
+                                    }
                                 }
                             }
                         }

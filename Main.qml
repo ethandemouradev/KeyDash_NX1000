@@ -22,7 +22,13 @@ Window {
     visible: true
     color: "#081418"
     visibility: Window.Windowed
-    flags: Qt.FramelessWindowHint
+    //flags: Qt.FramelessWindowHint
+
+    property var dashObj: null
+
+    Component.onCompleted: {
+        dashObj = dash           // copy once; no live binding
+    }
 
     // Shared settings
     Settings {
@@ -39,6 +45,8 @@ Window {
         property int shiftBlinkThreshold: 6500
         property int overRevThreshold: 7200
         property bool ovEnable: true
+        property real odoBackupKm: 0
+        property real tripBackupKm: 0
 
         // ===== Device / BT =====
         property int  autoReconnectTries: 5          // 0 disables
@@ -98,20 +106,40 @@ Window {
         Pages.DashboardPage {
             id: dashboardPage
             prefs: appSettings
-            dashController: dash    // <- pass your C++ object if you have one
-            onOpenService: nav.push(servicePage);
+            dashController: null
+
+            Component.onCompleted: {
+                if (dashObj) {
+                    dashboardPage.dashController = dashObj
+                } else if (typeof dash !== "undefined" && dash) {
+                    // fallback if dashObj wasn't set yet
+                    dashboardPage.dashController = dash
+                }
+            }
+
+            onOpenService: nav.push(servicePage)
         }
     }
 
     // Create the Service page as a component to push
     Component {
         id: servicePage
-        Pages.ServicePage { prefs: appSettings; dashController: dash; onDone: nav.pop() }
-    }
+        Pages.ServicePage {
+            prefs: appSettings
+            dashController: dashObj
+            onDone: nav.pop()
 
-    // Global back (Esc) to pop pages
-    Shortcut {
-        sequences: ["Escape", "Back"]
-        onActivated: if (nav.depth > 1) nav.pop()
+            onOpenReplay: (fileUrl, autoPlay) => {
+                nav.push(
+                    Qt.resolvedUrl("qrc:/KeyDash_NX1000/pages/ReplayPage.qml"),
+                    {
+                        dashController: dashObj,
+                        prefs: appSettings,
+                        initialSource: fileUrl,
+                        autoPlay: autoPlay               // <-- use the arg, not replayPicker
+                    }
+                )
+            }
+        }
     }
 }

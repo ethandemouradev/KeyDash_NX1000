@@ -15,30 +15,55 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Qt
 find_package(Qt6 6.4 REQUIRED COMPONENTS Core Gui Qml Quick Bluetooth Xml)
-
 qt_standard_project_setup()
+
+# Silence QTP0004 warning (Qt will auto-generate qmldir stubs for subdirs)
+qt_policy(SET QTP0004 NEW)
+
+# MinGW: allow huge RCC translation units, and avoid <windows.h> min/max macros
+if (MINGW)
+  add_compile_options(-Wa,-mbig-obj)
+  add_compile_definitions(NOMINMAX=1)
+endif()
 
 # ---- Executable sources ----
 qt_add_executable(appKeyDash_NX1000
     main.cpp
     dashmodel.cpp
     ecu_reader.cpp
-    # add your other .cpp files here as needed
+    crashlog.cpp
 )
 
-# ---- QML module / docs/----
+# Public headers (for moc/includes only — do NOT list QML here)
+target_sources(appKeyDash_NX1000
+    PUBLIC
+        dashmodel.h
+        ecu_reader.h
+        crashlog.h
+        FileReader.h
+)
+
+# ---- QML module ----
+# Prefix matches your QML URLs: qrc:/KeyDash_NX1000/...
 qt_add_qml_module(appKeyDash_NX1000
     URI KeyDash_NX1000
     VERSION 1.0
     RESOURCE_PREFIX /
+
+    # QML/JS files (explicit — stable, no re-glob loops)
     QML_FILES
         Main.qml
         pages/DashboardPage.qml
         pages/ServicePage.qml
+        pages/ReplayPage.qml
+        components/LogReplayController.qml
+        style/ThemedButton.qml
         style/ThemedSlider.qml
         style/ThemedSwitch.qml
-        style/ThemedButton.qml
+        scripts/LogParser.js
         errors/Errors.js
+
+    # Non-QML packaged resources (explicit list to avoid GLOB mismatch)
     RESOURCES
         assets/DashBlank.png
         assets/Tachometer_Full.png
@@ -52,34 +77,6 @@ qt_add_qml_module(appKeyDash_NX1000
         fonts/NeuropolX_Lite.ttf
         fonts/NeuropolX_Italic.ttf
         proto/version1_218.xml
-        docs/Setup.md
-        docs/FirstBoot.md
-        docs/Navigation.md
-        docs/tabs/Device.md
-        docs/tabs/Tachometer.md
-        docs/tabs/Display.md
-        docs/tabs/Gauges.md
-        docs/tabs/Performance.md
-        docs/Errors.md
-        docs/Troubleshooting.md
-        docs/FAQ.md
-        docs/customization/Customization.md
-        docs/customization/Overlays.md
-        docs/customization/Preferences.md
-        docs/Glossary.md
-        docs/SUMMARY.md
-        SOURCES
-)
-
-# Headers for moc (PUBLIC so moc sees them)
-target_sources(appKeyDash_NX1000
-    PUBLIC
-        dashmodel.h
-        ecu_reader.h
-        pages/ServicePage.qml
-        pages/DashboardPage.qml
-        errors/Errors.js
-        docs/SUMMARY.md
 )
 
 target_link_libraries(appKeyDash_NX1000
@@ -92,7 +89,7 @@ target_link_libraries(appKeyDash_NX1000
         Qt6::Xml
 )
 
-# Nice to have: color diagnostics
+# Colored diagnostics (nice to have)
 if (CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
     target_compile_options(appKeyDash_NX1000 PRIVATE -fdiagnostics-color=always)
 endif()

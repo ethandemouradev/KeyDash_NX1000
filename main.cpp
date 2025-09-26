@@ -8,10 +8,13 @@
 #include <QStandardPaths>
 #include <QFile>
 #include <QDir>
+#include <QLockFile>
 #include <algorithm>
 
+#include "FileReader.h"
 #include "dashmodel.h"
 #include "ecu_reader.h"
+#include "crashlog.h"
 
 #ifdef HAVE_SERIALPORT
 #include "serialworker.h"
@@ -19,35 +22,50 @@
 
 using namespace Qt::StringLiterals;
 
-// Helper: exponential smoothing
 static inline double smooth(double prev, double now, double alpha) {
-    // clamp alpha to sane range
     if (alpha < 0.0) alpha = 0.0;
     if (alpha > 1.0) alpha = 1.0;
     return prev * (1.0 - alpha) + now * alpha;
 }
 
-int main(int argc, char *argv[]) {
-    QGuiApplication app(argc, argv);
-
+int main(int argc, char *argv[])
+{
     QCoreApplication::setOrganizationName("KeyDash");
     QCoreApplication::setOrganizationDomain("keydash.local");
+    QCoreApplication::setApplicationVersion("0.1.0");
     QCoreApplication::setApplicationName("KeyDash_NX1000");
-    //QGuiApplication::setOverrideCursor(Qt::BlankCursor);
 
-    // Settings (shared with QML Settings{ category: "KeyDash" })
+    // Start crash logging *very* early
+    CrashLog::init(QStringLiteral("KeyDash_NX1000"), QStringLiteral("1.0.0"));
+
+    QGuiApplication app(argc, argv);
+
+    // (Optional) enforce single instance
+    const QString lockDir = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    QDir().mkpath(lockDir);
+    QLockFile lock(lockDir + "/KeyDash.lock");
+    lock.setStaleLockTime(0);
+    if (!lock.tryLock(100)) {
+        // Another instance is running; exit quietly
+        return 0;
+    }
+
+#ifndef QT_DEBUG
+    QLoggingCategory::setFilterRules(QStringLiteral("*.debug=false"));
+#endif
+
+    // Settings storage
     QSettings settings(QSettings::IniFormat, QSettings::UserScope,
                        QCoreApplication::organizationName(),
                        QCoreApplication::applicationName());
 
+    // --- Models/IO ---
     DashModel dash;
-    dash.loadVehicleConfig(); // optional; your method may read /etc defaults
+    dash.loadVehicleConfig();
 
-    // --- ECUMaster Bluetooth reader ---
     EcuReader ecu;
     ecu.loadXmlMap("qrc:/proto/version1_218.xml");
 
-// Optional serial (compiled only if you have Qt SerialPort)
 #ifdef HAVE_SERIALPORT
     SerialWorker worker(&dash);
 #else
@@ -68,7 +86,7 @@ int main(int argc, char *argv[]) {
     QObject::connect(&dash, &DashModel::odoChanged, [&]{ settings.setValue("odo", dash.odo()); });
     QObject::connect(&dash, &DashModel::tripChanged, [&]{ settings.setValue("trip", dash.trip()); });
 
-    // ---------- Read a few defaults you keep in /etc (optional) ----------
+    // ---------- Defaults (optional) ----------
     {
         QSettings sys("/etc/keydash/keydash.ini", QSettings::IniFormat);
         sys.beginGroup("vehicle");
@@ -84,80 +102,50 @@ int main(int argc, char *argv[]) {
     }
 
     // ==========================================================
-    //                ECU → DashModel data bridge
+    //                ECU → DashModel bridge
     // ==========================================================
     const double KPA_TO_PSI = 0.14503773773020923;
-
     auto readAlpha = [&](const char* key, double def) {
         return settings.value(QStringLiteral("KeyDash/") + key, def).toDouble();
     };
 
-    // RPM
     QObject::connect(&ecu, &EcuReader::rpmChanged, &app, [&](){
-        const double a = readAlpha("smoothRpm", 0.35);
-        dash.setRpm(smooth(dash.rpm(), ecu.rpm(), a));
+        dash.setRpm(smooth(dash.rpm(), ecu.rpm(), readAlpha("smoothRpm", 0.35)));
     });
-    // MAP / Boost (psi) = (MAPkPa - BAROkPa) * 0.145...
     QObject::connect(&ecu, &EcuReader::mapChanged, &app, [&](){
-        const double a = readAlpha("smoothBoost", 0.25);
-        // BARO: if EcuReader exposes baro(), use it; else fall back to 101.3 kPa
         double baroKpa = settings.value("KeyDash/baroKpa", 101.3).toDouble();
-        // Try to discover baro() at runtime (optional)
         int propIdx = ecu.metaObject()->indexOfProperty("baro");
         if (propIdx >= 0) {
             QVariant v = ecu.metaObject()->property(propIdx).read(&ecu);
             if (v.isValid()) baroKpa = v.toDouble();
         }
-        const double mapKpa = ecu.map();
-        const double boostPsi = (mapKpa - baroKpa) * KPA_TO_PSI;
-        dash.setBoost(smooth(dash.boost(), boostPsi, a));
+        const double boostPsi = (ecu.map() - baroKpa) * KPA_TO_PSI;
+        dash.setBoost(smooth(dash.boost(), boostPsi, readAlpha("smoothBoost", 0.25)));
     });
-    // CLT
-    QObject::connect(&ecu, &EcuReader::cltChanged, &app, [&](){
-        const double a = readAlpha("smoothClt", 0.25);
-        dash.setClt(smooth(dash.clt(), ecu.clt(), a));
-    });
-    // IAT
-    QObject::connect(&ecu, &EcuReader::iatChanged, &app, [&](){
-        const double a = readAlpha("smoothIat", 0.25);
-        dash.setIat(smooth(dash.iat(), ecu.iat(), a));
-    });
-    // VBAT
-    QObject::connect(&ecu, &EcuReader::battChanged, &app, [&](){
-        const double a = readAlpha("smoothVbat", 0.30);
-        dash.setVbat(smooth(dash.vbat(), ecu.batt(), a));
-    });
-    // AFR (or lambda mapped to AFR elsewhere if you do that in EcuReader)
-    QObject::connect(&ecu, &EcuReader::afrChanged, &app, [&](){
-        const double a = readAlpha("smoothAfr", 0.30);
-        dash.setAfr(smooth(dash.afr(), ecu.afr(), a));
-    });
+    QObject::connect(&ecu, &EcuReader::cltChanged,  &app, [&](){ dash.setClt (smooth(dash.clt(),  ecu.clt(),  readAlpha("smoothClt",  0.25))); });
+    QObject::connect(&ecu, &EcuReader::iatChanged,  &app, [&](){ dash.setIat (smooth(dash.iat(),  ecu.iat(),  readAlpha("smoothIat",  0.25))); });
+    QObject::connect(&ecu, &EcuReader::battChanged, &app, [&](){ dash.setVbat(smooth(dash.vbat(), ecu.batt(), readAlpha("smoothVbat", 0.30))); });
+    QObject::connect(&ecu, &EcuReader::afrChanged,  &app, [&](){ dash.setAfr (smooth(dash.afr(),  ecu.afr(),  readAlpha("smoothAfr",  0.30))); });
 
     // ==========================================================
-    //       Auto-connect on startup (always enabled)
+    //       Auto-connect on startup
     // ==========================================================
     {
-        const QString btAddr = settings.value("KeyDash/bt_addr", "").toString();
+        const QString btAddr = settings.value("KeyDash/bt_addr").toString();
         if (!btAddr.isEmpty()) {
             ecu.setDeviceAddress(btAddr);
-            ecu.connectToDevice();  // try immediately
+            ecu.connectToDevice();
         }
     }
-    // Persist last-used BT address when connected
     QObject::connect(&ecu, &EcuReader::connectionChanged, &app, [&](bool ok){
         if (ok) settings.setValue("KeyDash/bt_addr", ecu.deviceAddress());
     });
-    // If you still want legacy hooks:
-    QObject::connect(&ecu, &EcuReader::connectedLegacy,   &app, [&](){ /* ... */ });
-    QObject::connect(&ecu, &EcuReader::disconnectedLegacy,&app, [&](){ /* ... */ });
-
 
     // ==========================================================
-    //        Auto-reconnect + reconnect on wake/focus
+    //        Auto-reconnect / on wake
     // ==========================================================
     int pendingReconnects = 0;
     QPointer<QTimer> reconnectTimer;
-
     auto scheduleReconnect = [&](int tries, int backoffMs) {
         if (tries <= 0) return;
         pendingReconnects = tries;
@@ -175,19 +163,15 @@ int main(int argc, char *argv[]) {
         }
         reconnectTimer->start(std::max(100, backoffMs));
     };
-
     QObject::connect(&ecu, &EcuReader::disconnectedLegacy, &app, [&](){
         const int tries   = settings.value("KeyDash/autoReconnectTries", 5).toInt();
         const int backoff = settings.value("KeyDash/autoReconnectBackoffMs", 2000).toInt();
         scheduleReconnect(tries, backoff);
     });
-
     QObject::connect(&app, &QGuiApplication::applicationStateChanged, [&](Qt::ApplicationState st){
         if (st == Qt::ApplicationActive) {
-            const bool onWake = settings.value("KeyDash/reconnectOnWake", true).toBool();
-            if (onWake && !ecu.isConnected()) {
-                ecu.connectToDevice(); // kick one attempt; 'disconnected' will schedule retries
-            }
+            if (settings.value("KeyDash/reconnectOnWake", true).toBool() && !ecu.isConnected())
+                ecu.connectToDevice();
         }
     });
 
@@ -221,17 +205,12 @@ int main(int argc, char *argv[]) {
         logTimer.stop();
         const bool on = settings.value("KeyDash/logEnabled", false).toBool();
         int hz = std::clamp(settings.value("KeyDash/logHz", 10).toInt(), 1, 50);
-        if (!on) {
-            if (logFile.isOpen()) logFile.close();
-            return;
-        }
-        if (!logFile.isOpen())
-            if (!openLogFile()) return;
+        if (!on) { if (logFile.isOpen()) logFile.close(); return; }
+        if (!logFile.isOpen()) if (!openLogFile()) return;
         logTimer.start(1000 / hz);
     };
     QObject::connect(&logTimer, &QTimer::timeout, &app, [&](){
         if (!logFile.isOpen()) return;
-        // Try to get BARO again (see boost calc)
         double baroKpa = settings.value("KeyDash/baroKpa", 101.3).toDouble();
         int propIdx = ecu.metaObject()->indexOfProperty("baro");
         if (propIdx >= 0) {
@@ -264,10 +243,23 @@ int main(int argc, char *argv[]) {
     //                     QML Engine
     // ==========================================================
     QQmlApplicationEngine engine;
+
+    FileReader fs;
+    engine.rootContext()->setContextProperty("Fs", &fs);
+    engine.rootContext()->setContextProperty("fileReader", &fs);
+    engine.rootContext()->setContextProperty("FileReader", &fs);
     engine.rootContext()->setContextProperty("dash", &dash);
     engine.rootContext()->setContextProperty("ecu",  &ecu);
-    engine.load(u"qrc:/KeyDash_NX1000/Main.qml"_s);
 
-    if (engine.rootObjects().isEmpty()) return -1;
+    const QUrl url(u"qrc:/KeyDash_NX1000/Main.qml"_s);
+    QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
+                     &app, [url](QObject *obj, const QUrl &objUrl) {
+                         if (!obj && objUrl == url) QCoreApplication::exit(-1);
+                     }, Qt::QueuedConnection);
+    engine.load(url);
+
+    if (engine.rootObjects().isEmpty())
+        return -1;
+
     return app.exec();
 }

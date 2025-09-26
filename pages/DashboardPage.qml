@@ -7,10 +7,23 @@ Page {
     id: dashPage
     focus: true
     required property var prefs
-    property var dashController: null
-    Keys.onPressed: (e) => {
-        if (e.key === Qt.Key_S) { dashPage.openService(); e.accepted = true }
+    required property var dashController
+    readonly property var dash: dashController
+
+    property alias stageItem: stage
+
+    // --- distance helpers (assume device/dashController always reports KM) ---
+    function kmToUi(km) {
+        const v = Number(km) || 0
+        return (prefs && prefs.useMph === true) ? (v * 0.621371) : v
     }
+    function distUnitLabel() {
+        return (prefs && prefs.useMph === true) ? "mi" : "km"
+    }
+
+    function kmToMiles(km) { return Number(km) * 0.621371 }
+    function numFmt(n, decimals) { return Number(n).toLocaleString(Qt.locale(), 'f', decimals) }
+
     signal openService()
 
     /* =============================
@@ -21,6 +34,7 @@ Page {
 
     // Intro
     property bool introEnable: true
+    property bool skipIntro: false
     property real introFactor: 1.8   // scales intro animation durations
 
     // Over-rev flash
@@ -81,9 +95,9 @@ Page {
     // Over-rev flash hysteresis
     property bool overRevActive: false
     Connections {
-        target: dash
+        target: dashController ? dashController : null
         function onRpmChanged() {
-            const rpm = dash.rpm
+            const rpm = dashController.rpm
             if (overRevActive) {
                 if (rpm < overRevThreshold - overRevHysteresis) overRevActive = false
             } else {
@@ -97,7 +111,7 @@ Page {
        ========================= */
     SequentialAnimation on turnPhase {
         id: turnBlink
-        running: dash.leftSignal || dash.rightSignal
+        running: !!(dashController && (dashController.leftSignal || dashController.rightSignal))
         loops: Animation.Infinite
         NumberAnimation { from: 0.25; to: 1.0; duration: 250; easing.type: Easing.InOutSine }
         NumberAnimation { from: 1.0;  to: 0.25; duration: 250; easing.type: Easing.InOutSine }
@@ -291,23 +305,23 @@ Page {
 
             RightNum { id: boost;
                 rightX: leftCol.rightEdge; yPos: leftCol.startY + 0*leftCol.rowGap;
-                value: dash.boost; decimals: 1; px: leftCol.px }
+                value: dashController ? dashController.boost : 0; decimals: 1; px: leftCol.px }
 
             RightNum { id: coolant;
                 rightX: leftCol.rightEdge; yPos: leftCol.startY + 1*leftCol.rowGap;
-                value: dash.clt; decimals: 0; px: leftCol.px; dy: -1; errorHigh: 100 }
+                value: dashController ? dashController.clt : 0; decimals: 0; px: leftCol.px; dy: -1; errorHigh: 100 }
 
             RightNum { id: iat;
                 rightX: leftCol.rightEdge; yPos: leftCol.startY + 2*leftCol.rowGap;
-                value: dash.iat; decimals: 0; px: leftCol.px; errorHigh: 50 }
+                value: dashController ? dashController.iat : 0; decimals: 0; px: leftCol.px; errorHigh: 50 }
 
             RightNum { id: voltage;
                 rightX: leftCol.rightEdge; yPos: leftCol.startY + 3*leftCol.rowGap;
-                value: dash.vbat; decimals: 1; px: leftCol.px; dy: 10; errorLow: 14.0; errorHigh: 16.0 }
+                value: dashController ? dashController.vbat : 0; decimals: 1; px: leftCol.px; dy: 10; errorLow: 14.0; errorHigh: 16.0 }
 
             RightNum { id: afr;
                 rightX: leftCol.rightEdge; yPos: leftCol.startY + 4*leftCol.rowGap;
-                value: dash.afr; decimals: 1; px: leftCol.px; dy: 30;
+                value: dashController ? dashController.afr : 0; decimals: 1; px: leftCol.px; dy: 30;
                 warnLow: 11.5; warnHigh: 15.1; errorLow: 11.0; errorHigh: 16.0 }
         }
 
@@ -317,13 +331,13 @@ Page {
         Item {
             // logic only
             Connections {
-                target: dash
+                target: dashController ? dashController : null
                 function onSpeedChanged() {
-                    const s = dash.useMph ? dash.speed : dash.speed * 1.60934
-                    const target = dash.useMph ? 60.0 : 100.0
-                    const startThresh = dash.useMph
-                        ? dashPage.z60StartThresholdMph
-                        : dashPage.z60StartThresholdMph * 1.60934
+                    if (!dashController) return
+                    const s = (prefs.useMph ? dashController.speed : dashController.speed * 1.60934)
+                    const target = (prefs.useMph ? 60.0 : 100.0)
+                    const startThresh = (prefs.useMph ? dashPage.z60StartThresholdMph
+                                                      : dashPage.z60StartThresholdMph * 1.60934)
 
                     if (!dashPage.z60Timing) {
                         if (s <= startThresh) dashPage.z60Armed = true
@@ -380,7 +394,7 @@ Page {
             // subtle pop
             transform: Scale { id: z60Scale; origin.x: width/2; origin.y: height/2; xScale: 1; yScale: 1 }
             Connections {
-                target: dashController
+                target: dashController ? dashController : null
                 function onZ60PopupChanged() {
                     if (dashController.z60Popup) {
                         z60Popup.open()
@@ -403,7 +417,7 @@ Page {
                 spacing: 4
 
                 Text {
-                    text: dash.useMph ? "0–60 mph" : "0–100 km/h"
+                    text: (prefs.useMph ? "0–60 mph" : "0–100 km/h")
                     color: "#ffcc00"; font.family: neu.name; font.pixelSize: 20
                     horizontalAlignment: Text.AlignHCenter
                 }
@@ -448,7 +462,11 @@ Page {
                 id: speedText
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.top: parent.top
-                text: Math.round(dash.useMph ? dash.speed : dash.speed * 1.60934)
+                text: Math.round(
+                    prefs.useMph
+                        ? (dashController ? (Number(dashController.speed)       || 0) : 0)             // mph direct
+                        : (dashController ? (Number(dashController.speed)*1.60934 || 0) : 0)           // km/h
+                )
                 color: "#7ee6ff"
                 font.family: neu.name                 // common family
                 font.italic: neu_italic.status === FontLoader.Ready
@@ -457,7 +475,7 @@ Page {
                 styleColor: "#00000099"
 
                 // for bump sizing
-                property real lastSpeed: dash.speed
+                property real lastSpeed: Math.round(dashController ? dashController.speed : 0)
 
                 // scale transform (bump effect)
                 transform: Scale { id: speedScale; origin.x: speedText.width/2; origin.y: 0; xScale: 1; yScale: 1 }
@@ -465,15 +483,16 @@ Page {
 
             // bump when above 60/100 and speed changes
             Connections {
-                target: dash
+                target: dashController ? dashController : null
                 function onSpeedChanged() {
-                    const shown = dashPage.useMph ? dash.speed : (dash.speed * 1.60934)
-                    const limit = dashPage.useMph ? 60 : 100
+                    if (!dashController) return
+                    const shown = dashController.useMph ? dashController.speed : (dashController.speed * 1.60934)
+                    const limit = dashController.useMph ? 60 : 100
                     if (shown < limit) return
 
-                    const delta = Math.abs(dash.speed - speedText.lastSpeed)
+                    const delta = Math.abs(dashController.speed - speedText.lastSpeed)
                     const bump  = Math.min(0.10, 0.04 + delta * 0.002)
-                    speedText.lastSpeed = dash.speed
+                    speedText.lastSpeed = dashController.speed
 
                     speedBump.stop()
                     speedBump.from = 1.0
@@ -495,7 +514,7 @@ Page {
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.top: speedText.bottom
                 anchors.topMargin: speedBox.gap
-                text: dash.useMph ? "mph" : "km/h"
+                text: (prefs.useMph ? "mph" : "km/h")
                 color: "#ffcc00"
                 font.family: neu.name
                 font.pixelSize: speedBox.mphPx
@@ -510,7 +529,7 @@ Page {
             x: 817; y: 61; width: 18; height: 74
             color: "#ffcc00"
             radius: 0
-            visible: dash.rpm > 50
+            visible: !!(dashController && (dashController.rpm > 50))
             opacity: visible ? 1 : 0
             Behavior on opacity { NumberAnimation { duration: 120 } }
             z: 50
@@ -527,22 +546,22 @@ Page {
             // Map ECU rpm -> [0..1] across the image width with a short first segment (500 rpm),
             // then equal 1000-rpm segments afterwards.
             property real measuredFrac: {
-                const r = Math.max(rpmMin, Math.min(rpmMax, dash.rpm))
+                const raw = dashController ? (dashController.rpm || 0) : 0
+                if (raw <= rpmMin) return 0         // <-- force 0 at idle/off
 
-                // number of 1000-rpm blocks after the first short 500-rpm block
-                const blocksAfter = Math.floor((rpmMax - 1000) / 1000)    // e.g. 8000 -> 7
-                const totalBlocks = 1 + blocksAfter                       // first short + the rest
+                const r = Math.min(rpmMax, raw)
+                const blocksAfter = Math.max(0, Math.floor((rpmMax - 1000) / 1000))
+                const totalBlocks = 1 + blocksAfter
 
                 if (r <= 1000) {
-                    // 500..1000 spans exactly one "block" of width
-                    const span = 1000 - rpmMin;                           // 500
-                    return ((r - rpmMin) / span) / totalBlocks;
+                    const span = Math.max(1, 1000 - rpmMin) // e.g. 500
+                    return ((r - rpmMin) / span) / totalBlocks
                 } else {
-                    // 1000..rpmMax spans 'blocksAfter' equal-width blocks
-                    const span = rpmMax - 1000;                           // e.g. 7000
-                    return (1 + (r - 1000) / span * blocksAfter) / totalBlocks;
+                    const span = Math.max(1, rpmMax - 1000) // e.g. 7000
+                    return (1 + (r - 1000) / span * blocksAfter) / totalBlocks
                 }
             }
+
             // what we draw
             property real displayFrac: 0
             // True while intro sweep is running (disables live binding)
@@ -556,6 +575,10 @@ Page {
 
             // helper: start intro sweep 0 → 1 → 0
             function startSweep() {
+                if (dashPage.skipIntro || !prefs.introEnable) {
+                    rpmBar.sweeping = false
+                    return
+                }
                 rpmBar.sweeping = true
                 rpmBar.displayFrac = 0
                 sweepAnim.stop()
@@ -601,7 +624,7 @@ Page {
             Text {
                 id: gearText
                 anchors.centerIn: parent
-                text: (dash.gear <= 0 ? "N" : dash.gear)
+                text: (!dashController || dashController.gear <= 0 ? "N" : dashController.gear)
                 color: "#7ee6ff"
                 font.family: neu.name
                 font.pixelSize: 96
@@ -609,8 +632,9 @@ Page {
                 Behavior on color { ColorAnimation { duration: 140; easing.type: Easing.InOutQuad } }
             }
             Connections {
-                target: dash
+                target: dashController ? dashController : null
                 function onGearChanged() {
+                    if (!dashController) return
                     gearPulseAnim.start()
                     gearText.color = "#ffcc00"
                     Qt.callLater(() => gearText.color = "#7ee6ff")
@@ -652,9 +676,10 @@ Page {
             // blink state with hysteresis
             property bool blinkActive: false
             Connections {
-                target: dash
+                target: dashController ? dashController : null
                 function onRpmChanged() {
-                    const rpm = dash.rpm
+                    if (!dashController) return
+                    const rpm = dashController.rpm
                     if (shiftBox.blinkActive) {
                         if (rpm < shiftBox.blinkThreshold - shiftBox.hysteresis) shiftBox.blinkActive = false
                     } else {
@@ -668,8 +693,8 @@ Page {
                 id: shiftImg
                 anchors.fill: parent
                 source: shiftBox.src
-                visible: (dash.rpm >= shiftBox.showThreshold) || blinkAnim.running
-                opacity: (dash.rpm >= shiftBox.showThreshold ? 1 : 0)
+                visible: !!((dashController && dashController.rpm >= shiftBox.showThreshold) || blinkAnim.running)
+                opacity: (dashController && dashController.rpm >= shiftBox.showThreshold ? 1 : 0)
                 smooth: true
             }
 
@@ -680,7 +705,7 @@ Page {
                 loops: Animation.Infinite
                 NumberAnimation { target: shiftImg; property: "opacity"; from: 0.25; to: 1.0; duration: shiftBox.periodMs/2; easing.type: Easing.InOutSine }
                 NumberAnimation { target: shiftImg; property: "opacity"; from: 1.0;  to: 0.25; duration: shiftBox.periodMs/2; easing.type: Easing.InOutSine }
-                onRunningChanged: if (!running) shiftImg.opacity = (dash.rpm >= shiftBox.showThreshold ? 1 : 0)
+                onRunningChanged: if (!running) shiftImg.opacity = (dashController && dashController.rpm >= shiftBox.showThreshold ? 1 : 0)
             }
         }
 
@@ -724,18 +749,76 @@ Page {
 
         Item {
             id: odoBox; x: 1985; y: 320; width: 300; height: 60
+            // Prefer live ECU (km), else fallback to persisted km
+            readonly property real _odoKm:
+                (dashController && dashController.odo !== undefined && dashController.odo !== null)
+                    ? Number(dashController.odo)
+                    : Number(prefs ? prefs.odoBackupKm : 0)
+
             Text {
                 anchors.centerIn: parent
-                text: Math.round(dash.useMph ? dash.odo : dash.odo * 1.60934) + (dash.useMph ? " mi." : " km")
+
+                // live value in KM if available; otherwise NaN
+                property real __odoKmLive: (dashController && isFinite(Number(dashController.odo)))
+                                           ? Number(dashController.odo) : NaN
+                // choose live if valid, else backup (km)
+                property real __odoKm: isNaN(__odoKmLive) ? Number(prefs.odoBackupKm || 0) : __odoKmLive
+
+                text: prefs.useMph
+                      ? (numFmt(kmToMiles(__odoKm), 0) + " mi.")
+                      : (numFmt(__odoKm, 0)          + " km")
+
                 color: "#7ee6ff"; font.family: neu.name; font.pixelSize: 50
             }
         }
         Item {
             id: tripBox; x: 1995; y: 470; width: 300; height: 60
+            // Prefer live ECU (km), else fallback to persisted km
+            readonly property real _tripKm:
+                (dashController && dashController.trip !== undefined && dashController.trip !== null)
+                    ? Number(dashController.trip)
+                    : Number(prefs ? prefs.tripBackupKm : 0)
+
             Text {
                 anchors.centerIn: parent
-                text: (dash.useMph ? dash.trip : dash.trip * 1.60934).toFixed(1) + (dash.useMph ? " mi." : " km")
+
+                // live value in KM if available; otherwise NaN
+                property real __tripKmLive: (dashController && isFinite(Number(dashController.trip)))
+                                            ? Number(dashController.trip) : NaN
+                // choose live if valid, else backup (km)
+                property real __tripKm: isNaN(__tripKmLive) ? Number(prefs.tripBackupKm || 0) : __tripKmLive
+
+                text: prefs.useMph
+                      ? (numFmt(kmToMiles(__tripKm), 1) + " mi.")
+                      : (numFmt(__tripKm, 1)           + " km")
+
                 color: "#7ee6ff"; font.family: neu.name; font.pixelSize: 50
+            }
+        }
+
+        // Keep persisted backups fresh (stored in KM)
+        Connections {
+            target: dashController ? dashController : null
+            function onOdoChanged() {
+                if (!prefs) return
+                const km = Number(dashController.odo || 0)
+                if (km >= 0) prefs.odoBackupKm = km
+            }
+            function onTripChanged() {
+                if (!prefs) return
+                const km = Number(dashController.trip || 0)
+                if (km >= 0) prefs.tripBackupKm = km
+            }
+        }
+
+
+        // Seed backups once on load if available
+        Component.onCompleted: {
+            if (dashController && prefs) {
+                if (dashController.odo  !== undefined && dashController.odo  !== null)
+                    prefs.odoBackupKm  = Number(dashController.odo)
+                if (dashController.trip !== undefined && dashController.trip !== null)
+                    prefs.tripBackupKm = Number(dashController.trip)
             }
         }
 
@@ -746,8 +829,8 @@ Page {
         Item {
             id: leftTurn
             x: 1793; y: 592; width: 81; height: 68
-            visible: ((dash.leftSignal || dashPage.selfTest) ? dashPage.turnPhase : 0) > 0
-            opacity: (dash.leftSignal || dashPage.selfTest) ? dashPage.turnPhase : 0
+            visible: (((dashController && dashController.leftSignal) || dashPage.selfTest) ? dashPage.turnPhase : 0) > 0
+            opacity: ((dashController && dashController.leftSignal) || dashPage.selfTest) ? dashPage.turnPhase : 0
             transformOrigin: Item.Center
             scale: 1
             Image { anchors.fill: parent; source: "qrc:/KeyDash_NX1000/assets/LeftTurnSignal_On.png"; smooth: true }
@@ -768,8 +851,8 @@ Page {
         Item {
             id: rightTurn
             x: 2393; y: 592; width: 81; height: 69
-            visible: ((dash.rightSignal || dashPage.selfTest) ? dashPage.turnPhase : 0) > 0
-            opacity: (dash.rightSignal || dashPage.selfTest) ? dashPage.turnPhase : 0
+            visible: (((dashController && dashController.rightSignal) || dashPage.selfTest) ? dashPage.turnPhase : 0) > 0
+            opacity: ((dashController && dashController.rightSignal) || dashPage.selfTest) ? dashPage.turnPhase : 0
             transformOrigin: Item.Center
             scale: 1
             Image { anchors.fill: parent; source: "qrc:/KeyDash_NX1000/assets/RightTurnSignal_On.png"; smooth: true }
@@ -787,17 +870,17 @@ Page {
         }
 
         // TCS / CEL / Headlights
-        Lamp { id: tcsLamp;  x: 1998; y: 587; width: 53; height: 60;  source: "qrc:/KeyDash_NX1000/assets/TractionControl_On.png"; on: dash.tcsOn  || dashPage.selfTest }
-        Lamp { id: celLamp;  x: 2088; y: 583; width: 96; height: 64;  source: "qrc:/KeyDash_NX1000/assets/CEL_On.png";             on: dash.celOn  || dashPage.selfTest }
-        Lamp { id: headLamp; x: 2208; y: 585; width: 96; height: 62;  source: "qrc:/KeyDash_NX1000/assets/Headlight_On.png";       on: dash.headlightsOn || dashPage.selfTest }
+        Lamp { id: tcsLamp;  x: 1998; y: 587; width: 53; height: 60;  source: "qrc:/KeyDash_NX1000/assets/TractionControl_On.png"; on: (dashController && dashController.tcsOn)  || dashPage.selfTest }
+        Lamp { id: celLamp;  x: 2088; y: 583; width: 96; height: 64;  source: "qrc:/KeyDash_NX1000/assets/CEL_On.png";             on: (dashController && dashController.celOn)  || dashPage.selfTest }
+        Lamp { id: headLamp; x: 2208; y: 585; width: 96; height: 62;  source: "qrc:/KeyDash_NX1000/assets/Headlight_On.png";       on: (dashController && dashController.headlightsOn) || dashPage.selfTest }
 
         /* ===============================
            Coolant warning toast
            =============================== */
         Connections {
-            target: dash
+            target: dashController ? dashController : null
             function onCltChanged() {
-                if (dash.clt >= 105 && !dashPage.cltWarn) { dashPage.cltWarn = true; Qt.callLater(()=>warnHide.start()) }
+                if (dashController && dashController.clt >= 105 && !dashPage.cltWarn) { dashPage.cltWarn = true; Qt.callLater(()=>warnHide.start()) }
             }
         }
         Timer { id: warnHide; interval: 3000; onTriggered: dashPage.cltWarn = false }
@@ -811,7 +894,7 @@ Page {
             Behavior on opacity { NumberAnimation { duration: 180 } }
             Text {
                 anchors.centerIn: parent
-                text: "Coolant High: " + Math.round(dash.clt) + "°"
+                text: "Coolant High: " + (dashController ? Math.round(dashController.clt) : 0) + "°"
                 color: "white"; font.family: neu.name; font.pixelSize: 22
             }
         }
@@ -821,128 +904,36 @@ Page {
             id: modelInit
 
             Component.onCompleted: {
-                // If you did NOT call dash.loadVehicleConfig() in C++:
-                // dash.loadVehicleConfig()
+                if (!dashController) return
+                // If you did NOT call dashController.loadVehicleConfig() in C++:
+                // dashController.loadVehicleConfig()
 
                 // Mirror prefs -> model on first load
-                dash.setUseMph(prefs.useMph)
-                dash.setRpmMax(prefs.rpmMax)
+                dashController.setUseMph(prefs.useMph)
+                dashController.setRpmMax(prefs.rpmMax)
 
                 // If you don't have an INI yet, set your drivetrain here:
-                dash.setFinalDrive(4.080)
-                dash.setGearRatio(1, 3.321)
-                dash.setGearRatio(2, 1.902)
-                dash.setGearRatio(3, 1.308)
-                dash.setGearRatio(4, 1.000)
-                dash.setGearRatio(5, 0.891)
+                dashController.setFinalDrive(4.080)
+                dashController.setGearRatio(1, 3.321)
+                dashController.setGearRatio(2, 1.902)
+                dashController.setGearRatio(3, 1.308)
+                dashController.setGearRatio(4, 1.000)
+                dashController.setGearRatio(5, 0.891)
             }
 
             // Keep model in sync if the user changes prefs later
             Connections {
-                target: prefs
-                function onUseMphChanged() { dash.setUseMph(prefs.useMph) }
-                function onRpmMaxChanged() { dash.setRpmMax(prefs.rpmMax) }
+              target: prefs
+              function onUseMphChanged() { if (dashController && dashController.setUseMph) dashController.setUseMph(prefs.useMph) }
+              function onRpmMaxChanged() { if (dashController && dashController.setRpmMax) dashController.setRpmMax(prefs.rpmMax) }
             }
 
             // Keep prefs updated if the model changes units elsewhere (e.g., C++)
             Connections {
-                target: dash
-                function onUseMphChanged() {
-                    if (prefs.useMph !== dash.useMph)
-                        prefs.useMph = dash.useMph
-                }
-            }
-        }
-
-        /* ===============================
-           Service panel (toggle with “S”)
-           =============================== */
-        property bool serviceOpen: false
-        Shortcut { sequence: "S"; context: Qt.ApplicationShortcut; onActivated: serviceOpen = !serviceOpen }
-
-        Item {
-          id: servicePanel
-          x: 2320; y: 110
-          width: 380; height: parent.height
-          z: 9000
-          visible: stage.serviceOpen || opacity > 0.01
-          enabled: stage.serviceOpen
-          clip: true
-
-            Column {
-                anchors.fill: parent
-                anchors.margins: 16
-                spacing: 8
-
-                Text { text: "Service Panel"; font.family: neu.name; font.pixelSize: 26; color: "#ffcc00" }
-
-                // Units
-                Row {
-                    spacing: 12
-                    Text { text: "Units:"; color: "white"; font.family: neu.name; font.pixelSize: 18; verticalAlignment: Text.AlignVCenter }
-                    Switch {
-                        id: units
-                        checked: prefs.useMph
-                        onToggled: {
-                            prefs.useMph = checked
-                            dash.setUseMph(checked)
-                        }
-                    }
-                    Text {
-                        text: units.checked ? "mph" : "km/h"
-                        color: "white"; font.family: neu.name; font.pixelSize: 14
-                        anchors.verticalCenter: units.verticalCenter
-                        Behavior on color { ColorAnimation { duration: 120 } }
-                    }
-                }
-
-                // Over-rev enable
-                Row {
-                    spacing: 12
-                    Text { text: "Rev flash"; color: "white"; font.family: neu.name; font.pixelSize: 18 }
-                    Switch { id: ovSwitch; checked: prefs.ovEnable; onToggled: prefs.ovEnable = checked }
-                }
-
-                // Intro toggle
-                Row {
-                    spacing: 12
-                    Text { text: "Intro on boot"; color: "white"; font.family: neu.name; font.pixelSize: 18 }
-                    Switch { checked: prefs.introEnable; onToggled: prefs.introEnable = checked }
-                }
-
-                // Brightness
-                Text { text: "Brightness: " + Math.round(dashPage.brightness * 100); color: "white"; font.family: neu.name; font.pixelSize: 18 }
-                Slider { from: 0.05; to: 1; value: dashPage.brightness; stepSize: 0.05; onValueChanged: dashPage.brightness = value }
-
-                // Shift thresholds
-                Text { text: "Shift Light: " + shiftBox.showThreshold; color: "white"; font.family: neu.name; font.pixelSize: 18 }
-                Slider { from: 2000; to: rpmMax; stepSize: 100; value: shiftBox.showThreshold; onValueChanged: shiftBox.showThreshold = Math.round(value) }
-                Text { text: "Shift Blink: " + shiftBox.blinkThreshold; color: "white"; font.family: neu.name; font.pixelSize: 18 }
-                Slider { from: 2000; to: rpmMax; stepSize: 100; value: shiftBox.blinkThreshold; onValueChanged: shiftBox.blinkThreshold = Math.round(value) }
-
-                // Over-rev threshold
-                Text { text: "Over Rev Flash: " + overRevThreshold; color: "white"; font.family: neu.name; font.pixelSize: 16 }
-                Slider { from: 4000; to: rpmMax; stepSize: 100; value: overRevThreshold; onValueChanged: overRevThreshold = Math.round(value) }
-
-                // Intro length
-                Text { text: "Intro length: " + prefs.introFactor.toFixed(1) + "s"; color: "white"; font.family: neu.name; font.pixelSize: 18 }
-                Slider {
-                    id: introLen
-                    from: 3.0; to: 8.0; stepSize: 1.0
-                    value: prefs.introFactor
-                    width: 160
-                    onValueChanged: prefs.introFactor = Math.round(value * 10) / 10
-                }
-
-                // Trip reset
-                HoldButton { label: "Reset Trip"; holdMs: 1200; onActivated: dash.resetTrip() }
-
-                // Slide-in/out
-                states: [
-                    State { name: "panelOpen";   when: stage.serviceOpen;  PropertyChanges { target: servicePanel; x: 2330;       opacity: 1 } },
-                    State { name: "panelClosed"; when: !stage.serviceOpen; PropertyChanges { target: servicePanel; x: 2330 + 300; opacity: 0 } }
-                ]
-                transitions: [ Transition { NumberAnimation { properties: "x,opacity"; duration: 300; easing.type: Easing.OutCubic } } ]
+              target: dashController ? dashController : null
+              function onUseMphChanged() {
+                if (dashController && prefs.useMph !== dashController.useMph) prefs.useMph = dashController.useMph
+              }
             }
         }
 
@@ -953,23 +944,11 @@ Page {
             id: statusBar
             anchors.top: parent.top
             width: parent.width; height: 28
-            color: dash.connected ? "#0b2a0b" : "#2a0b0b"
-            opacity: dash.connected ? 0 : 0.9
+            color: (dashController && dashController.connected) ? "#0b2a0b" : "#2a0b0b"
+            opacity: (dashController && dashController.connected) ? 0 : 0.9
             visible: opacity > 0
-            Text { anchors.centerIn: parent; text: dash.connected ? "" : "ECU DISCONNECTED"; color: "#ffcc00"; font.family: neu.name; font.pixelSize: 20 }
+            Text { anchors.centerIn: parent; text: (dashController && dashController.connected) ? "" : "ECU DISCONNECTED"; color: "#ffcc00"; font.family: neu.name; font.pixelSize: 20 }
         }
-
-        /* ===============================
-           Settings hot area (dev)
-           =============================== */
-        /*Rectangle {
-            id: settingsHotspot
-            x: 1130; y: 635; width: 300; height: 80; radius: 12
-            z: 10001
-            color: "#ffcc00"; opacity: 0
-            border.color: "#ffcc00"; border.width: 1
-            MouseArea { anchors.fill: parent; hoverEnabled: true; onClicked: stage.serviceOpen = !stage.serviceOpen }
-        }*/
 
         /* ===============================
            Intro overlay (curtain + title + sweep + reveal)
@@ -978,7 +957,16 @@ Page {
             id: introOverlay
             anchors.fill: parent
             z: 10002
-            visible: true
+            visible: (prefs.introEnable && !dashPage.skipIntro)
+
+            onVisibleChanged: {
+                if (!visible) {
+                    // If it gets hidden later, still ensure we are fully revealed and not sweeping
+                    setGroupOpacity(1)
+                    rpmBar.sweeping = false
+                    introAnim.stop()
+                }
+            }
 
             // durations scaled by persisted factor
             property real factor: prefs.introFactor
@@ -1014,13 +1002,18 @@ Page {
 
             // If intro disabled, skip everything
             Component.onCompleted: {
-                if (prefs.introEnable) {
-                    setGroupOpacity(0)
-                    introAnim.start()
-                } else {
-                    setGroupOpacity(1)
-                    visible = false
+                // If intro is disabled OR we're in replay skip mode → reveal instantly
+                if (!prefs.introEnable || dashPage.skipIntro) {
+                    setGroupOpacity(1)     // show all UI
+                    rpmBar.sweeping = false
+                    introAnim.stop()
+                    introOverlay.visible = false
+                    return
                 }
+
+                // Otherwise run the normal intro
+                setGroupOpacity(0)
+                introAnim.start()
             }
 
             SequentialAnimation {
