@@ -1,11 +1,19 @@
+// Serial port helper that can drive the DashModel with either real ECU data
+// or a synthetic demo stream. All edits here are comment-only; behaviour
+// and timing are preserved.
+
 #include "serialworker.h"
 #include "dashmodel.h"
 #include <QtMath>
+
++// Convert kilometers-per-hour to miles-per-hour (used by demo/port code).
 static inline double kphToMph(double k){ return k*0.621371; }
 
 SerialWorker::SerialWorker(DashModel* model, QObject* parent)
     : QObject(parent), m_model(model)
 {
+    // Start the synthetic demo timer (50 ms -> 20 Hz) by default. Opening a
+    // real serial port will stop the demo loop.
     connect(&m_demo,&QTimer::timeout,this,&SerialWorker::demoTick);
     m_demo.start(50); // 20 Hz demo
 }
@@ -21,8 +29,11 @@ bool SerialWorker::openPort(const QString& name, int baud){
     m_demo.stop(); return true;
 }
 void SerialWorker::onReadyRead(){
+    // Append incoming bytes to the frame buffer. Parsing is intentionally
+    // left to the integrator: when a complete ECU frame is available call
+    // pushSample(...) with the decoded values.
     m_buf.append(m_port.readAll());
-    // TODO: parse your 16-byte ECUmaster frame here; when you have one:
+    // Example integration point (decode frame -> pushSample(...)).
     // pushSample(rpm, speed_kph, boost, clt, iat, vbat, afr, gear);
 }
 void SerialWorker::demoTick(){

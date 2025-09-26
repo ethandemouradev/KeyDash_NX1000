@@ -5,7 +5,7 @@ import QtQuick.Controls.Basic as Basic   // non-native so customization works
 Basic.Switch {
     id: control
 
-    // ── Theme knobs you can tweak app-wide ──────────────────────────────
+    // Theme tokens (colors & sizes) for the switch control
     property color trackOff:    "#475569"        // slate/off
     property color trackOn:     "#0ea5e9"        // primary/on
     property color thumbColor:  "#ffcc00"        // accent thumb
@@ -24,7 +24,7 @@ Basic.Switch {
     // Label (optional): use contentItem to keep default behavior
     // contentItem: Text { text: control.text; color: "white"; font.pixelSize: 18 }
 
-    // ── Track (background) ───────────────────────────────────────────────
+    // Track (background) and animated thumb
     indicator: Rectangle {
         id: track
         implicitWidth: control.trackW

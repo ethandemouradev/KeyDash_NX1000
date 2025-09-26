@@ -19,27 +19,27 @@ class DashModel : public QObject {
     Q_PROPERTY(double  odo   READ odo  WRITE setOdo  NOTIFY odoChanged)
     Q_PROPERTY(double  trip  READ trip WRITE setTrip NOTIFY tripChanged)
 
-    // Indicator flags
+    // Indicator flags (lamps/signals)
     Q_PROPERTY(bool leftSignal   READ leftSignal   WRITE setLeftSignal   NOTIFY leftSignalChanged)
     Q_PROPERTY(bool rightSignal  READ rightSignal  WRITE setRightSignal  NOTIFY rightSignalChanged)
     Q_PROPERTY(bool headlightsOn READ headlightsOn WRITE setHeadlightsOn NOTIFY headlightsOnChanged)
     Q_PROPERTY(bool celOn        READ celOn        WRITE setCelOn        NOTIFY celOnChanged)
     Q_PROPERTY(bool tcsOn        READ tcsOn        WRITE setTcsOn        NOTIFY tcsOnChanged)
 
-    // Config
+    // Configuration properties
     Q_PROPERTY(bool   useMph     READ useMph     WRITE setUseMph     NOTIFY useMphChanged)
     Q_PROPERTY(int    rpmMax     READ rpmMax     WRITE setRpmMax     NOTIFY rpmMaxChanged)
     Q_PROPERTY(double finalDrive READ finalDrive WRITE setFinalDrive NOTIFY finalDriveChanged)
 
     Q_PROPERTY(bool z60Popup READ z60Popup WRITE setZ60Popup NOTIFY z60PopupChanged)
 
-    // NEW: ECU connection status for banner
+    // ECU connection status (used by UI connection banner)
     Q_PROPERTY(bool connected READ connected WRITE setConnected NOTIFY connectedChanged)
 
 public:
     explicit DashModel(QObject* parent=nullptr);
 
-    // getters
+    // Getters
     bool   useMph()     const { return m_useMph; }
     int    rpmMax()     const { return m_rpmMax; }
     double finalDrive() const { return m_finalDrive; }
@@ -95,7 +95,7 @@ public slots:
     void setTcsOn(bool v){ if (v!=m_tcsOn){ m_tcsOn=v; emit tcsOnChanged(); } }
     void setConnected(bool v){ if (m_connected != v) { m_connected = v; emit connectedChanged(); } }
 
-    // helper to update multiple values at once (with light smoothing)
+    // Helper: update multiple sensor values at once (applies light smoothing)
     void applySample(double rpm, double mph, double boost, double clt,
                      double iat, double vbat, double afr, int gear) {
         auto sm = [](double p, double c){ return p*0.7 + c*0.3; };
@@ -106,10 +106,10 @@ public slots:
         setGear(gear);
     }
 
-    // set individual gear ratio (1-based)
+    // Set gear ratio for a specific gear (1-based)
     Q_INVOKABLE void setGearRatio(int gear, double ratio);
 
-    // optional: load /etc/keydash/keydash.ini at boot
+    // Optional: load vehicle config from INI (default system path)
     Q_INVOKABLE bool loadVehicleConfig(const QString& path = QStringLiteral("/etc/keydash/keydash.ini"));
 
 public:

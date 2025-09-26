@@ -10,21 +10,21 @@ Page {
     id: page
     title: "Replay"
 
-    // passed in from Main.qml
+    // Input properties (from Main.qml)
     required property var dashController
     required property var prefs
     property url initialSource: ""
     property bool autoPlay: true
 
-    // state
+    // Local state
     property var lastFrame: ({ t:0, rpm:0, map:0, tps:0, clt:0, iat:0, afr:0, batt:0 })
 
-    // ============== 1) Local container so overlay can anchor to a sibling ==============
+    // 1) Local container so overlay can anchor to sibling components
     Item {
         id: stage
         anchors.fill: parent
 
-        // ---- Your actual dashboard, full screen ----
+        // Embedded DashboardPage (full screen)
         Pages.DashboardPage {
             id: dash
             anchors.fill: parent
@@ -33,13 +33,13 @@ Page {
             dashController: page.dashController
         }
 
-        // Show/hide overlay with a tap anywhere on the dash
+        // Toggle overlay visibility on tap
         TapHandler {
             target: null
             onTapped: overlay.visible = !overlay.visible
         }
 
-        // ---- Transport overlay (bottom, full width, auto height) ----
+    // Transport overlay (bottom, full width)
         Rectangle {
             id: overlay
             anchors {
@@ -55,8 +55,8 @@ Page {
             Behavior on opacity { NumberAnimation { duration: 140; easing.type: Easing.OutCubic } }
 
             readonly property bool atEnd: replay.duration > 0 && replay.position >= replay.duration - 0.001
-            property bool pinned: false       // <-- define since you reference it later
-            property bool fingerDown: false   // <-- DragHandler touches this
+            property bool pinned: false
+            property bool fingerDown: false
 
             ColumnLayout {
                 id: overlayCol
@@ -64,12 +64,12 @@ Page {
                 anchors.margins: 12
                 spacing: 10
 
-                // Single header row: centered controls + right-aligned Close
+                // Header row: centered transport controls and Close button
                 RowLayout {
                     Layout.fillWidth: true
                     spacing: 10
 
-                    // Centering container takes all width
+                    // Centering container
                     Item {
                         Layout.fillWidth: true
                         // Center the control cluster inside this item
@@ -78,7 +78,7 @@ Page {
                             anchors.horizontalCenter: parent.horizontalCenter
                             spacing: 10
 
-                            // Play / Pause / Restart
+                            // Play / Pause / Restart controls
                             Button {
                                 id: playBtn
                                 text: replay.playing ? "Pause" : (overlay.atEnd ? "Restart" : "Play")
@@ -101,7 +101,7 @@ Page {
                                 onClicked: { replay.stop(); overlay.visible = true }
                             }
 
-                            // Speed chips
+                            // Playback speed buttons
                             Row {
                                 spacing: 8
                                 Repeater {
@@ -139,7 +139,7 @@ Page {
                         }
                     }
 
-                    // Close button stays on the far right
+                    // Close button aligned to the right
                     Button {
                         text: "Close"
                         implicitWidth: 120; implicitHeight: 64
@@ -149,18 +149,18 @@ Page {
                     }
                 }
 
-                // Scrub bar: duration-scaled width, centered, big touch targets
+                // Scrub bar: scaled to duration, centered, touch-friendly
                 RowLayout {
                     Layout.fillWidth: true
 
                     // left spacer
                     Item { Layout.fillWidth: true }
 
-                    // centered cell holds the actual bar (fixed width)
+                    // Center cell holds the scrub bar
                     Item {
                         // This is the visible bar container
                         id: scrub
-                        // ---- sizing knobs ----
+                        // Sizing knobs
                         property real pxPerSecond: 6
                         property real minBar: 320
                         property real maxBar: Math.min(overlay.width - 48, 1200)
@@ -169,11 +169,11 @@ Page {
                         width: Math.max(minBar, Math.min(maxBar, desired))
                         height: 56
 
-                        // tell the RowLayout how big this cell is
+                        // Inform RowLayout of cell sizing
                         implicitWidth: width
                         implicitHeight: height
 
-                        // background track
+                        // Background track
                         Rectangle {
                             id: track
                             anchors.verticalCenter: parent.verticalCenter
@@ -184,7 +184,7 @@ Page {
                             color: "#163041"
                         }
 
-                        // progress fill
+                        // Progress fill
                         Rectangle {
                             id: fill
                             anchors.verticalCenter: track.verticalCenter
@@ -195,7 +195,7 @@ Page {
                             color: "#ffcc00"
                         }
 
-                        // thumb (big)
+                        // Thumb indicator
                         Rectangle {
                             id: thumb
                             width: 28; height: 28; radius: 14
@@ -205,7 +205,7 @@ Page {
                                         Math.min(track.x + track.width - width/2, fill.x + fill.width - width/2))
                         }
 
-                        // Pointer handling (tap + drag)
+                        // Pointer handling: tap and drag to seek
                         MouseArea {
                             anchors.fill: parent
                             onPressed:  overlay.fingerDown = true
@@ -228,18 +228,18 @@ Page {
         }
     }
 
-    // ============== 3) Replayer engine (headless) ==============
+    // 3) Replayer engine (headless)
     LogReplayController {
         id: replay
 
-        // 3A) Push every parsed frame into DashModel (robust field mapping)
+    // 3A) Push parsed frames into DashModel (tolerant mapping)
         onFrameAdvanced: (f) => {
             lastFrame = f
 
             if (!page.dashController)
                 return
 
-            // --- tolerant column mapping (handles mph/kph/speed, map/boost, batt/vbat, etc.) ---
+            // Tolerant column mapping (handles mph/kph/speed, map/boost, batt/vbat, etc.)
             const rpm   = (f.rpm   !== undefined) ? Number(f.rpm)   : 0
             const mph   = (function(){
                 if (f.mph  !== undefined) return Number(f.mph)
@@ -266,12 +266,12 @@ Page {
             })()
             const gear  = (f.gear  !== undefined) ? parseInt(f.gear, 10) : -1
 
-            // 3B) Feed the model
+            // 3B) Feed the DashModel
             if (page.dashController.applySample) {
-                // one-shot helper you already exposed in DashModel
+                // Use the one-shot applySample helper if available
                 page.dashController.applySample(rpm, mph, boost, clt, iat, vbat, afr, gear)
             } else {
-                // fallback: call individual setters (safe-guarded)
+                // Fallback: call individual setters if applySample is not available
                 if (page.dashController.setRpm)     page.dashController.setRpm(rpm)
                 if (page.dashController.setSpeed)   page.dashController.setSpeed(mph)
                 if (page.dashController.setBoost && !Number.isNaN(boost)) page.dashController.setBoost(boost)
@@ -283,7 +283,7 @@ Page {
             }
         }
 
-        // 3C) Pause live inputs while replaying (optional niceties)
+        // 3C) Manage replay mode and UI synchronization on load/end
         onLoaded: {
             if (page.dashController && page.dashController.setReplayMode)
                 page.dashController.setReplayMode(true)

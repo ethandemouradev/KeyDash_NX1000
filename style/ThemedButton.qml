@@ -5,6 +5,7 @@ Basic.Button {
     id: control
 
     // simple theme knobs
+           // Themed style tokens (colors / radius) for app-wide button styling
     property color bgNormal:   "#ededed"
     property color bgHover:    "#0ea5e9"
     property color bgPressed:  "#0b74a3"

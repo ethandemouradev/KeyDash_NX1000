@@ -12,7 +12,7 @@ Page {
 
     property alias stageItem: stage
 
-    // --- distance helpers (assume device/dashController always reports KM) ---
+    // Distance helpers — device reports KM; convert to user units (km/mi)
     function kmToUi(km) {
         const v = Number(km) || 0
         return (prefs && prefs.useMph === true) ? (v * 0.621371) : v
@@ -26,31 +26,29 @@ Page {
 
     signal openService()
 
-    /* =============================
-       Global knobs (persisted below)
-       ============================= */
+    // Persistent global settings
     property bool useMph: true
     property real brightness: 1.0
 
-    // Intro
+    // Intro animation controls
     property bool introEnable: true
     property bool skipIntro: false
     property real introFactor: 1.8   // scales intro animation durations
 
-    // Over-rev flash
+    // Over-rev flash settings
     property bool overRevEnable: true
     property int  overRevThreshold: 6500
     property int  overRevHysteresis: 150
     property real overRevIntensity: 0.35  // 0..1
     property real overRevHz: 3.0          // flashes per second
 
-    // Tach placement / scaling
+    // Tachometer placement and scaling
     property int tachBarX: 813
     property int tachBarY: 60
     property int rpmMax:   8000
     property int rpmMin: 450    // 500 rpm = 0%
 
-    // 0–60 options
+    // 0–60 timing options
     property bool  z60Enable: true
     property real  z60ShowSecs: 5.0
     property real  z60TargetMph: 60.0
@@ -58,31 +56,29 @@ Page {
     property real  z60Best: 0
     property bool  z60IsNewBest: false
 
-    // 0–60 runtime state (not persisted)
+    // 0–60 runtime state (volatile)
     property bool z60Armed:  false
     property bool z60Timing: false
     property real z60T0ms:   0
     property real z60Time:   0
     property bool z60Popup:  false
 
-    // Alerts
+    // Alert flags
     property bool cltWarn: false
 
-    // Over-rev oscillator phase (drives smooth flash)
+    // Over-rev oscillator phase (smooth flash control)
     property real overRevPhase: 0
 
-    // Turn-signal shared phase (for fade up/down)
+    // Turn signal fade phase
     property real turnPhase: 1.0
 
-    // Hide mouse cursor (overlay layer)
+    // Hide mouse cursor overlay
     property bool hideCursor: true
 
-    // For lamp self-test on boot
+    // Lamp self-test flag
     property bool selfTest: false
 
-    /* =============================
-       Over-rev oscillator animation
-       ============================= */
+    // Over-rev phase animation
     NumberAnimation on overRevPhase {
         from: 0
         to:   2 * Math.PI
@@ -92,7 +88,7 @@ Page {
         onRunningChanged: if (!running) overRevPhase = 0
     }
 
-    // Over-rev flash hysteresis
+    // Over-rev flash hysteresis and RPM monitoring
     property bool overRevActive: false
     Connections {
         target: dashController ? dashController : null
@@ -106,9 +102,7 @@ Page {
         }
     }
 
-    /* =========================
-       Turn indicator fade phase
-       ========================= */
+    // Turn indicator fade animation
     SequentialAnimation on turnPhase {
         id: turnBlink
         running: !!(dashController && (dashController.leftSignal || dashController.rightSignal))
@@ -117,9 +111,7 @@ Page {
         NumberAnimation { from: 1.0;  to: 0.25; duration: 250; easing.type: Easing.InOutSine }
     }
 
-    /* =========================
-       Cursor hider overlay
-       ========================= */
+    // Cursor-hider overlay
     MouseArea {
         anchors.fill: parent
         acceptedButtons: Qt.NoButton
@@ -129,9 +121,7 @@ Page {
         z: 10000
     }
 
-    /* =========================
-       Stage (scaled coordinate system)
-       ========================= */
+        // Stage: scaled coordinate system
     Item {
         id: stage
         anchors.centerIn: parent
@@ -170,13 +160,13 @@ Page {
             visible: opacity > 0
         }
 
-        /* ===== Assets & fonts ===== */
+    // Assets and fonts
         Image { anchors.fill: parent; source: "qrc:/KeyDash_NX1000/assets/DashBlank.png"; fillMode: Image.Stretch }
         Loader { active: true; sourceComponent: Component { Image { source: "qrc:/KeyDash_NX1000/assets/Tachometer_Full.png"; cache: true; visible: false } } }
         FontLoader { id: neu;        source: "qrc:/KeyDash_NX1000/fonts/NeuropolX_Lite.ttf" }
         FontLoader { id: neu_italic; source: "qrc:/KeyDash_NX1000/fonts/NeuropolX_Italic.ttf" }
 
-        // Lamp self-test timer duration
+        // Lamp self-test timer
         Timer {
             id: selfTestTimer
             interval: 1000
@@ -185,11 +175,9 @@ Page {
             onTriggered: dashPage.selfTest = false
         }
 
-        /* ===========================================================
-           Reusable components (RightNum / HoldButton / Lamp)
-           =========================================================== */
+        // Reusable UI components: RightNum, HoldButton, Lamp
 
-        // Right-anchored big number (boost/coolant/iat/vbat/afr)
+    // Right-anchored numeric display (boost, coolant, IAT, voltage, AFR)
         component RightNum: Text {
             property real value: 0
             property int  decimals: 0
@@ -218,7 +206,7 @@ Page {
             Behavior on color { ColorAnimation { duration: 180; easing.type: Easing.InOutQuad } }
         }
 
-        // Hold-to-activate rectangular button (used in Service panel)
+    // Hold-to-activate button (used in Service panel)
         component HoldButton: Item {
             id: hb
             width: 160; height: 48
@@ -267,7 +255,7 @@ Page {
             }
         }
 
-        // Generic lamp with optional blink (not used for turn signals)
+    // Generic lamp component with optional blink
         component Lamp: Item {
             property bool on: false
             property bool blink: false
@@ -291,9 +279,7 @@ Page {
             }
         }
 
-        /* ===============================
-           Left column numeric gauges
-           =============================== */
+    // Left column numeric gauges
         Item {
             id: leftCol
             x: -275
@@ -325,9 +311,7 @@ Page {
                 warnLow: 11.5; warnHigh: 15.1; errorLow: 11.0; errorHigh: 16.0 }
         }
 
-        /* ===============================
-           0–60 timing logic + toast
-           =============================== */
+    // 0–60 timing logic and result toast
         Item {
             // logic only
             Connections {
@@ -368,7 +352,7 @@ Page {
                 }
             }
 
-            // toast auto-dismiss
+            // Auto-dismiss timer for 0–60 toast
             Timer {
                 id: z60Dismiss
                 interval: Math.round(dashPage.z60ShowSecs * 1000)
@@ -376,7 +360,7 @@ Page {
             }
         }
 
-        // 0–60 (0–100 km/h) result toast
+    // 0–60 result toast
         Rectangle {
             id: z60Toast
             x: 835; y: 300
@@ -445,19 +429,17 @@ Page {
             }
         }
 
-        /* ===============================
-           Centered SPEED block
-           =============================== */
+    // Centered speed block
         Item {
             id: speedBox
             x: 925; y: 265; width: 720; height: 380
 
-            // size knobs
+            // Size properties
             property int fontPx: 240
             property int mphPx:  64
             property int gap:    10
 
-            // main speed number
+            // Main speed number
             Text {
                 id: speedText
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -474,14 +456,14 @@ Page {
                 style: Text.Outline
                 styleColor: "#00000099"
 
-                // for bump sizing
+                // Last speed used for bump calculations
                 property real lastSpeed: Math.round(dashController ? dashController.speed : 0)
 
-                // scale transform (bump effect)
+                // Scale transform for bump effect
                 transform: Scale { id: speedScale; origin.x: speedText.width/2; origin.y: 0; xScale: 1; yScale: 1 }
             }
 
-            // bump when above 60/100 and speed changes
+            // Speed bump effect when above configured limit
             Connections {
                 target: dashController ? dashController : null
                 function onSpeedChanged() {
@@ -509,7 +491,7 @@ Page {
                 onRunningChanged: if (running) speedScale.yScale = speedScale.xScale
             }
 
-            // mph / km/h label
+            // Unit label (mph / km/h)
             Text {
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.top: speedText.bottom
@@ -521,9 +503,7 @@ Page {
             }
         }
 
-        /* ===============================
-           Tach yellow box (rpm > ~50)
-           =============================== */
+    // Tach highlight box (visible above idle)
         Rectangle {
             id: rpmYellowBox
             x: 817; y: 61; width: 18; height: 74
@@ -535,16 +515,13 @@ Page {
             z: 50
         }
 
-        /* ===============================
-           Tach bar (sweep + live follow)
-           =============================== */
+    // Tach bar (intro sweep + live follow)
         Item {
             id: rpmBar
             x: tachBarX; y: tachBarY
             width: 907; height: 121
 
-            // Map ECU rpm -> [0..1] across the image width with a short first segment (500 rpm),
-            // then equal 1000-rpm segments afterwards.
+                // Map ECU RPM to fraction [0..1] across image width; idle-to-1k has a shorter span, then uniform 1k segments.
             property real measuredFrac: {
                 const raw = dashController ? (dashController.rpm || 0) : 0
                 if (raw <= rpmMin) return 0         // <-- force 0 at idle/off
@@ -562,18 +539,18 @@ Page {
                 }
             }
 
-            // what we draw
+            // Display fraction used for clipping the tach image
             property real displayFrac: 0
-            // True while intro sweep is running (disables live binding)
+            // Sweeping flag disables live binding during intro
             property bool sweeping: true
 
-            // Follow live when NOT sweeping
+            // Live binding for display fraction when not sweeping
             Binding { target: rpmBar; property: "displayFrac"; value: rpmBar.measuredFrac; when: !rpmBar.sweeping }
 
-            // smooth updates
+            // Smooth display updates
             Behavior on displayFrac { NumberAnimation { duration: 120 } }
 
-            // helper: start intro sweep 0 → 1 → 0
+            // Start intro sweep (0 → 1 → 0)
             function startSweep() {
                 if (dashPage.skipIntro || !prefs.introEnable) {
                     rpmBar.sweeping = false
@@ -595,7 +572,7 @@ Page {
                 ScriptAction { script: rpmBar.sweeping = false }   // Binding reattaches
             }
 
-            // clipping window revealing full tach image
+            // Clipping window that reveals the tach image based on displayFrac
             Item {
                 anchors.left: parent.left
                 anchors.top: parent.top
@@ -614,9 +591,7 @@ Page {
             }
         }
 
-        /* ===============================
-           Gear block (center)
-           =============================== */
+    // Gear block (center)
         Item {
             id: gearBox
             x: 1552; y: 500; width: 160; height: 140; z: 20
@@ -648,9 +623,7 @@ Page {
             }
         }
 
-        /* ===============================
-           SHIFT icon (image)
-           =============================== */
+    // SHIFT icon (image)
         Item {
             id: shiftBox
             x: 1150; y: 215; width: 260; height: 77; z: 30
@@ -709,9 +682,7 @@ Page {
             }
         }
 
-        /* ===============================
-           Date / Odo / Trip
-           =============================== */
+    // Date / Odometer / Trip
         Item {
             id: dateBox
             x: 1940; y: 90; width: 420; height: 120
@@ -734,7 +705,7 @@ Page {
                 font.pixelSize: 65
                 color: "#ffcc00"
 
-                // 🔑 Binding depends on prefs.clock24, so it updates when that changes
+                // Binding depends on prefs.clock24; updates when preference changes
                 text: dateBox.fmt(prefs.clock24)
             }
 
@@ -822,10 +793,8 @@ Page {
             }
         }
 
-        /* ===============================
-           Turn Signals + Status Lamps
-           =============================== */
-        // Left turn with gentle “thump”
+          // Turn signals and status lamps
+          // Left turn indicator with thump animation
         Item {
             id: leftTurn
             x: 1793; y: 592; width: 81; height: 68
@@ -847,7 +816,7 @@ Page {
             NumberAnimation { id: thumpAnimL; target: leftTurn; property: "scale"; to: 1.0; duration: 140; easing.type: Easing.OutCubic }
         }
 
-        // Right turn with gentle “thump”
+    // Right turn indicator with thump animation
         Item {
             id: rightTurn
             x: 2393; y: 592; width: 81; height: 69
@@ -869,14 +838,12 @@ Page {
             NumberAnimation { id: thumpAnimR; target: rightTurn; property: "scale"; to: 1.0; duration: 140; easing.type: Easing.OutCubic }
         }
 
-        // TCS / CEL / Headlights
+    // Status lamps: TCS, CEL, Headlights
         Lamp { id: tcsLamp;  x: 1998; y: 587; width: 53; height: 60;  source: "qrc:/KeyDash_NX1000/assets/TractionControl_On.png"; on: (dashController && dashController.tcsOn)  || dashPage.selfTest }
         Lamp { id: celLamp;  x: 2088; y: 583; width: 96; height: 64;  source: "qrc:/KeyDash_NX1000/assets/CEL_On.png";             on: (dashController && dashController.celOn)  || dashPage.selfTest }
         Lamp { id: headLamp; x: 2208; y: 585; width: 96; height: 62;  source: "qrc:/KeyDash_NX1000/assets/Headlight_On.png";       on: (dashController && dashController.headlightsOn) || dashPage.selfTest }
 
-        /* ===============================
-           Coolant warning toast
-           =============================== */
+          // Coolant warning toast
         Connections {
             target: dashController ? dashController : null
             function onCltChanged() {
@@ -899,14 +866,13 @@ Page {
             }
         }
 
-        // --- wire DashModel defaults at startup ---
+        // Initialize DashModel defaults at startup
         Item {
             id: modelInit
 
             Component.onCompleted: {
                 if (!dashController) return
-                // If you did NOT call dashController.loadVehicleConfig() in C++:
-                // dashController.loadVehicleConfig()
+                // Ensure DashModel configuration is loaded before showing this page. In C++ call dashController.loadVehicleConfig() as appropriate.
 
                 // Mirror prefs -> model on first load
                 dashController.setUseMph(prefs.useMph)
@@ -937,9 +903,7 @@ Page {
             }
         }
 
-        /* ===============================
-           ECU connection banner
-           =============================== */
+          // ECU connection banner
         Rectangle {
             id: statusBar
             anchors.top: parent.top
@@ -950,9 +914,7 @@ Page {
             Text { anchors.centerIn: parent; text: (dashController && dashController.connected) ? "" : "ECU DISCONNECTED"; color: "#ffcc00"; font.family: neu.name; font.pixelSize: 20 }
         }
 
-        /* ===============================
-           Intro overlay (curtain + title + sweep + reveal)
-           =============================== */
+          // Intro overlay (curtain, title, sweep, reveal)
         Item {
             id: introOverlay
             anchors.fill: parent
@@ -968,7 +930,7 @@ Page {
                 }
             }
 
-            // durations scaled by persisted factor
+            // Animation durations scaled by persisted factor
             property real factor: prefs.introFactor
 
             // curtain
@@ -988,7 +950,7 @@ Page {
                 transform: Scale { id: titleScale; origin.x: introTitle.width / 2; origin.y: introTitle.height / 2; xScale: 1; yScale: 1 }
             }
 
-            // utility to set initial UI opacity
+            // Utility to set initial UI opacity for main groups
             function setGroupOpacity(o) {
                 leftCol.opacity = o
                 rpmYellowBox.opacity = o
@@ -1000,7 +962,7 @@ Page {
                 tripBox.opacity = o
             }
 
-            // If intro disabled, skip everything
+            // If intro disabled, reveal UI immediately
             Component.onCompleted: {
                 // If intro is disabled OR we're in replay skip mode → reveal instantly
                 if (!prefs.introEnable || dashPage.skipIntro) {
@@ -1011,7 +973,7 @@ Page {
                     return
                 }
 
-                // Otherwise run the normal intro
+                // Otherwise run the normal intro sequence
                 setGroupOpacity(0)
                 introAnim.start()
             }

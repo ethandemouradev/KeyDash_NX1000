@@ -1,3 +1,6 @@
+// ECU reader: handles Bluetooth discovery, RFCOMM socket, frame decoding and
+// mapping channel IDs to named values. Exposes properties/signals for QML.
+
 #pragma once
 #include <QObject>
 #include <QtBluetooth/QBluetoothAddress>
@@ -12,7 +15,7 @@
 struct ChannelInfo {
     QString name;
     QString storage;     // "word", "sword", "ubyte", "sbyte", "percent7"
-    double  divider = 1; // may be negative in XML
+    double  divider = 1; // may be negative in XML (normalized comment)
     double  offset  = 0;
     QString unit;
 };

@@ -2,13 +2,13 @@
 #include <QString>
 
 namespace CrashLog {
-// Call once on startup (very early in main()).
+// Initialize the crash/session log. Call early in main().
 void init(const QString& appName = QString(), const QString& version = QString());
 
-// Optional helper if you want to append custom lines anywhere.
+// Append a line to the session log (thread-safe).
 void append(const QString& line);
 
-// (Legacy convenience) Installs the crash handler only. `init()` already does this.
+// Install only the crash handler; `init()` does this by default.
 void installCrashHandler();
 
 // Full path to current session log file (e.g. .../KeyDash/crashlog.txt)
