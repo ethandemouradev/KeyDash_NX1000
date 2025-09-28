@@ -21,11 +21,6 @@ Window {
     visibility: Window.Windowed
 
     //flags: Qt.FramelessWindowHint
-    property var dashObj: null
-
-    Component.onCompleted: {
-        dashObj = dash // copy once; no live binding
-    }
 
     // Application settings (persisted)
     Settings {
@@ -134,17 +129,7 @@ Window {
         Pages.DashboardPage {
             id: dashboardPage
             prefs: appSettings
-            dashController: null
-
-            Component.onCompleted: {
-                if (dashObj) {
-                    dashboardPage.dashController = dashObj
-                } else if (typeof dash !== "undefined" && dash) {
-                    // Fallback assignment if dashObj was not available at startup
-                    dashboardPage.dashController = dash
-                }
-            }
-
+            dashController: dash      // live binding straight to the C++ 'dash'
             onOpenService: nav.push(servicePage)
         }
     }
@@ -154,20 +139,14 @@ Window {
         id: servicePage
         Pages.ServicePage {
             prefs: appSettings
-            dashController: dashObj
+            dashController: dash
             onDone: nav.pop()
-
             onOpenReplay: (fileUrl, autoPlay) => {
-                              nav.push(
-                                  Qt.resolvedUrl(
-                                      "qrc:/KeyDash_NX1000/pages/ReplayPage.qml"),
-                                  {
-                                      "dashController": dashObj,
-                                      "prefs": appSettings,
-                                      "initialSource": fileUrl,
-                                      "autoPlay": autoPlay // pass initialSource and autoPlay through nav.push
-                                  })
-                          }
+                nav.push(
+                    Qt.resolvedUrl("qrc:/KeyDash_NX1000/pages/ReplayPage.qml"),
+                    { dashController: dash, prefs: appSettings, initialSource: fileUrl, autoPlay }
+                )
+            }
         }
     }
 }

@@ -2,6 +2,9 @@
 #include <QSettings>
 #include <QVariantMap>
 #include <QtMath>
+#include "dashmodel.h"
+#include <QtGlobal>
+#include <QDateTime>
 
 DashModel::DashModel(QObject *parent)
     : QObject(parent), m_gears(10, 0.0) // allow gears 1..9 by default
@@ -13,6 +16,26 @@ DashModel::DashModel(QObject *parent)
   m_gears[4] = 1.000;
   m_gears[5] = 0.891;
   // m_gears[6].. as needed
+}
+
+static inline double kPaToPsi(double kpa) { return kpa * 0.1450377377; }
+
+void DashModel::onSignal(const SignalUpdate &up) {
+    if (up.name == "Engine.RPM") {
+        setRpm(int(up.value + 0.5));
+    } else if (up.name == "Vehicle.SpeedKph") {
+        setSpeed(up.value);
+    } else if (up.name == "Temps.CLT_C") {
+        setClt(up.value);
+    } else if (up.name == "Temps.IAT_C") {
+        setIat(up.value);
+    } else if (up.name == "Engine.MAP_kPa") {
+        // absolute kPa -> gauge psi (subtract atmospheric ~101.325 kPa)
+        const double boostPsi = kPaToPsi(up.value - 101.325);
+        setBoost(boostPsi);
+    } else if (up.name == "Engine.Boost_PSI") {
+        setBoost(up.value);
+    }
 }
 
 void DashModel::setUseMph(bool v) {

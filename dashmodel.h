@@ -3,6 +3,7 @@
 #include <QString>
 #include <QVector>
 #include <QVariantMap>
+#include "core/signal_types.h"
 
 class DashModel : public QObject {
     Q_OBJECT
@@ -94,6 +95,7 @@ public slots:
     void setCelOn(bool v){ if (v!=m_celOn){ m_celOn=v; emit celOnChanged(); } }
     void setTcsOn(bool v){ if (v!=m_tcsOn){ m_tcsOn=v; emit tcsOnChanged(); } }
     void setConnected(bool v){ if (m_connected != v) { m_connected = v; emit connectedChanged(); } }
+    void onSignal(const SignalUpdate &up);
 
     // Helper: update multiple sensor values at once (applies light smoothing)
     void applySample(double rpm, double mph, double boost, double clt,

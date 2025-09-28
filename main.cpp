@@ -9,12 +9,16 @@
 #include <QSettings>
 #include <QStandardPaths>
 #include <QTimer>
+#include <QPointer>
+#include <QElapsedTimer>
+
 #include <algorithm>
 
 #include "FileReader.h"
 #include "crashlog.h"
 #include "dashmodel.h"
 #include "ecu_reader.h"
+#include "controllers/connection_controller.h"
 
 #ifdef HAVE_SERIALPORT
 #include "serialworker.h"
@@ -33,7 +37,7 @@ static inline double smooth(double prev, double now, double alpha) {
 int main(int argc, char *argv[]) {
   QCoreApplication::setOrganizationName("KeyDash");
   QCoreApplication::setOrganizationDomain("keydash.local");
-  QCoreApplication::setApplicationVersion("0.1.0");
+  QCoreApplication::setApplicationVersion("1.0.0");
   QCoreApplication::setApplicationName("KeyDash_NX1000");
 
   // Start crash logging *very* early
@@ -64,9 +68,17 @@ int main(int argc, char *argv[]) {
   // --- Models/IO ---
   DashModel dash;
   dash.loadVehicleConfig();
+  ConnectionController conn;
+
+  QObject::connect(&conn, &ConnectionController::sig,
+                   &dash, &DashModel::onSignal);
 
   EcuReader ecu;
   ecu.loadXmlMap("qrc:/proto/version1_218.xml");
+
+  QElapsedTimer lastTraffic;
+  lastTraffic.invalidate();     // not valid until we see first packet
+  dash.setConnected(false);     // start disconnected
 
 #ifdef HAVE_SERIALPORT
   SerialWorker worker(&dash);
@@ -110,39 +122,90 @@ int main(int argc, char *argv[]) {
   // ==========================================================
   //                ECU → DashModel bridge
   // ==========================================================
-  const double KPA_TO_PSI = 0.14503773773020923;
-  auto readAlpha = [&](const char *key, double def) {
-    return settings.value(QStringLiteral("KeyDash/") + key, def).toDouble();
+  auto connectLegacyBridge = [&](bool enable) {
+      static QMetaObject::Connection c1, c2, c3, c4, c5, c6;
+      // disconnect old connections first
+      auto tryDisc = [](QMetaObject::Connection &c){ if (c) { QObject::disconnect(c); c = {}; } };
+      tryDisc(c1); tryDisc(c2); tryDisc(c3); tryDisc(c4); tryDisc(c5); tryDisc(c6);
+
+      if (!enable) return;
+
+      const double KPA_TO_PSI = 0.14503773773020923;
+      auto readAlpha = [&](const char *key, double def) {
+          return settings.value(QStringLiteral("KeyDash/") + key, def).toDouble();
+      };
+
+      c1 = QObject::connect(&ecu, &EcuReader::rpmChanged, &app, [&] {
+          dash.setRpm(smooth(dash.rpm(), ecu.rpm(), readAlpha("smoothRpm", 0.35)));
+        lastTraffic.restart();
+        dash.setConnected(true);
+      });
+      c2 = QObject::connect(&ecu, &EcuReader::mapChanged, &app, [&] {
+          double baroKpa = settings.value("KeyDash/baroKpa", 101.3).toDouble();
+          int propIdx = ecu.metaObject()->indexOfProperty("baro");
+          if (propIdx >= 0) {
+              QVariant v = ecu.metaObject()->property(propIdx).read(&ecu);
+              if (v.isValid()) baroKpa = v.toDouble();
+          }
+          const double boostPsi = (ecu.map() - baroKpa) * KPA_TO_PSI;
+          dash.setBoost(smooth(dash.boost(), boostPsi, readAlpha("smoothBoost", 0.25)));
+          lastTraffic.restart();
+          dash.setConnected(true);
+      });
+      c3 = QObject::connect(&ecu, &EcuReader::cltChanged, &app, [&] {
+          dash.setClt(smooth(dash.clt(), ecu.clt(), readAlpha("smoothClt", 0.25)));
+          lastTraffic.restart();
+          dash.setConnected(true);
+      });
+      c4 = QObject::connect(&ecu, &EcuReader::iatChanged, &app, [&] {
+          dash.setIat(smooth(dash.iat(), ecu.iat(), readAlpha("smoothIat", 0.25)));
+          lastTraffic.restart();
+          dash.setConnected(true);
+      });
+      c5 = QObject::connect(&ecu, &EcuReader::battChanged, &app, [&] {
+          dash.setVbat(smooth(dash.vbat(), ecu.batt(), readAlpha("smoothVbat", 0.30)));
+          lastTraffic.restart();
+          dash.setConnected(true);
+      });
+      c6 = QObject::connect(&ecu, &EcuReader::afrChanged, &app, [&] {
+          dash.setAfr(smooth(dash.afr(), ecu.afr(), readAlpha("smoothAfr", 0.30)));
+          lastTraffic.restart();
+          dash.setConnected(true);
+      });
   };
 
-  QObject::connect(&ecu, &EcuReader::rpmChanged, &app, [&]() {
-    dash.setRpm(smooth(dash.rpm(), ecu.rpm(), readAlpha("smoothRpm", 0.35)));
+  // call it once at startup (legacy on by default)
+  connectLegacyBridge(true);
+
+  // when a new protocol connects, turn legacy off
+  QObject::connect(&conn, &ConnectionController::statusChanged, &app, [&](const QString& s){
+      if (s.startsWith("Connected via ")) {
+          connectLegacyBridge(false);   // disable legacy when Demo/others are active
+      }
   });
-  QObject::connect(&ecu, &EcuReader::mapChanged, &app, [&]() {
-    double baroKpa = settings.value("KeyDash/baroKpa", 101.3).toDouble();
-    int propIdx = ecu.metaObject()->indexOfProperty("baro");
-    if (propIdx >= 0) {
-      QVariant v = ecu.metaObject()->property(propIdx).read(&ecu);
-      if (v.isValid())
-        baroKpa = v.toDouble();
-    }
-    const double boostPsi = (ecu.map() - baroKpa) * KPA_TO_PSI;
-    dash.setBoost(
-        smooth(dash.boost(), boostPsi, readAlpha("smoothBoost", 0.25)));
+  // Heartbeat: any incoming normalized signal = fresh traffic
+  QObject::connect(&conn, &ConnectionController::sig, &app,
+                   [&](const SignalUpdate&) {
+                       lastTraffic.restart();
+                       dash.setConnected(true);
+                   });
+
+  QTimer staleWatch;
+  staleWatch.setInterval(1000);
+  QObject::connect(&staleWatch, &QTimer::timeout, &app, [&]{
+      // No telemetry yet? stay disconnected.
+      if (!lastTraffic.isValid()) {
+          dash.setConnected(false);
+          return;
+      }
+      // If no traffic for > 2s, consider link down
+      if (lastTraffic.elapsed() > 2000) {
+          dash.setConnected(false);
+      }
   });
-  QObject::connect(&ecu, &EcuReader::cltChanged, &app, [&]() {
-    dash.setClt(smooth(dash.clt(), ecu.clt(), readAlpha("smoothClt", 0.25)));
-  });
-  QObject::connect(&ecu, &EcuReader::iatChanged, &app, [&]() {
-    dash.setIat(smooth(dash.iat(), ecu.iat(), readAlpha("smoothIat", 0.25)));
-  });
-  QObject::connect(&ecu, &EcuReader::battChanged, &app, [&]() {
-    dash.setVbat(
-        smooth(dash.vbat(), ecu.batt(), readAlpha("smoothVbat", 0.30)));
-  });
-  QObject::connect(&ecu, &EcuReader::afrChanged, &app, [&]() {
-    dash.setAfr(smooth(dash.afr(), ecu.afr(), readAlpha("smoothAfr", 0.30)));
-  });
+  staleWatch.start();
+
+
 
   // ==========================================================
   //       Auto-connect on startup
@@ -155,8 +218,11 @@ int main(int argc, char *argv[]) {
     }
   }
   QObject::connect(&ecu, &EcuReader::connectionChanged, &app, [&](bool ok) {
-    if (ok)
-      settings.setValue("KeyDash/bt_addr", ecu.deviceAddress());
+      if (ok) {
+          settings.setValue("KeyDash/bt_addr", ecu.deviceAddress());
+          lastTraffic.restart();
+      }
+      dash.setConnected(ok);
   });
 
   // ==========================================================
@@ -286,6 +352,7 @@ int main(int argc, char *argv[]) {
   engine.rootContext()->setContextProperty("FileReader", &fs);
   engine.rootContext()->setContextProperty("dash", &dash);
   engine.rootContext()->setContextProperty("ecu", &ecu);
+  engine.rootContext()->setContextProperty("connCtrl", &conn);
 
   const QUrl url(u"qrc:/KeyDash_NX1000/Main.qml"_s);
   QObject::connect(

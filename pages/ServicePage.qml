@@ -1772,6 +1772,31 @@ Page {
 
                                             Row {
                                                 spacing: 10
+                                                Button {
+                                                    text: "ECU / Connection Settings"
+                                                    onClicked: {
+                                                        // If your app uses a global StackView called 'stack', push the page:
+                                                        if (typeof stack !== "undefined" && stack.push) {
+                                                            stack.push("qrc:/KeyDash_NX1000/pages/SettingsECUPage.qml")
+                                                        } else {
+                                                            // Fallback: open a dialog with the page inside
+                                                        const d = Qt.createQmlObject(`
+                                                          import QtQuick
+                                                          import QtQuick.Controls
+                                                          import KeyDash_NX1000
+                                                          Dialog {
+                                                            id: dlg
+                                                            modal: true
+                                                            title: "ECU / Connection"
+                                                            width: 900; height: 520                     // <-- explicit
+                                                            standardButtons: Dialog.Ok
+                                                            contentItem: SettingsECUPage { }            // <-- no anchors.fill
+                                                          }
+                                                        `, svc, "EcuDlg");
+                                                            d.open();
+                                                        }
+                                                    }
+                                                }
                                                 ThemedButton {
                                                     text: (ecu && ecu.isConnected
                                                            && ecu.isConnected(

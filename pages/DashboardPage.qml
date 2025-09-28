@@ -7,8 +7,7 @@ Page {
     id: dashPage
     focus: true
     required property var prefs
-    required property var dashController
-    readonly property var dash: dashController
+    property var dashController: dash
 
     property alias stageItem: stage
 
@@ -32,7 +31,7 @@ Page {
 
     // Intro animation controls
     property bool introEnable: true
-    property bool skipIntro: false
+    property bool skipIntro: true
     property real introFactor: 1.8   // scales intro animation durations
 
     // Over-rev flash settings
@@ -73,7 +72,7 @@ Page {
     property real turnPhase: 1.0
 
     // Hide mouse cursor overlay
-    property bool hideCursor: true
+    property bool hideCursor: false
 
     // Lamp self-test flag
     property bool selfTest: false
@@ -161,7 +160,7 @@ Page {
         }
 
     // Assets and fonts
-        Image { anchors.fill: parent; source: "qrc:/KeyDash_NX1000/assets/DashBlank.png"; fillMode: Image.Stretch }
+        Image { anchors.fill: parent; source: "qrc:/KeyDash_NX1000/assets/DashBackground.png"; fillMode: Image.Stretch }
         Loader { active: true; sourceComponent: Component { Image { source: "qrc:/KeyDash_NX1000/assets/Tachometer_Full.png"; cache: true; visible: false } } }
         FontLoader { id: neu;        source: "qrc:/KeyDash_NX1000/fonts/NeuropolX_Lite.ttf" }
         FontLoader { id: neu_italic; source: "qrc:/KeyDash_NX1000/fonts/NeuropolX_Italic.ttf" }
@@ -175,7 +174,8 @@ Page {
             onTriggered: dashPage.selfTest = false
         }
 
-        // Reusable UI components: RightNum, HoldButton, Lamp
+
+    // Reusable UI components: RightNum, HoldButton, Lamp
 
     // Right-anchored numeric display (boost, coolant, IAT, voltage, AFR)
         component RightNum: Text {
@@ -279,36 +279,214 @@ Page {
             }
         }
 
-    // Left column numeric gauges
+        // Display Data
         Item {
             id: leftCol
-            x: -275
+            x: 0
             y: 15
-            property int rightEdge: 820
-            property int startY: 36
-            property int rowGap: 124
+            z: 10000
+            opacity: 1
+
+            property real stoichAfr: 14.7
+            // ---- lane & columns (edit these) ----
+            property int laneLeft:   24
+            property int laneRight:  585
+            property int rightEdge:  550    // digits' RIGHT edge alignment
+            property int unitLeft:   600    // <- adjust
+            property int unitRight:  765    // <- adjust
+            property int unitCenter: Math.round((unitLeft + unitRight) / 2)
+            property int startY:     20
             property int px: 100
+            property int unitPx: 100
+            // Your original visual grid spacing between thick yellow lines:
+            property int bigRowGap: 130
+            // Content actually sits on the half-step between those lines:
+            property int rowStep: Math.round(bigRowGap / 2)
+            // optional icon column (if you add icons)
+            property int iconLeft:   54
+            property int iconRight:  160
+            property int iconCenter: Math.round((iconLeft + iconRight) / 2)
 
-            RightNum { id: boost;
-                rightX: leftCol.rightEdge; yPos: leftCol.startY + 0*leftCol.rowGap;
-                value: dashController ? dashController.boost : 0; decimals: 1; px: leftCol.px }
+            function metricValue(name) {
+                if (!dashController) return NaN
+                switch (name) {
+                case "Boost": return Number(dashController.boost)
+                case "CLT":   return Number(dashController.clt)
+                case "IAT":   return Number(dashController.iat)
+                case "VBat":  return Number(dashController.vbat)
+                case "AFR":   return Number(dashController.afr)
+                case "TPS":   return Number(dashController.tps)
+                default:      return NaN
+                }
+            }
+            function metricUnit(name) {
+                switch (name) {
+                case "Boost": return "psi"
+                case "CLT":
+                case "IAT":   return "°C"
+                case "VBat":  return "V"
+                case "AFR":   return "AFR"
+                case "TPS":   return "%"
+                default:      return ""
+                }
+            }
+            function metricIcon(name) {
+                switch (name) {
+                case "Boost": return "qrc:/KeyDash_NX1000/assets/icons/boost.png"
+                case "AFR":   return "qrc:/KeyDash_NX1000/assets/icons/lambda.png"
+                case "TPS":   return "qrc:/KeyDash_NX1000/assets/icons/tps.png"
+                case "CLT":   return "qrc:/KeyDash_NX1000/assets/icons/coolant.png"
+                case "IAT":   return "qrc:/KeyDash_NX1000/assets/icons/therm.png"
+                case "VBat":  return "qrc:/KeyDash_NX1000/assets/icons/battery.png"
+                default:      return ""
+                }
+            }
+            function metricSpec(name) {
+                switch (name) {
+                case "Boost": return ({dec:1})
+                case "CLT":   return ({dec:0, errorHigh:100})
+                case "IAT":   return ({dec:0, errorHigh:50})
+                case "VBat":  return ({dec:1, dy:0, errorLow:14.0, errorHigh:16.0})
+                case "AFR":   return ({dec:1, dy:0, warnLow:11.5, warnHigh:15.1, errorLow:11.0, errorHigh:16.0})
+                case "TPS":   return ({dec:0})
+                default:      return ({dec:0})
+                }
+            }
 
-            RightNum { id: coolant;
-                rightX: leftCol.rightEdge; yPos: leftCol.startY + 1*leftCol.rowGap;
-                value: dashController ? dashController.clt : 0; decimals: 0; px: leftCol.px; dy: -1; errorHigh: 100 }
+            component MetricRow: Item {
+                property int rowIndex: 0
+                property var choices: []
+                property int px: leftCol.px
 
-            RightNum { id: iat;
-                rightX: leftCol.rightEdge; yPos: leftCol.startY + 2*leftCol.rowGap;
-                value: dashController ? dashController.iat : 0; decimals: 0; px: leftCol.px; errorHigh: 50 }
+                // row midline (between thick bars)
+                readonly property int centerY:
+                    leftCol.startY + (rowIndex * leftCol.bigRowGap) + leftCol.rowStep
 
-            RightNum { id: voltage;
-                rightX: leftCol.rightEdge; yPos: leftCol.startY + 3*leftCol.rowGap;
-                value: dashController ? dashController.vbat : 0; decimals: 1; px: leftCol.px; dy: 10; errorLow: 14.0; errorHigh: 16.0 }
+                width: 1; height: 1
 
-            RightNum { id: afr;
-                rightX: leftCol.rightEdge; yPos: leftCol.startY + 4*leftCol.rowGap;
-                value: dashController ? dashController.afr : 0; decimals: 1; px: leftCol.px; dy: 30;
-                warnLow: 11.5; warnHigh: 15.1; errorLow: 11.0; errorHigh: 16.0 }
+                // state
+                property int    choiceIndex: 0
+                property string metric: (choices.length ? choices[choiceIndex] : "")
+                readonly property var  spec: leftCol.metricSpec(metric)
+                readonly property real rawValue: leftCol.metricValue(metric)
+
+                // unit modes + selection
+                property var unitModes: []   // array of { label, decimals, convert(v) }
+                property int unitIndex: 0
+
+                // computed (no bindings → avoids loops)
+                property string currentUnitLabel: ""
+                property int    currentDecimals: 0
+                property real   convertedValue: 0
+
+                function buildUnitModes(name) {
+                    const s = leftCol.metricSpec(name) || { dec: 0 }
+                    switch (name) {
+                    case "AFR":
+                        return [
+                            { label: "AFR", decimals: 1, convert: function(v){ return v } },
+                            { label: "λ",   decimals: 2, convert: function(v){ return (v > 0 ? v / (leftCol.stoichAfr || 14.7) : 0) } }
+                        ]
+                    case "CLT":
+                    case "IAT":
+                        return [
+                            { label: "°C", decimals: 0, convert: function(v){ return v } },
+                            { label: "°F", decimals: 0, convert: function(v){ return (v * 9/5 + 32) } }
+                        ]
+                    case "Boost":
+                        return [
+                            { label: "psi", decimals: 1, convert: function(v){ return v } },
+                            { label: "kPa", decimals: 0, convert: function(v){ return v * 6.89476 } }
+                        ]
+                    default:
+                        return [
+                            { label: leftCol.metricUnit(name), decimals: s.dec, convert: function(v){ return v } }
+                        ]
+                    }
+                }
+
+                function recompute() {
+                    if (!unitModes || unitModes.length === 0) {
+                        unitModes = buildUnitModes(metric)
+                        unitIndex = 0
+                    }
+                    const mode = unitModes[unitIndex % unitModes.length]
+                    currentUnitLabel = mode.label
+                    currentDecimals  = (mode.decimals !== undefined ? mode.decimals : (spec && spec.dec) || 0)
+                    convertedValue   = mode.convert(Number(rawValue) || 0)
+                }
+
+                // initialize + react
+                Component.onCompleted: { unitModes = buildUnitModes(metric); unitIndex = 0; recompute() }
+                onMetricChanged:       { unitModes = buildUnitModes(metric); unitIndex = 0; recompute() }
+                onUnitIndexChanged:    recompute()
+                onUnitModesChanged:    recompute()
+                onRawValueChanged:     recompute()
+
+                // ICON — centered
+                Image {
+                    source: leftCol.metricIcon(parent.metric)
+                    width: 96; height: 96
+                    x: leftCol.iconCenter - width/2
+                    y: parent.centerY - height/2
+                    fillMode: Image.PreserveAspectFit
+                    smooth: true
+                    z: 2
+                }
+
+                // VALUE — centered on midline
+                RightNum {
+                    id: num
+                    rightX: leftCol.rightEdge
+                    yPos: parent.centerY - Math.round(implicitHeight / 2)
+                    px: px
+                    value: parent.convertedValue
+                    decimals: parent.currentDecimals
+                    dy: parent.spec.dy || 0
+                    warnLow:  ("warnLow"  in parent.spec ? parent.spec.warnLow  : NaN)
+                    warnHigh: ("warnHigh" in parent.spec ? parent.spec.warnHigh : NaN)
+                    errorLow: ("errorLow" in parent.spec ? parent.spec.errorLow : NaN)
+                    errorHigh:("errorHigh"in parent.spec ? parent.spec.errorHigh: NaN)
+                    z: 10
+                }
+
+                // UNIT — centered; click to toggle units (AFR↔λ, °C↔°F, etc.)
+                Text {
+                    id: unitText
+                    text: parent.currentUnitLabel
+                    x:  leftCol.unitCenter - Math.round(implicitWidth / 2)
+                    y:  parent.centerY - Math.round(implicitHeight / 2)
+                    color: "#ffcc00"
+                    font.family: (neu.status === FontLoader.Ready ? neu.name : Qt.application.font.family)
+                    font.pixelSize: leftCol.unitPx
+                    z: 10
+                }
+                MouseArea {
+                    anchors.fill: unitText
+                    onClicked: if (parent.unitModes.length > 1) parent.unitIndex = (parent.unitIndex + 1) % parent.unitModes.length
+                    cursorShape: Qt.PointingHandCursor
+                    hoverEnabled: true
+                }
+
+                // NEW: click the value (or the whole lane) to cycle metric AFR→CLT→VBat…
+                MouseArea {
+                    x: leftCol.laneLeft
+                    y: parent.centerY - Math.round(leftCol.bigRowGap / 2)
+                    width: leftCol.laneRight - leftCol.laneLeft
+                    height: leftCol.bigRowGap
+                    onClicked: if (parent.choices.length) { parent.choiceIndex = (parent.choiceIndex + 1) % parent.choices.length }
+                    cursorShape: Qt.PointingHandCursor
+                    hoverEnabled: true
+                    // keep under the unit-click area so unit taps still toggle units
+                    z: 5
+                }
+            }
+
+            MetricRow { rowIndex: 0; choices: ["Boost","TPS","AFR"] }
+            MetricRow { rowIndex: 1; choices: ["CLT","IAT","TPS"] }
+            MetricRow { rowIndex: 2; choices: ["IAT","CLT","TPS"] }
+            MetricRow { rowIndex: 3; choices: ["VBat","TPS","AFR"] }
+            MetricRow { rowIndex: 4; choices: ["AFR","TPS","Boost"] }
         }
 
     // 0–60 timing logic and result toast
@@ -377,18 +555,6 @@ Page {
 
             // subtle pop
             transform: Scale { id: z60Scale; origin.x: width/2; origin.y: height/2; xScale: 1; yScale: 1 }
-            Connections {
-                target: dashController ? dashController : null
-                function onZ60PopupChanged() {
-                    if (dashController.z60Popup) {
-                        z60Popup.open()
-                        z60Scale.xScale = z60Scale.yScale = 1.18
-                        Qt.callLater(() => popAnim.start())
-                    } else {
-                        z60Popup.close()
-                    }
-                }
-            }
             NumberAnimation {
                 id: popAnim
                 target: z60Scale; property: "xScale"; to: 1.0; duration: 140; easing.type: Easing.OutCubic
@@ -1035,3 +1201,4 @@ Page {
         MouseArea { anchors.fill: parent; hoverEnabled: true; onClicked: dashPage.openService() }
     }
 }
+
