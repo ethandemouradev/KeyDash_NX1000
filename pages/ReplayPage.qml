@@ -2,6 +2,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import "qrc:/KeyDash_NX1000/style"
 import "../components"
 import "../scripts/LogParser.js" as LP
 import "qrc:/KeyDash_NX1000/pages" as Pages   // <-- your DashboardPage import
@@ -13,8 +14,34 @@ Page {
     // Input properties (from Main.qml)
     required property var dashController
     required property var prefs
-    property url initialSource: ""
+    property var reTheme: null
+    property var initialSource: ""
     property bool autoPlay: true
+
+    function normalizeUrl(u) {
+        if (!u) return "";
+        if (typeof u === "string") return (u.startsWith("file:") || u.startsWith("qrc:")) ? u : Qt.resolvedUrl(u);
+        if (u.toString) {
+            const s = u.toString();
+            return (s.startsWith("file:") || s.startsWith("qrc:")) ? s : "";
+        }
+        if (u.url) {
+            const s = String(u.url);
+            return (s.startsWith("file:") || s.startsWith("qrc:")) ? s : "";
+        }
+        return "";
+    }
+
+    Component.onCompleted: {
+        const s = normalizeUrl(initialSource);
+        if (!s.length) {
+            console.warn("ReplayPage: no valid initialSource; expected file:/ or qrc:/");
+            return;
+        }
+        replay.sourceUrl = s;
+        replay.load();
+        Qt.callLater(() => { if (autoPlay) replay.play(); });
+    }
 
     // Local state
     property var lastFrame: ({ t:0, rpm:0, map:0, tps:0, clt:0, iat:0, afr:0, batt:0 })
@@ -31,6 +58,7 @@ Page {
             skipIntro: true            // <-- just assign; no 'property' keyword
             prefs: page.prefs
             dashController: page.dashController
+            theme: page.reTheme
         }
 
         // Toggle overlay visibility on tap
@@ -79,7 +107,8 @@ Page {
                             spacing: 10
 
                             // Play / Pause / Restart controls
-                            Button {
+                            ThemedButton {
+                                palette: page.reTheme
                                 id: playBtn
                                 text: replay.playing ? "Pause" : (overlay.atEnd ? "Restart" : "Play")
                                 implicitWidth: 140; implicitHeight: 64
@@ -93,7 +122,8 @@ Page {
                                     }
                                 }
                             }
-                            Button {
+                            ThemedButton {
+                                palette: page.reTheme
                                 text: "Stop"
                                 implicitWidth: 120; implicitHeight: 64
                                 font.pixelSize: 22
@@ -106,7 +136,8 @@ Page {
                                 spacing: 8
                                 Repeater {
                                     model: [0.5, 1, 2, 4]
-                                    delegate: Button {
+                                    delegate: ThemedButton {
+                                        palette: page.reTheme
                                         text: modelData + "×"
                                         checkable: true
                                         checked: Number(replay.speed) === Number(modelData)
@@ -140,7 +171,8 @@ Page {
                     }
 
                     // Close button aligned to the right
-                    Button {
+                    ThemedButton {
+                        palette: page.reTheme
                         text: "Close"
                         implicitWidth: 120; implicitHeight: 64
                         font.pixelSize: 22
@@ -192,14 +224,14 @@ Page {
                             height: track.height
                             radius: track.radius
                             width: Math.round(track.width * (replay.duration > 0 ? replay.position / replay.duration : 0))
-                            color: "#ffcc00"
+                            color: reTheme.secondaryColor
                         }
 
                         // Thumb indicator
                         Rectangle {
                             id: thumb
                             width: 28; height: 28; radius: 14
-                            color: "#ffcc00"; border.color: "#604b00"
+                            color: reTheme.secondaryColor; border.color: reTheme.bgStart
                             anchors.verticalCenter: track.verticalCenter
                             x: Math.max(track.x - width/2,
                                         Math.min(track.x + track.width - width/2, fill.x + fill.width - width/2))
@@ -300,12 +332,16 @@ Page {
             overlay.visible = true
         }
     }
-
-    Component.onCompleted: {
-            if (initialSource && String(initialSource).length) {
-                replay.sourceUrl = initialSource
-                replay.load()
-                if (autoPlay) replay.play()   // <-- obey the flag
-            }
+    Connections {
+        target: replay
+        function onLoaded() {
+            console.log("Replay loaded. duration =", replay.duration, "s, url =", replay.sourceUrl);
         }
+        function onEnded() {
+            console.log("Replay ended.");
+            overlay.visible = true;
+        }
+        // If your LogReplayController exposes an error signal or status, hook it here too.
+    }
+
 }

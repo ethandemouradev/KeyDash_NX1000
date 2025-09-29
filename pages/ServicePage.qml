@@ -2,7 +2,6 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import Qt.labs.platform 1.1
-// provides StandardPaths
 import Qt.labs.folderlistmodel 2.15
 import QtQuick.Dialogs
 import "qrc:/KeyDash_NX1000/style"
@@ -17,6 +16,7 @@ Page {
     // Input properties passed from parent
     required property var prefs
     property var dashController: null
+    property var theme: null
 
     // Per-tab horizontal offsets (px)
     property real offsetDeviceX: -200
@@ -26,18 +26,181 @@ Page {
     property real offsetPerfX: 30
 
     // Background image and font loaders
-    Image {
-        anchors.fill: parent
-        source: "qrc:/KeyDash_NX1000/assets/BlankBackground.png"
-        fillMode: Image.Stretch
-    }
     FontLoader {
         id: neu
-        source: "qrc:/KeyDash_NX1000/fonts/NeuropolX_Lite.ttf"
+        source: "qrc:/KeyDash_Assets/fonts/NeuropolX_Lite.ttf"
     }
     FontLoader {
         id: neuItalic
-        source: "qrc:/KeyDash_NX1000/fonts/NeuropolX_Italic.ttf"
+        source: "qrc:/KeyDash_Assets/fonts/NeuropolX_Italic.ttf"
+    }
+    FontLoader { id: brandFont; source: "qrc:/KeyDash_Assets/fonts/NissanOpti.otf" }
+
+    // 1) Gradient background (left→right: start → end → start)
+    Canvas {
+        id: mainBg
+        anchors.fill: parent
+        z: 0
+        onPaint: {
+            const ctx = getContext("2d")
+            const w = width, h = height
+            const g = ctx.createLinearGradient(0, 0, w, 0) // left→right
+            g.addColorStop(0.00, theme.bgStart)
+            g.addColorStop(0.40, theme.bgEnd)
+            g.addColorStop(0.60, theme.bgEnd)
+            g.addColorStop(1.00, theme.bgStart)
+            ctx.fillStyle = g
+            ctx.fillRect(0, 0, w, h)
+        }
+        Component.onCompleted: requestPaint()
+        onWidthChanged: requestPaint()
+        onHeightChanged: requestPaint()
+
+        Connections {
+            target: theme
+            function onBgStartChanged() { mainBg.requestPaint() }
+            function onBgEndChanged()   { mainBg.requestPaint() }
+        }
+    }
+
+    // 3) Frame (lines, tach scale, etc.) — tint with secondaryColor, keep PNG alpha
+    Canvas {
+        id: frameTint
+        anchors.fill: parent
+        anchors.topMargin: -32
+        anchors.bottomMargin: 32
+        z: 3
+
+        // Use the real asset path you ship (DashFrame.png unless you truly have BlankFrame.png)
+        property url   src: "qrc:/KeyDash_Assets/assets/BlankFrame.png"
+        property color tint: theme.secondaryColor
+
+        // FBO content can be dropped when the item is hidden; we’ll requestPaint() when visible again.
+        renderTarget: Canvas.FramebufferObject
+        antialiasing: true
+
+        function repaintIfReady() {
+            if (!isImageLoaded(src)) {
+                loadImage(src)         // kick off (or re-kick) async load
+                return
+            }
+            requestPaint()
+        }
+
+        Component.onCompleted: repaintIfReady()
+        onSrcChanged:          repaintIfReady()
+        onTintChanged:         repaintIfReady()
+        onWidthChanged:        repaintIfReady()
+        onHeightChanged:       repaintIfReady()
+        onVisibleChanged:      if (visible) repaintIfReady()
+
+        // Called by Canvas when any image finishes loading
+        onImageLoaded: function(url) {
+            if (url === src) requestPaint()
+        }
+
+        onPaint: {
+            const ctx = getContext("2d")
+            const w = width, h = height
+            ctx.clearRect(0, 0, w, h)
+
+            if (!isImageLoaded(src))
+                return  // wait for onImageLoaded() to trigger a repaint
+
+            // 1) draw original (alpha preserved)
+            ctx.drawImage(src, 0, 0, w, h)
+
+            // 2) colorize only where the PNG is opaque
+            ctx.globalCompositeOperation = "source-in"
+            ctx.fillStyle = tint
+            ctx.fillRect(0, 0, w, h)
+
+            // back to normal for anything that may draw later
+            ctx.globalCompositeOperation = "source-over"
+        }
+    }
+
+
+    // --- remove the baked-in "NISSAN" with a transparent patch ---
+    Canvas {
+        id: frameBadgePatch
+        x: 1144; y: 645; width: 270; height: 70
+        z: 4.5   // above the frame (z:3), below our new text
+
+        onPaint: {
+            const ctx = getContext("2d")
+            ctx.clearRect(0, 0, width, height)
+            // Nothing else drawn → this area will remain transparent
+        }
+
+        Component.onCompleted: requestPaint()
+        onWidthChanged:  requestPaint()
+        onHeightChanged: requestPaint()
+    }
+
+    // --- auto-fit text component (scales to fit its box) ---
+    component AutoFitText: Item {
+        id: aft
+        property string text: ""
+        property string family: (brandFont.status === FontLoader.Ready ? brandFont.name : Qt.application.font.family)
+        property color  color: "#ffffff"
+        property int    minPx: 10
+        property int    maxPx: 120
+        property int    padding: 4   // inner padding when fitting
+        // optional letter spacing (can help with tall text)
+        property real   letterSpacing: 0
+
+        // measured text
+        Text {
+            id: t
+            anchors.centerIn: parent
+            text: aft.text
+            color: aft.color
+            font.family: aft.family
+            font.pixelSize: aft.maxPx
+            font.letterSpacing: aft.letterSpacing
+            renderType: Text.NativeRendering
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            elide: Text.ElideNone
+        }
+
+        function refit() {
+            if (!width || !height || !t.text.length) return
+            // Binary search for best pixelSize that fits
+            var lo = minPx, hi = maxPx, best = minPx
+            for (let i = 0; i < 12; ++i) {
+                const mid = Math.floor((lo + hi) / 2)
+                t.font.pixelSize = mid
+                // Use implicitWidth/implicitHeight for a single-line Text
+                const wOk = (t.implicitWidth  + 2*padding) <= width
+                const hOk = (t.implicitHeight + 2*padding) <= height
+                if (wOk && hOk) { best = mid; lo = mid + 1 } else { hi = mid - 1 }
+            }
+            t.font.pixelSize = best
+        }
+
+        onWidthChanged:  refit()
+        onHeightChanged: refit()
+        onTextChanged:   refit()
+        Component.onCompleted: refit()
+    }
+
+    // --- place the auto-fit text on top of the patch ---
+    AutoFitText {
+        id: brandBadge
+        x: frameBadgePatch.x
+        y: frameBadgePatch.y
+        width: frameBadgePatch.width
+        height: frameBadgePatch.height
+        z: frameBadgePatch.z + 0.5
+        text: prefs.badgeText            // live
+        family: brandFont.status === FontLoader.Ready ? brandFont.name : Qt.application.font.family
+        color: theme.secondaryColor      // or theme.primaryColor
+        minPx: 18
+        maxPx: 80
+        padding: 6
+        letterSpacing: 1
     }
 
     function dashFontName() {
@@ -242,22 +405,22 @@ Page {
 
     // Night-time helper: returns true if 'now' falls within configured night window
     function isNight(now = new Date()) {
-    function toMins(s) {
-        const m = /^(\d{1,2}):(\d{2})$/.exec(s || "")
-        if (!m)
-            return null
-        const h = +m[1], mi = +m[2]
-        if (h < 0 || h > 23 || mi < 0 || mi > 59)
-            return null
-        return h * 60 + mi
-    }
-    const start = toMins(svc.prefs.nightStart)
-    const end = toMins(svc.prefs.nightEnd)
-    if (start === null || end === null)
-    return false
-    const nowMin = now.getHours() * 60 + now.getMinutes()
-    return (start <= end) ? (nowMin >= start
-    && nowMin < end) : (nowMin >= start || nowMin < end)
+        function toMins(s) {
+            const m = /^(\d{1,2}):(\d{2})$/.exec(s || "")
+            if (!m)
+                return null
+            const h = +m[1], mi = +m[2]
+            if (h < 0 || h > 23 || mi < 0 || mi > 59)
+                return null
+            return h * 60 + mi
+        }
+        const start = toMins(svc.prefs.nightStart)
+        const end = toMins(svc.prefs.nightEnd)
+        if (start === null || end === null)
+        return false
+        const nowMin = now.getHours() * 60 + now.getMinutes()
+        return (start <= end) ? (nowMin >= start
+        && nowMin < end) : (nowMin >= start || nowMin < end)
     }
 
     // Status banner: ECU connection state
@@ -296,40 +459,36 @@ Page {
         // allow caller to pass a tracker
         property var metrics: null
 
+        Layout.fillWidth: true
+        Layout.alignment: Qt.AlignHCenter
+        width: 400
         implicitHeight: 64
-        leftPadding: 10
-        rightPadding: 10
-        background: Item {}
+        background: Rectangle { color: "transparent" }
 
-        contentItem: Text {
-            id: tabText
-            text: __tab.text
-            font.family: dashFontName()
-            font.pixelSize: 72
-            font.letterSpacing: 0.5
-            color: __tab.checked ? "white" : "#9fb0bd"
-            horizontalAlignment: Text.AlignHCenter
-            verticalAlignment: Text.AlignVCenter
+        // expose these so TabBar can read them
+        readonly property real labelW: tabText.paintedWidth
+        readonly property real labelH: tabText.paintedHeight
 
-            // keep metrics up to date
-            onPaintedWidthChanged: {
-                if (__tab.metrics)
-                __tab.metrics.maxPainted = Math.max(__tab.metrics.maxPainted,
-                                                    paintedWidth)
-            }
-            Component.onCompleted: {
-                if (__tab.metrics)
-                __tab.metrics.maxPainted = Math.max(__tab.metrics.maxPainted,
-                                                    paintedWidth)
+        contentItem: Item {
+            anchors.fill: parent
+            anchors.margins: 6   // small breathing room
+
+            Text {
+                id: tabText
+                anchors.fill: parent
+                text: __tab.text
+                color: __tab.checked ? "white" : "#9fb0bd"
+                font.family: dashFontName()
+
+                // ✨ Auto-fit instead of elide
+                font.pixelSize: 72          // max
+                fontSizeMode: Text.Fit
+                minimumPixelSize: 16
+                elide: Text.ElideNone
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
             }
         }
-
-        // Tab sizing: use shared max painted width for equal-width tabs; otherwise size to text
-        implicitWidth: Math.ceil(
-                           (metrics
-                            && metrics.equalize ? (metrics.maxPainted
-                                                   || tabText.paintedWidth) : tabText.paintedWidth))
-                       + leftPadding + rightPadding
     }
 
     // HoldButton: press-and-hold action with visual progress
@@ -348,7 +507,7 @@ Page {
             anchors.fill: parent
             radius: 12
             border.width: 3
-            border.color: "#ffcc00"
+            border.color: theme.secondaryColor
             color: "transparent"
         }
 
@@ -362,8 +521,8 @@ Page {
             }
             width: parent.width * hb.progress
             radius: 12
-            color: "#ffcc00"
-            opacity: 0.50 // subtle fill; tweak if you want stronger
+            color: theme.secondaryColor
+            opacity: 0.60 // subtle fill; tweak if you want stronger
             Behavior on width {
                 NumberAnimation {
                     duration: 60
@@ -378,7 +537,7 @@ Page {
             text: hb.pressed ? "Keep holding…" : hb.label
             font.family: dashFontName()
             font.pixelSize: 26
-            color: (hb.progress > 0.7) ? "black" : "#ffcc00"
+            color: (hb.progress > 0.7) ? "black" : theme.secondaryColor
         }
 
         // Touch area and interaction
@@ -441,6 +600,154 @@ Page {
         MouseArea {
             anchors.fill: parent
         } // eat clicks behind dialogs
+    }
+
+    // ===== Badge editor modal =====
+    Item {
+        id: badgeModal
+        anchors.fill: parent
+        visible: false
+        z: 12100
+
+        // public API
+        function open(initial, cb, titleText) {
+            badgePad.value = initial || ""
+            badgePad.acceptCallback = cb || null
+            badgePad.title = titleText || "Edit Badge Text"
+            badgePad.isUppercase = true
+            badgeModal.visible = true
+        }
+        function close() { badgeModal.visible = false }
+
+        // backdrop
+        Rectangle {
+            anchors.fill: parent
+            color: "#000000"; opacity: 0.35
+            MouseArea { anchors.fill: parent; onClicked: badgeModal.close() }
+        }
+
+        // centered panel
+        Item {
+            id: badgePad
+            anchors.centerIn: parent
+            width: 820
+            height: 640    // taller to fit controls
+            property string value: ""
+            property var    acceptCallback: null
+            property string title: "Edit Badge Text"
+            property bool   isUppercase: true
+
+            Rectangle {
+                anchors.fill: parent
+                radius: 14
+                color: theme.bgEnd
+                border.color: theme.secondaryColor
+            }
+
+            Column {
+                anchors.fill: parent
+                anchors.margins: 18
+                spacing: 14
+
+                Text {
+                    text: badgePad.title
+                    color: theme.secondaryColor
+                    font.family: dashFontName()
+                    font.pixelSize: 28
+                    horizontalAlignment: Text.AlignHCenter
+                    width: parent.width
+                }
+
+                // display
+                Rectangle {
+                    width: parent.width
+                    height: 58
+                    radius: 8
+                    color: theme.bgStart
+                    border.color: theme.primaryColor
+                    Text {
+                        anchors.centerIn: parent
+                        text: badgePad.value.length ? badgePad.value : "Tap keys to enter"
+                        color: badgePad.value.length ? "white" : "#7a8b94"
+                        font.pixelSize: 22
+                        font.family: dashFontName()
+                        elide: Text.ElideRight
+                    }
+                }
+
+                // keyboard
+                GridLayout {
+                    id: keyGrid
+                    columns: 9
+                    rowSpacing: 10
+                    columnSpacing: 10
+                    Layout.fillWidth: true
+                    anchors.horizontalCenter: parent.horizontalCenter
+
+                    Repeater {
+                        model: ["Q","W","E","R","T","Y","U","I","O","P",
+                                "A","S","D","F","G","H","J","K","L",
+                                "Z","X","C","V","B","N","M"," ","-"]
+                        delegate: ThemedButton {
+                            palette: theme
+                            text: {
+                                if (modelData === " ") return "Space"
+                                return badgePad.isUppercase ? modelData.toUpperCase() : modelData.toLowerCase()
+                            }
+                            implicitWidth: 72
+                            implicitHeight: 56
+                            font.pixelSize: 20
+                            onClicked: {
+                                if (modelData === " ") badgePad.value += " "
+                                else badgePad.value += badgePad.isUppercase ? modelData.toUpperCase() : modelData.toLowerCase()
+                            }
+                        }
+                    }
+
+                    // extra row of controls
+                    ThemedButton {
+                        palette: theme
+                        text: badgePad.isUppercase ? "Shift↑" : "Shift↓"
+                        implicitWidth: 100; implicitHeight: 56
+                        font.pixelSize: 20
+                        onClicked: badgePad.isUppercase = !badgePad.isUppercase
+                        Layout.columnSpan: 2
+                    }
+                    ThemedButton {
+                        palette: theme
+                        text: "Back"; implicitWidth: 100; implicitHeight: 56
+                        font.pixelSize: 20
+                        onClicked: badgePad.value = badgePad.value.slice(0, Math.max(0, badgePad.value.length - 1))
+                        Layout.columnSpan: 2
+                    }
+                    ThemedButton {
+                        palette: theme
+                        text: "Clear"; implicitWidth: 100; implicitHeight: 56
+                        font.pixelSize: 20
+                        onClicked: badgePad.value = ""
+                        Layout.columnSpan: 2
+                    }
+                    ThemedButton {
+                        palette: theme
+                        text: "Cancel"; implicitWidth: 120; implicitHeight: 56
+                        font.pixelSize: 20
+                        onClicked: badgeModal.close()
+                        Layout.columnSpan: 2
+                    }
+                    ThemedButton {
+                        palette: theme
+                        text: "OK"; implicitWidth: 120; implicitHeight: 56
+                        font.pixelSize: 20
+                        enabled: badgePad.value.length > 0
+                        onClicked: {
+                            if (badgePad.acceptCallback) badgePad.acceptCallback(badgePad.value)
+                            badgeModal.close()
+                        }
+                        Layout.columnSpan: 2
+                    }
+                }
+            }
+        }
     }
 
     // Hex keypad used to enter Bluetooth MAC addresses
@@ -513,7 +820,8 @@ Page {
 
                 Repeater {
                     model: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "A", "B", "C", "D", "E", "F"]
-                    delegate: Button {
+                    delegate: ThemedButton {
+                        palette: theme
                         text: modelData
                         implicitWidth: 120
                         implicitHeight: 56
@@ -522,7 +830,8 @@ Page {
                     }
                 }
 
-                Button {
+                ThemedButton {
+                    palette: theme
                     text: "Back"
                     implicitWidth: 120
                     implicitHeight: 56
@@ -539,14 +848,16 @@ Page {
                         macPad.value = out
                     }
                 }
-                Button {
+                ThemedButton {
+                    palette: theme
                     text: "Clear"
                     implicitWidth: 120
                     implicitHeight: 56
                     font.pixelSize: 22
                     onClicked: macPad.value = ""
                 }
-                Button {
+                ThemedButton {
+                    palette: theme
                     text: "Cancel"
                     implicitWidth: 120
                     implicitHeight: 56
@@ -556,7 +867,8 @@ Page {
                         macPad.acceptCallback = null
                     }
                 }
-                Button {
+                ThemedButton {
+                    palette: theme
                     text: "OK"
                     implicitWidth: 120
                     implicitHeight: 56
@@ -615,7 +927,8 @@ Page {
                 Column {
                     spacing: 6
                     anchors.verticalCenter: parent.verticalCenter
-                    Button {
+                    ThemedButton {
+                        palette: theme
                         text: "▲"
                         implicitWidth: 90
                         implicitHeight: 50
@@ -635,7 +948,8 @@ Page {
                             font.pixelSize: 24
                         }
                    }
-                    Button {
+                    ThemedButton {
+                        palette: theme
                         text: "▼"
                         implicitWidth: 90
                         implicitHeight: 50
@@ -654,7 +968,8 @@ Page {
                 Column {
                     spacing: 6
                     anchors.verticalCenter: parent.verticalCenter
-                    Button {
+                    ThemedButton {
+                        palette: theme
                         text: "▲"
                         implicitWidth: 90
                         implicitHeight: 50
@@ -674,7 +989,8 @@ Page {
                             font.pixelSize: 24
                         }
                     }
-                    Button {
+                    ThemedButton {
+                        palette: theme
                         text: "▼"
                         implicitWidth: 90
                         implicitHeight: 50
@@ -687,7 +1003,8 @@ Page {
             Row {
                 spacing: 14
                 anchors.horizontalCenter: parent.horizontalCenter
-                Button {
+                ThemedButton {
+                    palette: theme
                     text: "Cancel"
                     implicitWidth: 140
                     implicitHeight: 50
@@ -697,7 +1014,8 @@ Page {
                         timePad.acceptCallback = null
                     }
                 }
-                Button {
+                ThemedButton {
+                    palette: theme
                     text: "OK"
                     implicitWidth: 140
                     implicitHeight: 50
@@ -812,7 +1130,8 @@ Page {
 
                 Repeater {
                     model: ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
-                    delegate: Button {
+                    delegate: ThemedButton {
+                        palette: theme
                         text: modelData
                         implicitWidth: 110
                         implicitHeight: 56
@@ -821,7 +1140,8 @@ Page {
                     }
                 }
 
-                Button {
+                ThemedButton {
+                    palette: theme
                     text: "0"
                     implicitWidth: 110
                     implicitHeight: 56
@@ -829,7 +1149,8 @@ Page {
                     onClicked: numPad._buffer += "0"
                     Layout.columnSpan: 2
                 }
-                Button {
+                ThemedButton {
+                    palette: theme
                     text: "+"
                     implicitWidth: 110
                     implicitHeight: 56
@@ -842,21 +1163,24 @@ Page {
                     }
                 }
 
-                Button {
+                ThemedButton {
+                    palette: theme
                     text: "Back"
                     implicitWidth: 110
                     implicitHeight: 50
                     font.pixelSize: 20
                     onClicked: numPad._buffer = numPad._buffer.slice(0, -1)
                 }
-                Button {
+                ThemedButton {
+                    palette: theme
                     text: "Clear"
                     implicitWidth: 110
                     implicitHeight: 50
                     font.pixelSize: 20
                     onClicked: numPad._buffer = ""
                 }
-                Button {
+                ThemedButton {
+                    palette: theme
                     text: "−"
                     implicitWidth: 110
                     implicitHeight: 50
@@ -873,7 +1197,8 @@ Page {
             Row {
                 spacing: 14
                 anchors.horizontalCenter: parent.horizontalCenter
-                Button {
+                ThemedButton {
+                    palette: theme
                     text: "Cancel"
                     implicitWidth: 140
                     implicitHeight: 50
@@ -884,7 +1209,8 @@ Page {
                         numPad._buffer = ""
                     }
                 }
-                Button {
+                ThemedButton {
+                    palette: theme
                     text: "OK"
                     implicitWidth: 140
                     implicitHeight: 50
@@ -918,8 +1244,8 @@ Page {
 
         background: Rectangle {
             radius: 14
-            color: "#0b151a"
-            border.color: "#28424d"
+            color: theme.bgStart
+            border.color: theme.primaryColor
             border.width: 1
         }
 
@@ -944,13 +1270,14 @@ Page {
                 Label {
                     text: "Replay Browser"
                     font.pixelSize: 20
-                    color: "#ffcc00"
+                    color: theme.secondaryColor
                     font.family: dashFontName()
                 }
                 Item {
                     Layout.fillWidth: true
                 }
                 ThemedButton {
+                    palette: theme
                     text: "✕"
                     width: 56
                     height: 40
@@ -974,12 +1301,14 @@ Page {
                     }
                 }
                 ThemedButton {
+                    palette: theme
                     text: "Browse…"
                     width: 140
                     height: 50
                     onClicked: dirDialog.open()
                 }
                 ThemedButton {
+                    palette: theme
                     text: "Refresh"
                     width: 140
                     height: 50
@@ -1014,8 +1343,8 @@ Page {
                     Rectangle {
                         anchors.fill: parent
                         radius: 10
-                        color: "#0f232b"
-                        border.color: "#2f4b57"
+                        color: theme.bgStart
+                        border.color: theme.primaryColor
                         border.width: 1
                     }
 
@@ -1035,7 +1364,7 @@ Page {
                         clip: true
                         model: logs
                         highlight: Rectangle {
-                            color: "#244059"
+                            color: theme.primaryColor
                             radius: 8
                             opacity: 0.5
                         }
@@ -1049,8 +1378,8 @@ Page {
                                 width: logList.width - 40
                                 height: 60
                                 radius: 10
-                                color: "#0f232b"
-                                border.color: "#2f4b57"
+                                color: theme.bgStart
+                                border.color: theme.primaryColor
                                 visible: logs.count === 0
                                 Text {
                                     anchors.centerIn: parent
@@ -1067,7 +1396,7 @@ Page {
                             text: fileName
                             font.pixelSize: 20
                             background: Rectangle {
-                                color: hovered ? "#1b3342" : "transparent"
+                                color: hovered ? theme.primaryColor : "transparent"
                             }
                             onClicked: {
                                 logList.currentIndex = index
@@ -1140,10 +1469,12 @@ Page {
                     }
 
                     ThemedButton {
+                        palette: theme
                         text: "Cancel"
                         onClicked: replayPopup.close()
                     }
                     ThemedButton {
+                        palette: theme
                         text: "Open"
                         enabled: logs.count > 0 && logList.currentIndex >= 0
                         onClicked: {
@@ -1182,8 +1513,8 @@ Page {
         height: Math.min(svc.height * 0.85, 640)
         background: Rectangle {
             radius: 14
-            color: "#0b151a"
-            border.color: "#28424d"
+            color: theme.bgStart
+            border.color: theme.primaryColor
             border.width: 1
         }
 
@@ -1215,13 +1546,14 @@ Page {
                                                         String(
                                                             crashLogsPopup.viewerFileUrl)).replace(
                                                         /^file:\/\/\//, ""))
-                    color: "#ffcc00"
+                    color: theme.secondaryColor
                     font.pixelSize: 20
                     font.family: dashFontName()
                     elide: Label.ElideRight
                     Layout.fillWidth: true
                 }
                 ThemedButton {
+                    palette: theme
                     text: (stack.currentIndex === 0) ? "Close" : "Back"
                     width: 120
                     height: 44
@@ -1263,6 +1595,7 @@ Page {
                                 Layout.fillWidth: true
                             }
                             ThemedButton {
+                                palette: theme
                                 text: "Open Folder"
                                 width: 150
                                 height: 40
@@ -1271,6 +1604,7 @@ Page {
                                                asUrl(crashLogsPopup.crashDir))
                             }
                             ThemedButton {
+                                palette: theme
                                 text: "Refresh"
                                 width: 120
                                 height: 40
@@ -1290,8 +1624,8 @@ Page {
                             Rectangle {
                                 anchors.fill: parent
                                 radius: 10
-                                color: "#0f232b"
-                                border.color: "#2f4b57"
+                                color: theme.bgStart
+                                border.color: theme.primaryColor
                                 border.width: 1
                             }
 
@@ -1312,7 +1646,7 @@ Page {
                                 clip: true
                                 model: crashlogs
                                 highlight: Rectangle {
-                                    color: "#244059"
+                                    color: theme.primaryColor
                                     radius: 8
                                     opacity: 0.5
                                 }
@@ -1324,7 +1658,7 @@ Page {
                                     font.pixelSize: 20
 
                                     background: Rectangle {
-                                        color: hovered ? "#1b3342" : "transparent"
+                                        color: hovered ? theme.primaryColor : "transparent"
                                     }
                                     contentItem: Text {
                                         text: fileName
@@ -1373,8 +1707,8 @@ Page {
                             Rectangle {
                                 anchors.fill: parent
                                 radius: 10
-                                color: "#0f232b"
-                                border.color: "#2f4b57"
+                                color: theme.bgStart
+                                border.color: theme.primaryColor
                                 border.width: 1
                                 z: 0
                             }
@@ -1394,7 +1728,7 @@ Page {
 
                                     // readable on dark bg
                                     color: "#e6f2f8"
-                                    selectionColor: "#244059"
+                                    selectionColor: theme.bgStart
                                     selectedTextColor: "#ffffff"
                                     font.family: "monospace"
                                     font.pixelSize: 14
@@ -1409,6 +1743,7 @@ Page {
                             Layout.alignment: Qt.AlignRight
                             spacing: 10
                             ThemedButton {
+                                palette: theme
                                 text: "Open in Editor"
                                 width: 160
                                 height: 40
@@ -1459,59 +1794,54 @@ Page {
                 property real ulX: 0
                 property real ulW: 0
 
-                TabBar {
-                    id: tabs
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    background: Item {}
+                // Header wrapper so everything is in the same anchor scope
+                Item {
+                    id: tabHeader
+                    width: parent.width
                     height: 72
-                    spacing: 32
-                    leftPadding: 0 // <— kills default left gutter
-                    rightPadding: 0 // <— kills default right gutter
 
-                    StyledTab {
-                        text: "Device"
-                        metrics: tabMetrics
+                    // Transparent background for the whole area (prevents default white)
+                    Rectangle { anchors.fill: parent; color: "transparent" }
+
+                    TabBar {
+                        id: tabs
+                        anchors.fill: parent
+                        leftPadding: 0
+                        rightPadding: 0
+                        spacing: 0
+                        clip: true
+
+                        readonly property real tabW: width / Math.max(1, count)
+
+                        // Kill TabBar’s own background
+                        background: Rectangle { color: "transparent"; radius: 0; border.width: 0 }
+
+                        // Your equal-width StyledTab (see #2)
+                        StyledTab { text: "Device" }
+                        StyledTab { text: "Tachometer" }
+                        StyledTab { text: "Display" }
+                        StyledTab { text: "Gauges" }
+                        StyledTab { text: "Performance" }
+                        StyledTab { text: "Customize" }
                     }
-                    StyledTab {
-                        text: "Tachometer"
-                        metrics: tabMetrics
-                    }
-                    StyledTab {
-                        text: "Display"
-                        metrics: tabMetrics
-                    }
-                    StyledTab {
-                        text: "Gauges"
-                        metrics: tabMetrics
-                    }
-                    StyledTab {
-                        text: "Performance"
-                        metrics: tabMetrics
+
+                    // Underline sized to the label, centered under it
+                    Rectangle {
+                        id: indicator
+                        height: 3
+                        y: tabs.height - height
+                        color: theme.secondaryColor
+
+                        width:  (tabs.currentItem ? tabs.currentItem.labelW : 0)
+                        x:      (tabs.currentItem
+                                 ? tabs.currentItem.x + (tabs.currentItem.width - width) / 2
+                                 : 0)
+
+                        Behavior on x { NumberAnimation { duration: 160; easing.type: Easing.OutCubic } }
+                        Behavior on width { NumberAnimation { duration: 160; easing.type: Easing.OutCubic } }
                     }
                 }
 
-                Rectangle {
-                    id: underline
-                    anchors.bottom: tabs.bottom
-                    anchors.bottomMargin: 2
-                    height: 4
-                    radius: 2
-                    color: "#ffcc00"
-                    x: tabBox.ulX
-                    width: tabBox.ulW
-                    Behavior on x {
-                        NumberAnimation {
-                            duration: 160
-                            easing.type: Easing.OutCubic
-                        }
-                    }
-                    Behavior on width {
-                        NumberAnimation {
-                            duration: 160
-                            easing.type: Easing.OutCubic
-                        }
-                    }
-                }
 
                 function updateUnderline() {
                     const list = tabs.contentItem
@@ -1643,6 +1973,7 @@ Page {
                                     Row {
                                         spacing: 12
                                         ThemedButton {
+                                            palette: theme
                                             text: (ecu
                                                    && ecu.scanning) ? "Stop Scan" : "Scan for Devices"
                                             width: 240
@@ -1664,6 +1995,7 @@ Page {
                                             height: 32
                                         }
                                         ThemedButton {
+                                            palette: theme
                                             text: "Refresh"
                                             width: 180
                                             height: 56
@@ -1772,7 +2104,8 @@ Page {
 
                                             Row {
                                                 spacing: 10
-                                                Button {
+                                                ThemedButton {
+                                                    palette: theme
                                                     text: "ECU / Connection Settings"
                                                     onClicked: {
                                                         // If your app uses a global StackView called 'stack', push the page:
@@ -1798,6 +2131,7 @@ Page {
                                                     }
                                                 }
                                                 ThemedButton {
+                                                    palette: theme
                                                     text: (ecu && ecu.isConnected
                                                            && ecu.isConnected(
                                                                )) ? "Disconnect" : "Connect"
@@ -1836,6 +2170,7 @@ Page {
                                                     }
                                                 }
                                                 ThemedButton {
+                                                    palette: theme
                                                     text: "Connect Selected"
                                                     width: 220
                                                     height: 56
@@ -1859,6 +2194,7 @@ Page {
                                                     }
                                                 }
                                                 ThemedButton {
+                                                    palette: theme
                                                     text: "Set Address Only"
                                                     width: 220
                                                     height: 56
@@ -1881,6 +2217,7 @@ Page {
                                                     font.pixelSize: 20
                                                 }
                                                 ThemedButton {
+                                                    palette: theme
                                                     width: 140
                                                     height: 50
                                                     font.pixelSize: 20
@@ -1907,6 +2244,7 @@ Page {
                                                     font.pixelSize: 20
                                                 }
                                                 ThemedButton {
+                                                    palette: theme
                                                     width: 160
                                                     height: 50
                                                     font.pixelSize: 20
@@ -1948,6 +2286,7 @@ Page {
                                             font.pixelSize: 20
                                         }
                                         ThemedSwitch {
+                                            palette: theme
                                             checked: (svc.prefs.autoReconnectTries
                                                       ?? 0) > 0
                                             width: 90
@@ -1963,6 +2302,7 @@ Page {
                                             font.pixelSize: 20
                                         }
                                         ThemedSwitch {
+                                            palette: theme
                                             checked: !!(svc.prefs.reconnectOnWake
                                                         ?? true)
                                             width: 90
@@ -2269,6 +2609,7 @@ Page {
                                             font.pixelSize: 22
                                         }
                                         ThemedSwitch {
+                                            palette: theme
                                             checked: svc.prefs.ovEnable ?? true
                                             width: 90
                                             height: 50
@@ -2283,6 +2624,7 @@ Page {
                                         font.pixelSize: 22
                                     }
                                     ThemedSlider {
+                                        palette: theme
                                         from: 2000
                                         to: (svc.prefs.rpmMax ?? 8000)
                                         stepSize: 100
@@ -2300,6 +2642,7 @@ Page {
                                         font.pixelSize: 22
                                     }
                                     ThemedSlider {
+                                        palette: theme
                                         from: 2000
                                         to: (svc.prefs.rpmMax ?? 8000)
                                         stepSize: 100
@@ -2317,6 +2660,7 @@ Page {
                                         font.pixelSize: 22
                                     }
                                     ThemedSlider {
+                                        palette: theme
                                         from: 4000
                                         to: (svc.prefs.rpmMax ?? 8000)
                                         stepSize: 100
@@ -2359,6 +2703,7 @@ Page {
                                             font.pixelSize: 22
                                         }
                                         ThemedSwitch {
+                                            palette: theme
                                             id: units
                                             checked: svc.prefs.useMph ?? true
                                             width: 90
@@ -2386,6 +2731,7 @@ Page {
                                             font.pixelSize: 22
                                         }
                                         ThemedSwitch {
+                                            palette: theme
                                             checked: svc.prefs.introEnable ?? true
                                             width: 90
                                             height: 50
@@ -2419,6 +2765,7 @@ Page {
                                             font.pixelSize: 22
                                         }
                                         ThemedSlider {
+                                            palette: theme
                                             from: 0.05
                                             to: 1
                                             stepSize: 0.05
@@ -2444,6 +2791,7 @@ Page {
                                             font.pixelSize: 22
                                         }
                                         ThemedSwitch {
+                                            palette: theme
                                             id: night
                                             checked: !!(svc.prefs.nightStart
                                                         || svc.prefs.nightEnd)
@@ -2467,6 +2815,7 @@ Page {
                                         spacing: 14
                                         enabled: night.checked
                                         ThemedButton {
+                                            palette: theme
                                             text: "From: " + (svc.prefs.nightStart
                                                               || "--:--")
                                             width: 220
@@ -2487,6 +2836,7 @@ Page {
                                             }
                                         }
                                         ThemedButton {
+                                            palette: theme
                                             text: "To: " + (svc.prefs.nightEnd
                                                             || "--:--")
                                             width: 220
@@ -2519,6 +2869,7 @@ Page {
                                             verticalAlignment: Text.AlignVCenter
                                         }
                                         ThemedSlider {
+                                            palette: theme
                                             from: 0.05
                                             to: 1
                                             stepSize: 0.05
@@ -2575,6 +2926,7 @@ Page {
                                             font.pixelSize: 22
                                         }
                                         ThemedSlider {
+                                            palette: theme
                                             from: 0
                                             to: 1
                                             stepSize: 0.05
@@ -2600,6 +2952,7 @@ Page {
                                             font.pixelSize: 22
                                         }
                                         ThemedSlider {
+                                            palette: theme
                                             from: 0
                                             to: 1
                                             stepSize: 0.05
@@ -2625,6 +2978,7 @@ Page {
                                             font.pixelSize: 22
                                         }
                                         ThemedSlider {
+                                            palette: theme
                                             from: 0
                                             to: 1
                                             stepSize: 0.05
@@ -2650,6 +3004,7 @@ Page {
                                             font.pixelSize: 22
                                         }
                                         ThemedSlider {
+                                            palette: theme
                                             from: 0
                                             to: 1
                                             stepSize: 0.05
@@ -2675,6 +3030,7 @@ Page {
                                             font.pixelSize: 22
                                         }
                                         ThemedSlider {
+                                            palette: theme
                                             from: 0
                                             to: 1
                                             stepSize: 0.05
@@ -2700,6 +3056,7 @@ Page {
                                             font.pixelSize: 22
                                         }
                                         ThemedSwitch {
+                                            palette: theme
                                             checked: !!(svc.prefs.nudgeAntiBurn
                                                         ?? false)
                                             width: 90
@@ -2740,6 +3097,7 @@ Page {
                                             font.pixelSize: 22
                                         }
                                         ThemedSwitch {
+                                            palette: theme
                                             checked: !!(svc.prefs.keepZ60 ?? true)
                                             width: 90
                                             height: 50
@@ -2755,6 +3113,7 @@ Page {
                                             font.pixelSize: 22
                                         }
                                         ThemedSwitch {
+                                            palette: theme
                                             checked: !!(svc.prefs.loggingEnabled
                                                         ?? false)
                                             width: 90
@@ -2771,6 +3130,7 @@ Page {
                                             font.pixelSize: 22
                                         }
                                         ThemedButton {
+                                            palette: theme
                                             text: "Open Replay Browser…"
                                             width: 260
                                             height: 56
@@ -2787,6 +3147,7 @@ Page {
                                             font.pixelSize: 22
                                         }
                                         ThemedButton {
+                                            palette: theme
                                             text: "Browse…"
                                             width: 220
                                             height: 56
@@ -2805,6 +3166,148 @@ Page {
                                             if (svc.prefs)
                                             svc.prefs.tripBackupKm = 0
                                         }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    Item {
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+
+                        Item {
+                            anchors.fill: parent
+
+                            Item {
+                                width: 600
+                                height: appCol.implicitHeight
+                                anchors.horizontalCenter: parent.horizontalCenter
+                                anchors.verticalCenter: parent.verticalCenter
+                                anchors.horizontalCenterOffset: svc.offsetPerfX
+
+                                Column {
+                                    id: appCol
+                                    spacing: 18
+                                    width: parent.width
+
+                                    // Touch-friendly badge text field (opens badge modal)
+                                    Rectangle {
+                                        id: badgeDisplay
+                                        width: 250
+                                        height: 52
+                                        radius: 8
+                                        color: theme.bgStart
+                                        border.color: theme.primaryColor
+
+                                        Row {
+                                            anchors.fill: parent
+                                            anchors.margins: 12
+                                            spacing: 10
+
+                                            Text {
+                                                text: (prefs.badgeText && prefs.badgeText.length) ? prefs.badgeText : "Tap to enter"
+                                                color: (prefs.badgeText && prefs.badgeText.length) ? "white" : "#7a8b94"
+                                                font.pixelSize: 22
+                                                font.family: dashFontName()
+                                                elide: Text.ElideRight
+                                                verticalAlignment: Text.AlignVCenter
+                                            }
+
+                                            Item { Layout.fillWidth: true; width: 1; height: 1 }
+
+                                            Text {
+                                                text: "✎"
+                                                color: theme.secondaryColor
+                                                font.pixelSize: 22
+                                                verticalAlignment: Text.AlignVCenter
+                                            }
+                                        }
+
+                                        MouseArea {
+                                            anchors.fill: parent
+                                            onClicked: {
+                                                // Open the modal and write back result
+                                                badgeModal.open(
+                                                    prefs.badgeText || "",
+                                                    function (s) { prefs.badgeText = s },
+                                                    "Center Badge Text"
+                                                )
+                                            }
+                                        }
+                                    }
+                                    // Optional quick presets
+                                    Row {
+                                        spacing: 8
+                                        Repeater {
+                                            model: ["KEYDASH","GOLIATH","NX1000","MENU", "SETTINGS"]
+                                            delegate: ThemedButton {
+                                                palette: theme
+                                                text: modelData
+                                                onClicked: prefs.badgeText = modelData
+                                            }
+                                        }
+                                    }
+                                    // Primary color
+                                    Row {
+                                        spacing: 8
+                                        Rectangle { width: 28; height: 28; radius: 6; border.width: 1; color: theme.primaryColor }
+                                        ThemedButton {
+                                            palette: theme
+                                            text: "Pick Primary"
+                                            onClicked: primaryDlg.open()
+                                        }
+                                    }
+                                    ColorDialog {
+                                        id: primaryDlg
+                                        selectedColor: theme.primaryColor
+                                        onAccepted: theme.primaryColor = selectedColor
+                                    }
+
+                                    // Secondary color
+                                    Row {
+                                        spacing: 8
+                                        Rectangle { width: 28; height: 28; radius: 6; border.width: 1; color: theme.secondaryColor }
+                                        ThemedButton {
+                                        palette: theme
+                                            text: "Pick Secondary"
+                                            onClicked: secondaryDlg.open()
+                                        }
+                                    }
+                                    ColorDialog {
+                                        id: secondaryDlg
+                                        selectedColor: theme.secondaryColor
+                                        onAccepted: theme.secondaryColor = selectedColor
+                                    }
+
+                                    // Background start color
+                                    Row {
+                                        spacing: 8
+                                        Rectangle { width: 28; height: 28; radius: 6; border.width: 1; color: theme.bgStart }
+                                        ThemedButton {
+                                        palette: theme
+                                            text: "Pick Background Main"
+                                            onClicked: backgroundmainDlg.open()
+                                        }
+                                    }
+                                    ColorDialog {
+                                        id: backgroundmainDlg
+                                        selectedColor: theme.bgStart
+                                        onAccepted: theme.bgStart = selectedColor
+                                    }
+                                    // Background start color
+                                    Row {
+                                        spacing: 8
+                                        Rectangle { width: 28; height: 28; radius: 6; border.width: 1; color: theme.bgEnd }
+                                        ThemedButton {
+                                            palette: theme
+                                            text: "Pick Background Seoncdary"
+                                            onClicked: backgroundsecondaryDlg.open()
+                                        }
+                                    }
+                                    ColorDialog {
+                                        id: backgroundsecondaryDlg
+                                        selectedColor: theme.bgEnd
+                                        onAccepted: theme.bgEnd = selectedColor
                                     }
                                 }
                             }

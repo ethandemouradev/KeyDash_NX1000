@@ -5,9 +5,11 @@ Basic.Slider {
     id: control
     from: 0; to: 100; value: 50
 
+    property var palette: null
+
     // Style tokens for the slider track/fill; knob is hidden in this theme.
     property color trackColor: "#444"
-    property color fillColor: "#0ea5e9"
+    property color fillColor: (palette && palette.primaryColor   !== undefined) ? palette.primaryColor   : "#0b74a3"
     property color disabledColor: "#777"
 
     background: Rectangle {

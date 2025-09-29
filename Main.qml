@@ -3,8 +3,8 @@ import QtQuick.Window
 import QtQuick.Controls
 import Qt.labs.settings 1.1
 import "pages" as Pages
+import "theme" as LocalTheme
 import QtMultimedia
-
 
 /*
     KeyDash — Main.qml
@@ -20,12 +20,17 @@ Window {
     color: "#081418"
     visibility: Window.Windowed
 
+    LocalTheme.Theme { id: appTheme }
+
     //flags: Qt.FramelessWindowHint
 
     // Application settings (persisted)
     Settings {
         id: appSettings
         category: "KeyDash"
+
+        property string badgeText: "KEYDASH"
+
         // Core preferences
         property bool useMph: true
         property real brightness: 1.0
@@ -130,6 +135,7 @@ Window {
             id: dashboardPage
             prefs: appSettings
             dashController: dash      // live binding straight to the C++ 'dash'
+            theme: appTheme
             onOpenService: nav.push(servicePage)
         }
     }
@@ -140,12 +146,42 @@ Window {
         Pages.ServicePage {
             prefs: appSettings
             dashController: dash
+            theme: appTheme
             onDone: nav.pop()
             onOpenReplay: (fileUrl, autoPlay) => {
+                function toUrlString(u) {
+                    if (!u) return "";
+                    if (typeof u === "string") return u;
+                    // QUrl from dialogs etc.
+                    if (u.toString) {
+                        const s = u.toString();
+                        // Reject random QML objects like Theme_QMLTYPE_...
+                        if (s.startsWith("file:") || s.startsWith("qrc:")) return s;
+                        return "";  // <- drop anything else
+                    }
+                    if (u.url) {
+                        const s = String(u.url);
+                        return (s.startsWith("file:") || s.startsWith("qrc:")) ? s : "";
+                    }
+                    return "";
+                }
+
+                const s = toUrlString(fileUrl);
+                if (!s.length) {
+                    console.warn("openReplay: invalid fileUrl:", fileUrl);
+                    return;  // don’t push ReplayPage with junk
+                }
+
                 nav.push(
                     Qt.resolvedUrl("qrc:/KeyDash_NX1000/pages/ReplayPage.qml"),
-                    { dashController: dash, prefs: appSettings, initialSource: fileUrl, autoPlay }
-                )
+                    {
+                        dashController: dash,
+                        prefs: appSettings,
+                        reTheme: appTheme,
+                        initialSource: s,
+                        autoPlay: !!autoPlay
+                    }
+                );
             }
         }
     }

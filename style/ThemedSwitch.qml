@@ -5,9 +5,11 @@ import QtQuick.Controls.Basic as Basic   // non-native so customization works
 Basic.Switch {
     id: control
 
+    property var palette: null
+
     // Theme tokens (colors & sizes) for the switch control
     property color trackOff:    "#475569"        // slate/off
-    property color trackOn:     "#0ea5e9"        // primary/on
+    property color trackOn:     (palette && palette.primaryColor   !== undefined) ? palette.primaryColor   : "#0b74a3"        // primary/on
     property color thumbColor:  "#ffcc00"        // accent thumb
     property color thumbDown:   Qt.darker(thumbColor, 1.25)
     property color disabledCol: "#7a8691"        // gray when disabled

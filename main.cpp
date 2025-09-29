@@ -346,26 +346,24 @@ int main(int argc, char *argv[]) {
   // ==========================================================
   QQmlApplicationEngine engine;
 
+  // DO NOT add qrc:/ as an import path.
+  // engine.addImportPath("qrc:/");  // keep this commented out
+
   FileReader fs;
   engine.rootContext()->setContextProperty("Fs", &fs);
   engine.rootContext()->setContextProperty("fileReader", &fs);
   engine.rootContext()->setContextProperty("FileReader", &fs);
   engine.rootContext()->setContextProperty("dash", &dash);
-  engine.rootContext()->setContextProperty("ecu", &ecu);
+  engine.rootContext()->setContextProperty("ecu",  &ecu);
   engine.rootContext()->setContextProperty("connCtrl", &conn);
 
-  const QUrl url(u"qrc:/KeyDash_NX1000/Main.qml"_s);
-  QObject::connect(
-      &engine, &QQmlApplicationEngine::objectCreated, &app,
-      [url](QObject *obj, const QUrl &objUrl) {
-        if (!obj && objUrl == url)
-          QCoreApplication::exit(-1);
-      },
-      Qt::QueuedConnection);
-  engine.load(url);
+  // ***** IMPORTANT *****
+  // Load the compiled QML MODULE (KeyDash_NX1000), not a qrc file:
+  engine.loadFromModule("KeyDash_NX1000", "Main");
 
   if (engine.rootObjects().isEmpty())
-    return -1;
+      return -1;
 
   return app.exec();
+
 }

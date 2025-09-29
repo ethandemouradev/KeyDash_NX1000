@@ -78,52 +78,52 @@ target_include_directories(appKeyDash_NX1000 PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/controllers
 )
 
-# ---------------- QML module ----------------
-# Prefix matches your QML URLs: qrc:/KeyDash_NX1000/...
+# --- QML module (ONLY QML/JS here; NO assets) ---
 qt_add_qml_module(appKeyDash_NX1000
-    URI KeyDash_NX1000
-    VERSION 1.0
-    RESOURCE_PREFIX /
+  URI KeyDash_NX1000
+  VERSION 1.0
+  # RESOURCE_PREFIX  <-- remove this line entirely
+  QML_FILES
+    Main.qml
+    pages/DashboardPage.qml
+    pages/ServicePage.qml
+    pages/ReplayPage.qml
+    pages/SettingsECUPage.qml
+    components/LogReplayController.qml
+    components/LeftInfoColumn.qml
+    style/ThemedButton.qml
+    style/ThemedSlider.qml
+    style/ThemedSwitch.qml
+    theme/Theme.qml         # pragma Singleton
+    scripts/LogParser.js
+    errors/Errors.js
+)
 
-    QML_FILES
-        Main.qml
-        pages/DashboardPage.qml
-        pages/ServicePage.qml
-        pages/ReplayPage.qml
-        pages/SettingsECUPage.qml
-        components/LogReplayController.qml
-        components/LeftInfoColumn.qml
-        style/ThemedButton.qml
-        style/ThemedSlider.qml
-        style/ThemedSwitch.qml
-        scripts/LogParser.js
-        errors/Errors.js
-
-    # Non-QML packaged resources
-    RESOURCES
-        assets/DashBackground.png
-        assets/Tachometer_Full.png
-        assets/ShiftIcon.png
-        assets/CEL_On.png
-        assets/TractionControl_On.png
-        assets/Headlight_On.png
-        assets/LeftTurnSignal_On.png
-        assets/RightTurnSignal_On.png
-        assets/BlankBackground.png
-        assets/icons/boost.png
-        assets/icons/lambda.png
-        assets/icons/coolant.png
-        assets/icons/battery.png
-        assets/icons/therm.png
-        fonts/NeuropolX_Lite.ttf
-        fonts/NeuropolX_Italic.ttf
-        proto/version1_218.xml
-        SOURCES controllers/connection_controller.h
-        SOURCES controllers/connection_controller.cpp
-        SOURCES protocols/ecumaster_classic.h protocols/ecumaster_classic.cpp
-        SOURCES protocols/demo_protocol.h
-        SOURCES protocols/demo_protocol.cpp
-        QML_FILES theme/Theme.qml
+# --- App assets (NO qmldir, NO QML files) ---
+qt_add_resources(appKeyDash_NX1000 "app_assets"
+  PREFIX "/KeyDash_Assets"
+  FILES
+    assets/DashFrame.png
+    assets/BlankFrame.png
+    assets/Decor_Gear.png
+    assets/TachometerEmpty.png
+    assets/Tachometer_Full.png
+    assets/ShiftIcon.png
+    assets/CEL_On.png
+    assets/TractionControl_On.png
+    assets/Headlight_On.png
+    assets/LeftTurnSignal_On.png
+    assets/RightTurnSignal_On.png
+    assets/icons/boost.png
+    assets/icons/lambda.png
+    assets/icons/coolant.png
+    assets/icons/battery.png
+    assets/icons/therm.png
+    assets/icons/tps.png
+    fonts/NeuropolX_Lite.ttf
+    fonts/NeuropolX_Italic.ttf
+    fonts/NissanOpti.otf
+    proto/version1_218.xml
 )
 
 # ---------------- Link Qt libs ----------------

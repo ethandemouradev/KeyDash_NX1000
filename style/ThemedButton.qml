@@ -4,11 +4,13 @@ import QtQuick.Controls.Basic as Basic
 Basic.Button {
     id: control
 
+    property var palette: null
+    FontLoader { id: brandFont; source: "qrc:/KeyDash_Assets/fonts/NissanOpti.otf" }
+
     // simple theme knobs
-           // Themed style tokens (colors / radius) for app-wide button styling
     property color bgNormal:   "#ededed"
-    property color bgHover:    "#0ea5e9"
-    property color bgPressed:  "#0b74a3"
+    property color bgHover:    (palette && palette.secondaryColor !== undefined) ? palette.secondaryColor : "#0ea5e9"
+    property color bgPressed:  (palette && palette.primaryColor   !== undefined) ? palette.primaryColor   : "#0b74a3"
     property color bgDisabled: "#6b7280"
 
     property color textNormal: "#141414"
@@ -33,9 +35,16 @@ Basic.Button {
     contentItem: Text {
         text: control.text
         color: control.enabled ? control.textNormal : control.textDisabled
-        font.pixelSize: 20
+        font.family: (brandFont.status === FontLoader.Ready ? brandFont.name
+                                                           : Qt.application.font.family)
+
+        // auto-fit text size
+        font.pixelSize: 24      // max size
+        fontSizeMode: Text.Fit
+        minimumPixelSize: 10    // shrink down as needed
+
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
-        elide: Text.ElideRight
+        elide: Text.ElideNone   // no truncation
     }
 }

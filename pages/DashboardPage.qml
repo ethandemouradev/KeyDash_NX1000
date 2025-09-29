@@ -2,12 +2,14 @@ import QtQuick
 import QtQuick.Controls
 import Qt.labs.settings 1.1
 import QtMultimedia
+//import KeyDash_NX1000 1.0
 
 Page {
     id: dashPage
     focus: true
     required property var prefs
     property var dashController: dash
+    property var theme: null
 
     property alias stageItem: stage
 
@@ -120,6 +122,26 @@ Page {
         z: 10000
     }
 
+    // Night-time helper: returns true if 'now' falls within configured night window
+    function isNight(now = new Date()) {
+        function toMins(s) {
+            const m = /^(\d{1,2}):(\d{2})$/.exec(s || "")
+            if (!m)
+                return null
+            const h = +m[1], mi = +m[2]
+            if (h < 0 || h > 23 || mi < 0 || mi > 59)
+                return null
+            return h * 60 + mi
+        }
+        const start = toMins(dashPage.prefs.nightStart)
+        const end = toMins(dashPage.prefs.nightEnd)
+        if (start === null || end === null)
+        return false
+        const nowMin = now.getHours() * 60 + now.getMinutes()
+        return (start <= end) ? (nowMin >= start
+        && nowMin < end) : (nowMin >= start || nowMin < end)
+    }
+
         // Stage: scaled coordinate system
     Item {
         id: stage
@@ -138,12 +160,14 @@ Page {
             origin.y: stage.height / 2
         }
 
-        // Global dimmer (based on brightness)
+        // Global dimmer overlay for night brightness adjustments
         Rectangle {
             anchors.fill: parent
             color: "black"
-            opacity: 1.0 - brightness
-            z: 9999
+            property real targetB: isNight() ? (dashPage.prefs.brightnessNight
+                                                ?? 0.35) : (dashPage.prefs.brightness ?? 1.0)
+            opacity: Math.max(0, Math.min(1, 1.0 - targetB))
+            z: 99999
             visible: opacity > 0
         }
 
@@ -159,11 +183,260 @@ Page {
             visible: opacity > 0
         }
 
-    // Assets and fonts
-        Image { anchors.fill: parent; source: "qrc:/KeyDash_NX1000/assets/DashBackground.png"; fillMode: Image.Stretch }
-        Loader { active: true; sourceComponent: Component { Image { source: "qrc:/KeyDash_NX1000/assets/Tachometer_Full.png"; cache: true; visible: false } } }
-        FontLoader { id: neu;        source: "qrc:/KeyDash_NX1000/fonts/NeuropolX_Lite.ttf" }
-        FontLoader { id: neu_italic; source: "qrc:/KeyDash_NX1000/fonts/NeuropolX_Italic.ttf" }
+        Loader { active: true; sourceComponent: Component { Image { source: "qrc:/KeyDash_Assets/assets/Tachometer_Full.png"; cache: true; visible: false } } }
+        FontLoader { id: neu;        source: "qrc:/KeyDash_Assets/fonts/NeuropolX_Lite.ttf" }
+        FontLoader { id: neu_italic; source: "qrc:/KeyDash_Assets/fonts/NeuropolX_Italic.ttf" }
+        FontLoader { id: brandFont; source: "qrc:/KeyDash_Assets/fonts/NissanOpti.otf" }
+
+        // 1) Gradient background (left→right: start → end → start)
+        Canvas {
+            id: mainBg
+            anchors.fill: parent
+            z: 0
+            onPaint: {
+                const ctx = getContext("2d")
+                const w = width, h = height
+                const g = ctx.createLinearGradient(0, 0, w, 0) // left→right
+                g.addColorStop(0.00, theme.bgStart)
+                g.addColorStop(0.40, theme.bgEnd)
+                g.addColorStop(0.60, theme.bgEnd)
+                g.addColorStop(1.00, theme.bgStart)
+                ctx.fillStyle = g
+                ctx.fillRect(0, 0, w, h)
+            }
+            Component.onCompleted: requestPaint()
+            onWidthChanged: requestPaint()
+            onHeightChanged: requestPaint()
+
+            Connections {
+                target: theme
+                function onBgStartChanged() { mainBg.requestPaint() }
+                function onBgEndChanged()   { mainBg.requestPaint() }
+            }
+        }
+
+        // Fine-tunable hex watermark + centered gear text
+        Canvas {
+            id: hexMark
+            width: 150
+            height: 150
+            z: 2
+            opacity: 1
+
+            // --- positioning knobs (unchanged) ---
+            property alias corner: _pos.corner
+            property alias margin: _pos.margin
+            property alias dx: _pos.dx
+            property alias dy: _pos.dy
+            QtObject {
+                id: _pos
+                property string corner: "bottomRight"
+                property int margin: 90
+                property int dx: -764
+                property int dy: 17
+            }
+            x: (function() {
+                switch (_pos.corner) {
+                case "topLeft":
+                case "bottomLeft":  return _pos.margin + _pos.dx
+                default:            return parent.width - width - _pos.margin + _pos.dx
+                }
+            })()
+            y: (function() {
+                switch (_pos.corner) {
+                case "topLeft":
+                case "topRight":    return _pos.margin + _pos.dy
+                default:            return parent.height - height - _pos.margin + _pos.dy
+                }
+            })()
+
+            // --- drawing knobs ---
+            property int  sides: 6
+            property real thickness: 10
+            property color ringColor: theme.secondaryColor
+            property color fillColor: theme.bgStart      // inner fill
+            property real rotationDeg: -30
+
+            onPaint: {
+                const ctx = getContext("2d")
+                ctx.clearRect(0, 0, width, height)
+
+                const cx = width * 0.5
+                const cy = height * 0.5
+                const R  = Math.min(width, height) * 0.46         // outer radius
+                const r  = Math.max(0, R - thickness)              // inner radius
+                const rot = rotationDeg * Math.PI / 180
+
+                function pathNgon(radius) {
+                    ctx.beginPath()
+                    for (let i = 0; i < sides; ++i) {
+                        const a = rot + i * 2*Math.PI / sides
+                        const x = cx + radius * Math.cos(a)
+                        const y = cy + radius * Math.sin(a)
+                        if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y)
+                    }
+                    ctx.closePath()
+                }
+
+                // 1) draw the outer hex (ring base)
+                ctx.fillStyle = ringColor
+                pathNgon(R); ctx.fill()
+
+                // 2) fill the inner hex with bgStart, creating a clean ring
+                ctx.fillStyle = fillColor
+                pathNgon(r); ctx.fill()
+
+                // 3) optional crisp border around the outer hex
+                ctx.lineWidth = 1.5
+                ctx.strokeStyle = ringColor
+                pathNgon(R); ctx.stroke()
+            }
+
+            // repaint when theme/size changes
+            onRingColorChanged: requestPaint()
+            onFillColorChanged: requestPaint()
+            onWidthChanged:     requestPaint()
+            onHeightChanged:    requestPaint()
+            Component.onCompleted: requestPaint()
+
+            Connections {
+                target: theme
+                function onBgStartChanged() { mainBg.requestPaint() }
+                function onSecondaryColorChanged()   { mainBg.requestPaint() }
+            }
+        }
+
+        // 3) Frame (lines, tach scale, etc.) — tint with secondaryColor, keep PNG alpha
+        Canvas {
+            id: frameTint
+            anchors.fill: parent
+            anchors.topMargin: -32
+            anchors.bottomMargin: 32
+            z: 3
+
+            property string src: "qrc:/KeyDash_Assets/assets/DashFrame.png"
+            property color  tint: theme.secondaryColor
+
+            renderTarget: Canvas.FramebufferObject
+
+            Component.onCompleted: loadImage(src)
+            onSrcChanged: { loadImage(src); requestPaint() }
+            onWidthChanged:  requestPaint()
+            onHeightChanged: requestPaint()
+            onTintChanged:   requestPaint()
+
+            onPaint: {
+                const ctx = getContext("2d")
+                const w = width, h = height
+                ctx.clearRect(0, 0, w, h)
+
+                if (!isImageLoaded(src)) {      // <- no getImage()
+                    requestPaint()              // try again next frame
+                    return
+                }
+
+                // 1) draw original (with alpha)
+                ctx.drawImage(src, 0, 0, w, h)  // <- pass URL
+
+                // 2) colorize only non-transparent pixels
+                ctx.globalCompositeOperation = "source-in"
+                ctx.fillStyle = tint
+                ctx.fillRect(0, 0, w, h)
+
+                ctx.globalCompositeOperation = "source-over"
+            }
+        }
+
+        // --- remove the baked-in "NISSAN" with a transparent patch ---
+        Canvas {
+            id: frameBadgePatch
+            x: 1144; y: 645; width: 270; height: 70
+            z: 4.5   // above the frame (z:3), below our new text
+
+            onPaint: {
+                const ctx = getContext("2d")
+                ctx.clearRect(0, 0, width, height)
+                // Nothing else drawn → this area will remain transparent
+            }
+
+            Component.onCompleted: requestPaint()
+            onWidthChanged:  requestPaint()
+            onHeightChanged: requestPaint()
+        }
+
+        // --- auto-fit text component (scales to fit its box) ---
+        component AutoFitText: Item {
+            id: aft
+            property string text: ""
+            property string family: (brandFont.status === FontLoader.Ready ? brandFont.name : Qt.application.font.family)
+            property color  color: "#ffffff"
+            property int    minPx: 10
+            property int    maxPx: 120
+            property int    padding: 4   // inner padding when fitting
+            // optional letter spacing (can help with tall text)
+            property real   letterSpacing: 0
+
+            // measured text
+            Text {
+                id: t
+                anchors.centerIn: parent
+                text: aft.text
+                color: aft.color
+                font.family: aft.family
+                font.pixelSize: aft.maxPx
+                font.letterSpacing: aft.letterSpacing
+                renderType: Text.NativeRendering
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                elide: Text.ElideNone
+            }
+
+            function refit() {
+                if (!width || !height || !t.text.length) return
+                // Binary search for best pixelSize that fits
+                var lo = minPx, hi = maxPx, best = minPx
+                for (let i = 0; i < 12; ++i) {
+                    const mid = Math.floor((lo + hi) / 2)
+                    t.font.pixelSize = mid
+                    // Use implicitWidth/implicitHeight for a single-line Text
+                    const wOk = (t.implicitWidth  + 2*padding) <= width
+                    const hOk = (t.implicitHeight + 2*padding) <= height
+                    if (wOk && hOk) { best = mid; lo = mid + 1 } else { hi = mid - 1 }
+                }
+                t.font.pixelSize = best
+            }
+
+            onWidthChanged:  refit()
+            onHeightChanged: refit()
+            onTextChanged:   refit()
+            Component.onCompleted: refit()
+        }
+
+        // --- place the auto-fit text on top of the patch ---
+        AutoFitText {
+            id: brandBadge
+            x: frameBadgePatch.x
+            y: frameBadgePatch.y
+            width: frameBadgePatch.width
+            height: frameBadgePatch.height
+            z: frameBadgePatch.z + 0.5
+            text: prefs.badgeText            // live
+            family: brandFont.status === FontLoader.Ready ? brandFont.name : Qt.application.font.family
+            color: theme.secondaryColor      // or theme.primaryColor
+            minPx: 18
+            maxPx: 80
+            padding: 6
+            letterSpacing: 1
+        }
+
+        Image {
+            id: tachometerempty;
+            anchors.fill: parent
+            source: "qrc:/KeyDash_Assets/assets/TachometerEmpty.png"
+            fillMode: Image.Stretch
+            smooth: true
+            z: 3
+        }
 
         // Lamp self-test timer
         Timer {
@@ -186,7 +459,7 @@ Page {
             property int  px: 100
             property int  dx: 0
             property int  dy: 0
-            property color col: "#7ee6ff"
+            property color col: theme.primaryColor
             // warn/error thresholds (optional)
             property real warnLow:  NaN
             property real warnHigh: NaN
@@ -204,55 +477,6 @@ Page {
             font.family: neu.name
             font.pixelSize: px
             Behavior on color { ColorAnimation { duration: 180; easing.type: Easing.InOutQuad } }
-        }
-
-    // Hold-to-activate button (used in Service panel)
-        component HoldButton: Item {
-            id: hb
-            width: 160; height: 48
-            property string label: "Hold to Reset"
-            property int holdMs: 1200
-            signal activated()
-            property bool pressed: false
-            property real fillOpacity: 0.0
-
-            Rectangle {
-                id: bg; anchors.fill: parent; radius: 12
-                border.width: 2; border.color: "#ffcc00"
-                color: (mouse.hovered && !hb.pressed) ? "#ffcc0030" : "transparent"
-                Behavior on color { ColorAnimation { duration: 120 } }
-            }
-            Rectangle {
-                anchors.fill: parent; radius: bg.radius
-                color: "#ff4d4d"; opacity: hb.fillOpacity
-                Behavior on opacity { NumberAnimation { duration: 120 } }
-            }
-            Text {
-                anchors.centerIn: parent
-                text: hb.pressed ? "Keep holding…" : hb.label
-                font.family: neu.name; font.pixelSize: 20
-                color: hb.fillOpacity > 0.7 ? "black" : "#ffcc00"
-                Behavior on color { ColorAnimation { duration: 90 } }
-            }
-            MouseArea {
-                id: mouse; anchors.fill: parent; hoverEnabled: true
-                onPressed:  { hb.pressed = true;  hb.fillOpacity = 0; tick.start() }
-                onReleased: { hb.pressed = false; tick.stop();       hb.fillOpacity = 0 }
-                onCanceled: { hb.pressed = false; tick.stop();       hb.fillOpacity = 0 }
-            }
-            Timer {
-                id: tick; interval: 16; repeat: true
-                property int elapsed: 0
-                onTriggered: {
-                    elapsed += interval
-                    hb.fillOpacity = Math.min(1, elapsed / hb.holdMs)
-                    if (elapsed >= hb.holdMs) {
-                        stop(); elapsed = 0; hb.pressed = false
-                        hb.activated(); hb.fillOpacity = 0
-                    }
-                }
-                onRunningChanged: if (!running) elapsed = 0
-            }
         }
 
     // Generic lamp component with optional blink
@@ -284,7 +508,7 @@ Page {
             id: leftCol
             x: 0
             y: 15
-            z: 10000
+            z: 100
             opacity: 1
 
             property real stoichAfr: 14.7
@@ -332,12 +556,12 @@ Page {
             }
             function metricIcon(name) {
                 switch (name) {
-                case "Boost": return "qrc:/KeyDash_NX1000/assets/icons/boost.png"
-                case "AFR":   return "qrc:/KeyDash_NX1000/assets/icons/lambda.png"
-                case "TPS":   return "qrc:/KeyDash_NX1000/assets/icons/tps.png"
-                case "CLT":   return "qrc:/KeyDash_NX1000/assets/icons/coolant.png"
-                case "IAT":   return "qrc:/KeyDash_NX1000/assets/icons/therm.png"
-                case "VBat":  return "qrc:/KeyDash_NX1000/assets/icons/battery.png"
+                case "Boost": return "qrc:/KeyDash_Assets/assets/icons/boost.png"
+                case "AFR":   return "qrc:/KeyDash_Assets/assets/icons/lambda.png"
+                case "TPS":   return "qrc:/KeyDash_Assets/assets/icons/tps.png"
+                case "CLT":   return "qrc:/KeyDash_Assets/assets/icons/coolant.png"
+                case "IAT":   return "qrc:/KeyDash_Assets/assets/icons/therm.png"
+                case "VBat":  return "qrc:/KeyDash_Assets/assets/icons/battery.png"
                 default:      return ""
                 }
             }
@@ -350,6 +574,48 @@ Page {
                 case "AFR":   return ({dec:1, dy:0, warnLow:11.5, warnHigh:15.1, errorLow:11.0, errorHigh:16.0})
                 case "TPS":   return ({dec:0})
                 default:      return ({dec:0})
+                }
+            }
+
+            // --- tiny helper: PNG tint that preserves alpha ---
+            component TintedIcon: Canvas {
+                id: tint
+                property string src: ""
+                property color  tintColor: theme.secondaryColor
+
+                renderTarget: Canvas.FramebufferObject
+
+                Component.onCompleted: if (src) loadImage(src)
+                onSrcChanged: { if (src) loadImage(src); requestPaint() }
+                onTintColorChanged: requestPaint()
+                onWidthChanged:  requestPaint()
+                onHeightChanged: requestPaint()
+
+                onPaint: {
+                    const ctx = getContext("2d")
+                    const w = width, h = height
+                    ctx.clearRect(0, 0, w, h)
+
+                    if (!src || !isImageLoaded(src)) {
+                        requestPaint() // try again next frame once loaded
+                        return
+                    }
+
+                    // 1) draw the original (with its alpha)
+                    ctx.drawImage(src, 0, 0, w, h)
+
+                    // 2) fill only where the icon is opaque
+                    ctx.globalCompositeOperation = "source-in"
+                    ctx.fillStyle = tintColor
+                    ctx.fillRect(0, 0, w, h)
+
+                    ctx.globalCompositeOperation = "source-over"
+                }
+
+                // repaint live when theme changes
+                Connections {
+                    target: theme
+                    function onSecondaryColorChanged() { tint.requestPaint() }
                 }
             }
 
@@ -423,15 +689,13 @@ Page {
                 onUnitModesChanged:    recompute()
                 onRawValueChanged:     recompute()
 
-                // ICON — centered
-                Image {
-                    source: leftCol.metricIcon(parent.metric)
+                // ICON — centered, tinted with theme.secondaryColor
+                TintedIcon {
                     width: 96; height: 96
                     x: leftCol.iconCenter - width/2
                     y: parent.centerY - height/2
-                    fillMode: Image.PreserveAspectFit
-                    smooth: true
                     z: 2
+                    src: leftCol.metricIcon(parent.metric)
                 }
 
                 // VALUE — centered on midline
@@ -456,7 +720,7 @@ Page {
                     text: parent.currentUnitLabel
                     x:  leftCol.unitCenter - Math.round(implicitWidth / 2)
                     y:  parent.centerY - Math.round(implicitHeight / 2)
-                    color: "#ffcc00"
+                    color: theme.secondaryColor
                     font.family: (neu.status === FontLoader.Ready ? neu.name : Qt.application.font.family)
                     font.pixelSize: leftCol.unitPx
                     z: 10
@@ -545,8 +809,8 @@ Page {
             width: content.implicitWidth + 40
             height: content.implicitHeight + 20
             radius: 12
-            color: "#101820cc"
-            border.color: "#ffcc00"; border.width: 2
+            color: theme.bgStart
+            border.color: theme.secondaryColor; border.width: 2
             z: 9500
 
             opacity: dashPage.z60Popup ? 1 : 0
@@ -568,23 +832,23 @@ Page {
 
                 Text {
                     text: (prefs.useMph ? "0–60 mph" : "0–100 km/h")
-                    color: "#ffcc00"; font.family: neu.name; font.pixelSize: 20
+                    color: theme.secondaryColor; font.family: neu.name; font.pixelSize: 20
                     horizontalAlignment: Text.AlignHCenter
                 }
                 Text {
                     text: dashPage.z60Time.toFixed(2) + " s"
-                    color: "#7ee6ff"; font.family: neu.name; font.pixelSize: 48
+                    color: theme.primaryColor; font.family: neu.name; font.pixelSize: 48
                     horizontalAlignment: Text.AlignHCenter
                 }
                 Text {
                     text: "NEW BEST!"
                     visible: dashPage.z60IsNewBest && dashPage.z60Popup
-                    color: "#ffcc00"; font.family: neu.name; font.pixelSize: 18
+                    color: theme.secondaryColor; font.family: neu.name; font.pixelSize: 18
                     horizontalAlignment: Text.AlignHCenter
                 }
                 Text {
                     text: "Best: " + (dashPage.z60Best > 0 ? dashPage.z60Best.toFixed(2) + " s" : "—")
-                    color: "#7ee6ff"; font.family: neu.name; font.pixelSize: 16
+                    color: theme.primaryColor; font.family: neu.name; font.pixelSize: 16
                     horizontalAlignment: Text.AlignHCenter
                 }
             }
@@ -615,7 +879,7 @@ Page {
                         ? (dashController ? (Number(dashController.speed)       || 0) : 0)             // mph direct
                         : (dashController ? (Number(dashController.speed)*1.60934 || 0) : 0)           // km/h
                 )
-                color: "#7ee6ff"
+                color: theme.primaryColor
                 font.family: neu.name                 // common family
                 font.italic: neu_italic.status === FontLoader.Ready
                 font.pixelSize: speedBox.fontPx
@@ -663,9 +927,33 @@ Page {
                 anchors.top: speedText.bottom
                 anchors.topMargin: speedBox.gap
                 text: (prefs.useMph ? "mph" : "km/h")
-                color: "#ffcc00"
+                color: theme.secondaryColor
                 font.family: neu.name
                 font.pixelSize: speedBox.mphPx
+            }
+
+            // Tap the big speed number
+            MouseArea {
+                anchors.fill: speedText
+                onClicked: {
+                    prefs.useMph = !prefs.useMph
+                    if (dashController && dashController.setUseMph) dashController.setUseMph(prefs.useMph)
+                }
+                hoverEnabled: false
+                acceptedButtons: Qt.LeftButton
+            }
+
+            // Tap the unit label
+            MouseArea {
+                anchors.fill: parent // or anchors.fill: previous unit Text if you prefer
+                anchors.top: speedText.bottom
+                anchors.bottom: parent.bottom
+                onClicked: {
+                    prefs.useMph = !prefs.useMph
+                    if (dashController && dashController.setUseMph) dashController.setUseMph(prefs.useMph)
+                }
+                hoverEnabled: false
+                acceptedButtons: Qt.LeftButton
             }
         }
 
@@ -673,7 +961,7 @@ Page {
         Rectangle {
             id: rpmYellowBox
             x: 817; y: 61; width: 18; height: 74
-            color: "#ffcc00"
+            color: theme.secondaryColor
             radius: 0
             visible: !!(dashController && (dashController.rpm > 50))
             opacity: visible ? 1 : 0
@@ -686,6 +974,7 @@ Page {
             id: rpmBar
             x: tachBarX; y: tachBarY
             width: 907; height: 121
+            z: tachometerempty.z + 1
 
                 // Map ECU RPM to fraction [0..1] across image width; idle-to-1k has a shorter span, then uniform 1k segments.
             property real measuredFrac: {
@@ -743,16 +1032,57 @@ Page {
                 anchors.left: parent.left
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
-                width: Math.round(parent.width * rpmBar.displayFrac)
+                width: Math.round(rpmBar.width * rpmBar.displayFrac)  // clip width only
                 clip: true
 
-                Image {
-                    x: 16; y: 0
+                // Draw at full size, let the parent clip reveal it
+                Item {
+                    x: 16                    // keep your original x offset
+                    y: 0
                     width: rpmBar.width
                     height: rpmBar.height
-                    source: "qrc:/KeyDash_NX1000/assets/Tachometer_Full.png"
-                    fillMode: Image.Stretch
-                    smooth: true
+
+                    Canvas {
+                        id: tachTint
+                        anchors.fill: parent
+                        renderTarget: Canvas.FramebufferObject
+
+                        property string src: "qrc:/KeyDash_Assets/assets/Tachometer_Full.png"
+                        property color  startColor: theme.secondaryColor
+                        property color  endColor:   "#ff0000"
+
+                        Component.onCompleted: loadImage(src)
+                        onSrcChanged: { loadImage(src); requestPaint() }
+                        onWidthChanged:  requestPaint()
+                        onHeightChanged: requestPaint()
+                        onStartColorChanged: requestPaint()
+                        onEndColorChanged:   requestPaint()
+
+                        Connections {
+                            target: theme
+                            function onSecondaryColorChanged() { tachTint.requestPaint() }
+                        }
+
+                        onPaint: {
+                            const ctx = getContext("2d")
+                            const w = width, h = height
+                            ctx.clearRect(0, 0, w, h)
+
+                            if (!isImageLoaded(src)) { requestPaint(); return }
+
+                            // Draw full-size image (no stretch with the clip)
+                            ctx.drawImage(src, 0, 0, w, h)
+
+                            // Gradient tint while preserving alpha
+                            ctx.globalCompositeOperation = "source-in"
+                            const g = ctx.createLinearGradient(0, 0, w, 0)
+                            g.addColorStop(0.0, startColor)
+                            g.addColorStop(1.0, endColor)
+                            ctx.fillStyle = g
+                            ctx.fillRect(0, 0, w, h)
+                            ctx.globalCompositeOperation = "source-over"
+                        }
+                    }
                 }
             }
         }
@@ -760,13 +1090,13 @@ Page {
     // Gear block (center)
         Item {
             id: gearBox
-            x: 1552; y: 500; width: 160; height: 140; z: 20
+            x: 1552; y: 500; width: 160; height: 140; z: hexMark.z + 1
 
             Text {
                 id: gearText
                 anchors.centerIn: parent
                 text: (!dashController || dashController.gear <= 0 ? "N" : dashController.gear)
-                color: "#7ee6ff"
+                color: theme.primaryColor
                 font.family: neu.name
                 font.pixelSize: 96
                 transform: Scale { id: gearScale; origin.x: gearText.width/2; origin.y: gearText.height/2; xScale: 1; yScale: 1 }
@@ -777,8 +1107,8 @@ Page {
                 function onGearChanged() {
                     if (!dashController) return
                     gearPulseAnim.start()
-                    gearText.color = "#ffcc00"
-                    Qt.callLater(() => gearText.color = "#7ee6ff")
+                    gearText.color = theme.secondaryColor
+                    Qt.callLater(() => gearText.color = theme.primaryColor)
                 }
             }
             SequentialAnimation {
@@ -800,7 +1130,7 @@ Page {
             property int  hysteresis: 100
             property bool blink: true
             property real blinkHz: 2.0
-            property string src: "qrc:/KeyDash_NX1000/assets/ShiftIcon.png"
+            property string src: "qrc:/KeyDash_Assets/assets/ShiftIcon.png"
 
             // nudging with arrows (focus first)
             focus: true
@@ -869,7 +1199,7 @@ Page {
                 wrapMode: Text.NoWrap
                 font.family: (neu && neu.status === FontLoader.Ready && neu.name.length) ? neu.name : Qt.application.font.family
                 font.pixelSize: 65
-                color: "#ffcc00"
+                color: theme.secondaryColor
 
                 // Binding depends on prefs.clock24; updates when preference changes
                 text: dateBox.fmt(prefs.clock24)
@@ -902,10 +1232,10 @@ Page {
                 property real __odoKm: isNaN(__odoKmLive) ? Number(prefs.odoBackupKm || 0) : __odoKmLive
 
                 text: prefs.useMph
-                      ? (numFmt(kmToMiles(__odoKm), 0) + " mi.")
+                      ? (numFmt(kmToMiles(__odoKm), 0) + " mi")
                       : (numFmt(__odoKm, 0)          + " km")
 
-                color: "#7ee6ff"; font.family: neu.name; font.pixelSize: 50
+                color: theme.primaryColor; font.family: neu.name; font.pixelSize: 50
             }
         }
         Item {
@@ -929,7 +1259,7 @@ Page {
                       ? (numFmt(kmToMiles(__tripKm), 1) + " mi.")
                       : (numFmt(__tripKm, 1)           + " km")
 
-                color: "#7ee6ff"; font.family: neu.name; font.pixelSize: 50
+                color: theme.primaryColor; font.family: neu.name; font.pixelSize: 50
             }
         }
 
@@ -948,9 +1278,8 @@ Page {
             }
         }
 
-
-        // Seed backups once on load if available
         Component.onCompleted: {
+            // seed backups once on load if available
             if (dashController && prefs) {
                 if (dashController.odo  !== undefined && dashController.odo  !== null)
                     prefs.odoBackupKm  = Number(dashController.odo)
@@ -968,7 +1297,7 @@ Page {
             opacity: ((dashController && dashController.leftSignal) || dashPage.selfTest) ? dashPage.turnPhase : 0
             transformOrigin: Item.Center
             scale: 1
-            Image { anchors.fill: parent; source: "qrc:/KeyDash_NX1000/assets/LeftTurnSignal_On.png"; smooth: true }
+            Image { anchors.fill: parent; source: "qrc:/KeyDash_Assets/assets/LeftTurnSignal_On.png"; smooth: true }
             Connections {
                 target: leftTurn
                 function onVisibleChanged() {
@@ -990,7 +1319,7 @@ Page {
             opacity: ((dashController && dashController.rightSignal) || dashPage.selfTest) ? dashPage.turnPhase : 0
             transformOrigin: Item.Center
             scale: 1
-            Image { anchors.fill: parent; source: "qrc:/KeyDash_NX1000/assets/RightTurnSignal_On.png"; smooth: true }
+            Image { anchors.fill: parent; source: "qrc:/KeyDash_Assets/assets/RightTurnSignal_On.png"; smooth: true }
             Connections {
                 target: rightTurn
                 function onVisibleChanged() {
@@ -1005,9 +1334,9 @@ Page {
         }
 
     // Status lamps: TCS, CEL, Headlights
-        Lamp { id: tcsLamp;  x: 1998; y: 587; width: 53; height: 60;  source: "qrc:/KeyDash_NX1000/assets/TractionControl_On.png"; on: (dashController && dashController.tcsOn)  || dashPage.selfTest }
-        Lamp { id: celLamp;  x: 2088; y: 583; width: 96; height: 64;  source: "qrc:/KeyDash_NX1000/assets/CEL_On.png";             on: (dashController && dashController.celOn)  || dashPage.selfTest }
-        Lamp { id: headLamp; x: 2208; y: 585; width: 96; height: 62;  source: "qrc:/KeyDash_NX1000/assets/Headlight_On.png";       on: (dashController && dashController.headlightsOn) || dashPage.selfTest }
+        Lamp { id: tcsLamp;  x: 1998; y: 587; width: 53; height: 60;  source: "qrc:/KeyDash_Assets/assets/TractionControl_On.png"; on: (dashController && dashController.tcsOn)  || dashPage.selfTest }
+        Lamp { id: celLamp;  x: 2088; y: 583; width: 96; height: 64;  source: "qrc:/KeyDash_Assets/assets/CEL_On.png";             on: (dashController && dashController.celOn)  || dashPage.selfTest }
+        Lamp { id: headLamp; x: 2208; y: 585; width: 96; height: 62;  source: "qrc:/KeyDash_Assets/assets/Headlight_On.png";       on: (dashController && dashController.headlightsOn) || dashPage.selfTest }
 
           // Coolant warning toast
         Connections {
@@ -1077,7 +1406,8 @@ Page {
             color: (dashController && dashController.connected) ? "#0b2a0b" : "#2a0b0b"
             opacity: (dashController && dashController.connected) ? 0 : 0.9
             visible: opacity > 0
-            Text { anchors.centerIn: parent; text: (dashController && dashController.connected) ? "" : "ECU DISCONNECTED"; color: "#ffcc00"; font.family: neu.name; font.pixelSize: 20 }
+            z: 9999
+            Text { anchors.centerIn: parent; text: (dashController && dashController.connected) ? "" : "ECU DISCONNECTED"; color: theme.secondaryColor; font.family: neu.name; font.pixelSize: 20 }
         }
 
           // Intro overlay (curtain, title, sweep, reveal)
@@ -1109,7 +1439,7 @@ Page {
                 anchors.horizontalCenter: parent.horizontalCenter
                 y: 330
                 opacity: 0
-                color: "#ffcc00"
+                color: theme.secondaryColor
                 font.family: neu.name                 // common family
                 font.italic: neu_italic.status === FontLoader.Ready
                 font.pixelSize: 130
@@ -1196,8 +1526,8 @@ Page {
         id: settingsHotspot
         x: 1130; y: 635; width: 300; height: 80; radius: 12
         z: 10001
-        color: "#ffcc00"; opacity: 0
-        border.color: "#ffcc00"; border.width: 1
+        color: theme.secondaryColor; opacity: 0
+        border.color: theme.secondaryColor; border.width: 1
         MouseArea { anchors.fill: parent; hoverEnabled: true; onClicked: dashPage.openService() }
     }
 }
