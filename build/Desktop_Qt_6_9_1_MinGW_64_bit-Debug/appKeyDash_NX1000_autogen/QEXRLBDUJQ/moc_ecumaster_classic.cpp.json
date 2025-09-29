@@ -1,0 +1,32 @@
+{
+    "classes": [
+        {
+            "className": "EcuMasterClassicProtocol",
+            "lineNumber": 6,
+            "object": true,
+            "qualifiedClassName": "EcuMasterClassicProtocol",
+            "slots": [
+                {
+                    "access": "private",
+                    "arguments": [
+                        {
+                            "name": "buf",
+                            "type": "QByteArray"
+                        }
+                    ],
+                    "index": 0,
+                    "name": "onSerial",
+                    "returnType": "void"
+                }
+            ],
+            "superClasses": [
+                {
+                    "access": "public",
+                    "name": "IECUProtocol"
+                }
+            ]
+        }
+    ],
+    "inputFile": "ecumaster_classic.h",
+    "outputRevision": 69
+}

@@ -1,0 +1,26 @@
+{
+    "classes": [
+        {
+            "className": "CanTransport",
+            "lineNumber": 8,
+            "object": true,
+            "qualifiedClassName": "CanTransport",
+            "slots": [
+                {
+                    "access": "private",
+                    "index": 0,
+                    "name": "onFramesReceived",
+                    "returnType": "void"
+                }
+            ],
+            "superClasses": [
+                {
+                    "access": "public",
+                    "name": "ITransport"
+                }
+            ]
+        }
+    ],
+    "inputFile": "can_transport.h",
+    "outputRevision": 69
+}

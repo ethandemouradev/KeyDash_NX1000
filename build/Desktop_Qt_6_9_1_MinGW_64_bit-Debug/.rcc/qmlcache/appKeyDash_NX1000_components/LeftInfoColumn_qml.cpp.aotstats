@@ -1,0 +1,204 @@
+[
+    {
+        "moduleFiles": [
+            {
+                "entries": [
+                    {
+                        "codegenSuccessful": false,
+                        "column": 31,
+                        "durationMicroseconds": 145,
+                        "errorMessage": "Cannot load property font from QtObject::application with type QQmlApplication.",
+                        "functionName": "fontName",
+                        "line": 15
+                    },
+                    {
+                        "codegenSuccessful": false,
+                        "column": 5,
+                        "durationMicroseconds": 0,
+                        "errorMessage": "Functions without type annotations won't be compiled",
+                        "functionName": "metricValue",
+                        "line": 25
+                    },
+                    {
+                        "codegenSuccessful": false,
+                        "column": 5,
+                        "durationMicroseconds": 0,
+                        "errorMessage": "Functions without type annotations won't be compiled",
+                        "functionName": "metricUnit",
+                        "line": 39
+                    },
+                    {
+                        "codegenSuccessful": false,
+                        "column": 5,
+                        "durationMicroseconds": 0,
+                        "errorMessage": "Functions without type annotations won't be compiled",
+                        "functionName": "metricIcon",
+                        "line": 52
+                    },
+                    {
+                        "codegenSuccessful": true,
+                        "column": 23,
+                        "durationMicroseconds": 154,
+                        "errorMessage": "",
+                        "functionName": "fill",
+                        "line": 68
+                    },
+                    {
+                        "codegenSuccessful": false,
+                        "column": 20,
+                        "durationMicroseconds": 460,
+                        "errorMessage": "Cannot generate efficient code for storing an array in a non-sequence type",
+                        "functionName": "model",
+                        "line": 72
+                    },
+                    {
+                        "codegenSuccessful": true,
+                        "column": 41,
+                        "durationMicroseconds": 190,
+                        "errorMessage": "",
+                        "functionName": "preferredHeight",
+                        "line": 76
+                    },
+                    {
+                        "codegenSuccessful": false,
+                        "column": 31,
+                        "durationMicroseconds": 48,
+                        "errorMessage": "Cannot access value for name root",
+                        "functionName": "color",
+                        "line": 78
+                    },
+                    {
+                        "codegenSuccessful": false,
+                        "column": 31,
+                        "durationMicroseconds": 58,
+                        "errorMessage": "Cannot access value for name root",
+                        "functionName": "width",
+                        "line": 79
+                    },
+                    {
+                        "codegenSuccessful": true,
+                        "column": 35,
+                        "durationMicroseconds": 87,
+                        "errorMessage": "",
+                        "functionName": "fill",
+                        "line": 83
+                    },
+                    {
+                        "codegenSuccessful": false,
+                        "column": 33,
+                        "durationMicroseconds": 134,
+                        "errorMessage": "Cannot access value for name root",
+                        "functionName": "source",
+                        "line": 87
+                    },
+                    {
+                        "codegenSuccessful": true,
+                        "column": 35,
+                        "durationMicroseconds": 203,
+                        "errorMessage": "",
+                        "functionName": "fillMode",
+                        "line": 88
+                    },
+                    {
+                        "codegenSuccessful": false,
+                        "column": 35,
+                        "durationMicroseconds": 130,
+                        "errorMessage": "Cannot access value for name root",
+                        "functionName": "text",
+                        "line": 100
+                    },
+                    {
+                        "codegenSuccessful": true,
+                        "column": 48,
+                        "durationMicroseconds": 124,
+                        "errorMessage": "",
+                        "functionName": "verticalAlignment",
+                        "line": 104
+                    },
+                    {
+                        "codegenSuccessful": false,
+                        "column": 42,
+                        "durationMicroseconds": 44,
+                        "errorMessage": "Cannot access value for name root",
+                        "functionName": "family",
+                        "line": 101
+                    },
+                    {
+                        "codegenSuccessful": true,
+                        "column": 45,
+                        "durationMicroseconds": 313,
+                        "errorMessage": "",
+                        "functionName": "pixelSize",
+                        "line": 102
+                    },
+                    {
+                        "codegenSuccessful": false,
+                        "column": 35,
+                        "durationMicroseconds": 86,
+                        "errorMessage": "Cannot access value for name root",
+                        "functionName": "text",
+                        "line": 107
+                    },
+                    {
+                        "codegenSuccessful": true,
+                        "column": 48,
+                        "durationMicroseconds": 98,
+                        "errorMessage": "",
+                        "functionName": "verticalAlignment",
+                        "line": 111
+                    },
+                    {
+                        "codegenSuccessful": false,
+                        "column": 42,
+                        "durationMicroseconds": 44,
+                        "errorMessage": "Cannot access value for name root",
+                        "functionName": "family",
+                        "line": 108
+                    },
+                    {
+                        "codegenSuccessful": true,
+                        "column": 45,
+                        "durationMicroseconds": 219,
+                        "errorMessage": "",
+                        "functionName": "pixelSize",
+                        "line": 109
+                    },
+                    {
+                        "codegenSuccessful": false,
+                        "column": 31,
+                        "durationMicroseconds": 43,
+                        "errorMessage": "Cannot access value for name rowRef",
+                        "functionName": "onTapped",
+                        "line": 117
+                    },
+                    {
+                        "codegenSuccessful": false,
+                        "column": 31,
+                        "durationMicroseconds": 63,
+                        "errorMessage": "Cannot generate efficient code for storing an array in a non-sequence type",
+                        "functionName": "choices",
+                        "line": 133
+                    },
+                    {
+                        "codegenSuccessful": false,
+                        "column": 40,
+                        "durationMicroseconds": 76,
+                        "errorMessage": "Cannot load property length from (component in D:/QtProjects/KeyDash_NX1000/components/LeftInfoColumn.qml)::choices with type QVariant.",
+                        "functionName": "currentMetric",
+                        "line": 135
+                    },
+                    {
+                        "codegenSuccessful": false,
+                        "column": 9,
+                        "durationMicroseconds": 182,
+                        "errorMessage": "Cannot load property length from (component in D:/QtProjects/KeyDash_NX1000/components/LeftInfoColumn.qml)::choices with type QVariant.",
+                        "functionName": "next",
+                        "line": 136
+                    }
+                ],
+                "filePath": "D:/QtProjects/KeyDash_NX1000/components/LeftInfoColumn.qml"
+            }
+        ],
+        "moduleId": "KeyDash_NX1000(appKeyDash_NX1000)"
+    }
+]

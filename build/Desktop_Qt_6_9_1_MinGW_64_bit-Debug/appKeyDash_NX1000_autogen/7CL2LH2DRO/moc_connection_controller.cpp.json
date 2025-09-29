@@ -1,0 +1,74 @@
+{
+    "classes": [
+        {
+            "className": "ConnectionController",
+            "lineNumber": 10,
+            "methods": [
+                {
+                    "access": "public",
+                    "arguments": [
+                        {
+                            "name": "transportKey",
+                            "type": "QString"
+                        },
+                        {
+                            "name": "portName",
+                            "type": "QString"
+                        },
+                        {
+                            "name": "baud",
+                            "type": "int"
+                        },
+                        {
+                            "name": "canIface",
+                            "type": "QString"
+                        },
+                        {
+                            "name": "protoKey",
+                            "type": "QString"
+                        }
+                    ],
+                    "index": 2,
+                    "name": "apply",
+                    "returnType": "bool"
+                }
+            ],
+            "object": true,
+            "qualifiedClassName": "ConnectionController",
+            "signals": [
+                {
+                    "access": "public",
+                    "arguments": [
+                        {
+                            "name": "update",
+                            "type": "SignalUpdate"
+                        }
+                    ],
+                    "index": 0,
+                    "name": "sig",
+                    "returnType": "void"
+                },
+                {
+                    "access": "public",
+                    "arguments": [
+                        {
+                            "name": "status",
+                            "type": "QString"
+                        }
+                    ],
+                    "index": 1,
+                    "name": "statusChanged",
+                    "returnType": "void"
+                }
+            ],
+            "superClasses": [
+                {
+                    "access": "public",
+                    "name": "QObject"
+                }
+            ]
+        }
+    ],
+    "inputFile": "connection_controller.h",
+    "outputRevision": 69
+}

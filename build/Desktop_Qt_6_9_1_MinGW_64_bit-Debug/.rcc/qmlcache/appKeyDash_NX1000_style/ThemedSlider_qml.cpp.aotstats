@@ -1,0 +1,52 @@
+[
+    {
+        "moduleFiles": [
+            {
+                "entries": [
+                    {
+                        "codegenSuccessful": false,
+                        "column": 31,
+                        "durationMicroseconds": 158,
+                        "errorMessage": "Cannot load property primaryColor from (component in D:/QtProjects/KeyDash_NX1000/style/ThemedSlider.qml)::palette with type QVariant.",
+                        "functionName": "fillColor",
+                        "line": 12
+                    },
+                    {
+                        "codegenSuccessful": true,
+                        "column": 16,
+                        "durationMicroseconds": 376,
+                        "errorMessage": "",
+                        "functionName": "color",
+                        "line": 17
+                    },
+                    {
+                        "codegenSuccessful": true,
+                        "column": 20,
+                        "durationMicroseconds": 158,
+                        "errorMessage": "",
+                        "functionName": "width",
+                        "line": 20
+                    },
+                    {
+                        "codegenSuccessful": true,
+                        "column": 21,
+                        "durationMicroseconds": 71,
+                        "errorMessage": "",
+                        "functionName": "height",
+                        "line": 21
+                    },
+                    {
+                        "codegenSuccessful": true,
+                        "column": 20,
+                        "durationMicroseconds": 224,
+                        "errorMessage": "",
+                        "functionName": "color",
+                        "line": 23
+                    }
+                ],
+                "filePath": "D:/QtProjects/KeyDash_NX1000/style/ThemedSlider.qml"
+            }
+        ],
+        "moduleId": "KeyDash_NX1000(appKeyDash_NX1000)"
+    }
+]

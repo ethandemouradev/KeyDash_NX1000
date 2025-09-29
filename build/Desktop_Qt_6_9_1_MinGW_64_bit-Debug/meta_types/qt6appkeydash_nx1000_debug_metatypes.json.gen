@@ -1,0 +1,1759 @@
+[
+    {
+        "classes": [
+            {
+                "className": "ConnectionController",
+                "lineNumber": 10,
+                "methods": [
+                    {
+                        "access": "public",
+                        "arguments": [
+                            {
+                                "name": "transportKey",
+                                "type": "QString"
+                            },
+                            {
+                                "name": "portName",
+                                "type": "QString"
+                            },
+                            {
+                                "name": "baud",
+                                "type": "int"
+                            },
+                            {
+                                "name": "canIface",
+                                "type": "QString"
+                            },
+                            {
+                                "name": "protoKey",
+                                "type": "QString"
+                            }
+                        ],
+                        "index": 2,
+                        "name": "apply",
+                        "returnType": "bool"
+                    }
+                ],
+                "object": true,
+                "qualifiedClassName": "ConnectionController",
+                "signals": [
+                    {
+                        "access": "public",
+                        "arguments": [
+                            {
+                                "name": "update",
+                                "type": "SignalUpdate"
+                            }
+                        ],
+                        "index": 0,
+                        "name": "sig",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "arguments": [
+                            {
+                                "name": "status",
+                                "type": "QString"
+                            }
+                        ],
+                        "index": 1,
+                        "name": "statusChanged",
+                        "returnType": "void"
+                    }
+                ],
+                "superClasses": [
+                    {
+                        "access": "public",
+                        "name": "QObject"
+                    }
+                ]
+            }
+        ],
+        "inputFile": "connection_controller.h",
+        "outputRevision": 69
+    },
+    {
+        "classes": [
+            {
+                "className": "FileReader",
+                "lineNumber": 7,
+                "methods": [
+                    {
+                        "access": "public",
+                        "arguments": [
+                            {
+                                "name": "url",
+                                "type": "QUrl"
+                            }
+                        ],
+                        "index": 0,
+                        "name": "readUrl",
+                        "returnType": "QString"
+                    },
+                    {
+                        "access": "public",
+                        "arguments": [
+                            {
+                                "name": "url",
+                                "type": "QUrl"
+                            }
+                        ],
+                        "index": 1,
+                        "isConst": true,
+                        "name": "readTextUrl",
+                        "returnType": "QString"
+                    }
+                ],
+                "object": true,
+                "qualifiedClassName": "FileReader",
+                "superClasses": [
+                    {
+                        "access": "public",
+                        "name": "QObject"
+                    }
+                ]
+            }
+        ],
+        "inputFile": "FileReader.h",
+        "outputRevision": 69
+    },
+    {
+        "classes": [
+            {
+                "className": "DashModel",
+                "lineNumber": 8,
+                "methods": [
+                    {
+                        "access": "public",
+                        "arguments": [
+                            {
+                                "name": "gear",
+                                "type": "int"
+                            }
+                        ],
+                        "index": 47,
+                        "isConst": true,
+                        "name": "gearRatio",
+                        "returnType": "double"
+                    },
+                    {
+                        "access": "public",
+                        "arguments": [
+                            {
+                                "name": "on",
+                                "type": "bool"
+                            }
+                        ],
+                        "index": 48,
+                        "name": "setReplayMode",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "arguments": [
+                            {
+                                "type": "QVariantMap"
+                            }
+                        ],
+                        "index": 49,
+                        "name": "ingestFrame",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "index": 50,
+                        "name": "resetTrip",
+                        "returnType": "void"
+                    }
+                ],
+                "object": true,
+                "properties": [
+                    {
+                        "constant": false,
+                        "designable": true,
+                        "final": false,
+                        "index": 0,
+                        "name": "speed",
+                        "notify": "speedChanged",
+                        "read": "speed",
+                        "required": false,
+                        "scriptable": true,
+                        "stored": true,
+                        "type": "double",
+                        "user": false,
+                        "write": "setSpeed"
+                    },
+                    {
+                        "constant": false,
+                        "designable": true,
+                        "final": false,
+                        "index": 1,
+                        "name": "rpm",
+                        "notify": "rpmChanged",
+                        "read": "rpm",
+                        "required": false,
+                        "scriptable": true,
+                        "stored": true,
+                        "type": "double",
+                        "user": false,
+                        "write": "setRpm"
+                    },
+                    {
+                        "constant": false,
+                        "designable": true,
+                        "final": false,
+                        "index": 2,
+                        "name": "boost",
+                        "notify": "boostChanged",
+                        "read": "boost",
+                        "required": false,
+                        "scriptable": true,
+                        "stored": true,
+                        "type": "double",
+                        "user": false,
+                        "write": "setBoost"
+                    },
+                    {
+                        "constant": false,
+                        "designable": true,
+                        "final": false,
+                        "index": 3,
+                        "name": "clt",
+                        "notify": "cltChanged",
+                        "read": "clt",
+                        "required": false,
+                        "scriptable": true,
+                        "stored": true,
+                        "type": "double",
+                        "user": false,
+                        "write": "setClt"
+                    },
+                    {
+                        "constant": false,
+                        "designable": true,
+                        "final": false,
+                        "index": 4,
+                        "name": "iat",
+                        "notify": "iatChanged",
+                        "read": "iat",
+                        "required": false,
+                        "scriptable": true,
+                        "stored": true,
+                        "type": "double",
+                        "user": false,
+                        "write": "setIat"
+                    },
+                    {
+                        "constant": false,
+                        "designable": true,
+                        "final": false,
+                        "index": 5,
+                        "name": "vbat",
+                        "notify": "vbatChanged",
+                        "read": "vbat",
+                        "required": false,
+                        "scriptable": true,
+                        "stored": true,
+                        "type": "double",
+                        "user": false,
+                        "write": "setVbat"
+                    },
+                    {
+                        "constant": false,
+                        "designable": true,
+                        "final": false,
+                        "index": 6,
+                        "name": "afr",
+                        "notify": "afrChanged",
+                        "read": "afr",
+                        "required": false,
+                        "scriptable": true,
+                        "stored": true,
+                        "type": "double",
+                        "user": false,
+                        "write": "setAfr"
+                    },
+                    {
+                        "constant": false,
+                        "designable": true,
+                        "final": false,
+                        "index": 7,
+                        "name": "gear",
+                        "notify": "gearChanged",
+                        "read": "gear",
+                        "required": false,
+                        "scriptable": true,
+                        "stored": true,
+                        "type": "int",
+                        "user": false,
+                        "write": "setGear"
+                    },
+                    {
+                        "constant": false,
+                        "designable": true,
+                        "final": false,
+                        "index": 8,
+                        "name": "dateTimeString",
+                        "notify": "dateTimeChanged",
+                        "read": "dateTimeString",
+                        "required": false,
+                        "scriptable": true,
+                        "stored": true,
+                        "type": "QString",
+                        "user": false,
+                        "write": "setDateTimeString"
+                    },
+                    {
+                        "constant": false,
+                        "designable": true,
+                        "final": false,
+                        "index": 9,
+                        "name": "odo",
+                        "notify": "odoChanged",
+                        "read": "odo",
+                        "required": false,
+                        "scriptable": true,
+                        "stored": true,
+                        "type": "double",
+                        "user": false,
+                        "write": "setOdo"
+                    },
+                    {
+                        "constant": false,
+                        "designable": true,
+                        "final": false,
+                        "index": 10,
+                        "name": "trip",
+                        "notify": "tripChanged",
+                        "read": "trip",
+                        "required": false,
+                        "scriptable": true,
+                        "stored": true,
+                        "type": "double",
+                        "user": false,
+                        "write": "setTrip"
+                    },
+                    {
+                        "constant": false,
+                        "designable": true,
+                        "final": false,
+                        "index": 11,
+                        "name": "leftSignal",
+                        "notify": "leftSignalChanged",
+                        "read": "leftSignal",
+                        "required": false,
+                        "scriptable": true,
+                        "stored": true,
+                        "type": "bool",
+                        "user": false,
+                        "write": "setLeftSignal"
+                    },
+                    {
+                        "constant": false,
+                        "designable": true,
+                        "final": false,
+                        "index": 12,
+                        "name": "rightSignal",
+                        "notify": "rightSignalChanged",
+                        "read": "rightSignal",
+                        "required": false,
+                        "scriptable": true,
+                        "stored": true,
+                        "type": "bool",
+                        "user": false,
+                        "write": "setRightSignal"
+                    },
+                    {
+                        "constant": false,
+                        "designable": true,
+                        "final": false,
+                        "index": 13,
+                        "name": "headlightsOn",
+                        "notify": "headlightsOnChanged",
+                        "read": "headlightsOn",
+                        "required": false,
+                        "scriptable": true,
+                        "stored": true,
+                        "type": "bool",
+                        "user": false,
+                        "write": "setHeadlightsOn"
+                    },
+                    {
+                        "constant": false,
+                        "designable": true,
+                        "final": false,
+                        "index": 14,
+                        "name": "celOn",
+                        "notify": "celOnChanged",
+                        "read": "celOn",
+                        "required": false,
+                        "scriptable": true,
+                        "stored": true,
+                        "type": "bool",
+                        "user": false,
+                        "write": "setCelOn"
+                    },
+                    {
+                        "constant": false,
+                        "designable": true,
+                        "final": false,
+                        "index": 15,
+                        "name": "tcsOn",
+                        "notify": "tcsOnChanged",
+                        "read": "tcsOn",
+                        "required": false,
+                        "scriptable": true,
+                        "stored": true,
+                        "type": "bool",
+                        "user": false,
+                        "write": "setTcsOn"
+                    },
+                    {
+                        "constant": false,
+                        "designable": true,
+                        "final": false,
+                        "index": 16,
+                        "name": "useMph",
+                        "notify": "useMphChanged",
+                        "read": "useMph",
+                        "required": false,
+                        "scriptable": true,
+                        "stored": true,
+                        "type": "bool",
+                        "user": false,
+                        "write": "setUseMph"
+                    },
+                    {
+                        "constant": false,
+                        "designable": true,
+                        "final": false,
+                        "index": 17,
+                        "name": "rpmMax",
+                        "notify": "rpmMaxChanged",
+                        "read": "rpmMax",
+                        "required": false,
+                        "scriptable": true,
+                        "stored": true,
+                        "type": "int",
+                        "user": false,
+                        "write": "setRpmMax"
+                    },
+                    {
+                        "constant": false,
+                        "designable": true,
+                        "final": false,
+                        "index": 18,
+                        "name": "finalDrive",
+                        "notify": "finalDriveChanged",
+                        "read": "finalDrive",
+                        "required": false,
+                        "scriptable": true,
+                        "stored": true,
+                        "type": "double",
+                        "user": false,
+                        "write": "setFinalDrive"
+                    },
+                    {
+                        "constant": false,
+                        "designable": true,
+                        "final": false,
+                        "index": 19,
+                        "name": "z60Popup",
+                        "notify": "z60PopupChanged",
+                        "read": "z60Popup",
+                        "required": false,
+                        "scriptable": true,
+                        "stored": true,
+                        "type": "bool",
+                        "user": false,
+                        "write": "setZ60Popup"
+                    },
+                    {
+                        "constant": false,
+                        "designable": true,
+                        "final": false,
+                        "index": 20,
+                        "name": "connected",
+                        "notify": "connectedChanged",
+                        "read": "connected",
+                        "required": false,
+                        "scriptable": true,
+                        "stored": true,
+                        "type": "bool",
+                        "user": false,
+                        "write": "setConnected"
+                    }
+                ],
+                "qualifiedClassName": "DashModel",
+                "signals": [
+                    {
+                        "access": "public",
+                        "index": 0,
+                        "name": "speedChanged",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "index": 1,
+                        "name": "rpmChanged",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "index": 2,
+                        "name": "boostChanged",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "index": 3,
+                        "name": "cltChanged",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "index": 4,
+                        "name": "iatChanged",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "index": 5,
+                        "name": "vbatChanged",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "index": 6,
+                        "name": "afrChanged",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "index": 7,
+                        "name": "gearChanged",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "index": 8,
+                        "name": "dateTimeChanged",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "index": 9,
+                        "name": "odoChanged",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "index": 10,
+                        "name": "tripChanged",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "index": 11,
+                        "name": "leftSignalChanged",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "index": 12,
+                        "name": "rightSignalChanged",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "index": 13,
+                        "name": "headlightsOnChanged",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "index": 14,
+                        "name": "celOnChanged",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "index": 15,
+                        "name": "tcsOnChanged",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "index": 16,
+                        "name": "useMphChanged",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "index": 17,
+                        "name": "rpmMaxChanged",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "index": 18,
+                        "name": "finalDriveChanged",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "arguments": [
+                            {
+                                "name": "gear",
+                                "type": "int"
+                            },
+                            {
+                                "name": "ratio",
+                                "type": "double"
+                            }
+                        ],
+                        "index": 19,
+                        "name": "gearRatioChanged",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "index": 20,
+                        "name": "z60PopupChanged",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "index": 21,
+                        "name": "connectedChanged",
+                        "returnType": "void"
+                    }
+                ],
+                "slots": [
+                    {
+                        "access": "public",
+                        "arguments": [
+                            {
+                                "name": "v",
+                                "type": "bool"
+                            }
+                        ],
+                        "index": 22,
+                        "name": "setUseMph",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "arguments": [
+                            {
+                                "name": "v",
+                                "type": "int"
+                            }
+                        ],
+                        "index": 23,
+                        "name": "setRpmMax",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "arguments": [
+                            {
+                                "name": "v",
+                                "type": "double"
+                            }
+                        ],
+                        "index": 24,
+                        "name": "setFinalDrive",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "arguments": [
+                            {
+                                "name": "v",
+                                "type": "double"
+                            }
+                        ],
+                        "index": 25,
+                        "name": "setSpeed",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "arguments": [
+                            {
+                                "name": "v",
+                                "type": "double"
+                            }
+                        ],
+                        "index": 26,
+                        "name": "setRpm",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "arguments": [
+                            {
+                                "name": "v",
+                                "type": "double"
+                            }
+                        ],
+                        "index": 27,
+                        "name": "setBoost",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "arguments": [
+                            {
+                                "name": "v",
+                                "type": "double"
+                            }
+                        ],
+                        "index": 28,
+                        "name": "setClt",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "arguments": [
+                            {
+                                "name": "v",
+                                "type": "double"
+                            }
+                        ],
+                        "index": 29,
+                        "name": "setIat",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "arguments": [
+                            {
+                                "name": "v",
+                                "type": "double"
+                            }
+                        ],
+                        "index": 30,
+                        "name": "setVbat",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "arguments": [
+                            {
+                                "name": "v",
+                                "type": "double"
+                            }
+                        ],
+                        "index": 31,
+                        "name": "setAfr",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "arguments": [
+                            {
+                                "name": "v",
+                                "type": "int"
+                            }
+                        ],
+                        "index": 32,
+                        "name": "setGear",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "arguments": [
+                            {
+                                "name": "s",
+                                "type": "QString"
+                            }
+                        ],
+                        "index": 33,
+                        "name": "setDateTimeString",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "arguments": [
+                            {
+                                "name": "v",
+                                "type": "double"
+                            }
+                        ],
+                        "index": 34,
+                        "name": "setOdo",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "arguments": [
+                            {
+                                "name": "v",
+                                "type": "double"
+                            }
+                        ],
+                        "index": 35,
+                        "name": "setTrip",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "arguments": [
+                            {
+                                "name": "v",
+                                "type": "bool"
+                            }
+                        ],
+                        "index": 36,
+                        "name": "setLeftSignal",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "arguments": [
+                            {
+                                "name": "v",
+                                "type": "bool"
+                            }
+                        ],
+                        "index": 37,
+                        "name": "setRightSignal",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "arguments": [
+                            {
+                                "name": "v",
+                                "type": "bool"
+                            }
+                        ],
+                        "index": 38,
+                        "name": "setHeadlightsOn",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "arguments": [
+                            {
+                                "name": "v",
+                                "type": "bool"
+                            }
+                        ],
+                        "index": 39,
+                        "name": "setCelOn",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "arguments": [
+                            {
+                                "name": "v",
+                                "type": "bool"
+                            }
+                        ],
+                        "index": 40,
+                        "name": "setTcsOn",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "arguments": [
+                            {
+                                "name": "v",
+                                "type": "bool"
+                            }
+                        ],
+                        "index": 41,
+                        "name": "setConnected",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "arguments": [
+                            {
+                                "name": "up",
+                                "type": "SignalUpdate"
+                            }
+                        ],
+                        "index": 42,
+                        "name": "onSignal",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "arguments": [
+                            {
+                                "name": "rpm",
+                                "type": "double"
+                            },
+                            {
+                                "name": "mph",
+                                "type": "double"
+                            },
+                            {
+                                "name": "boost",
+                                "type": "double"
+                            },
+                            {
+                                "name": "clt",
+                                "type": "double"
+                            },
+                            {
+                                "name": "iat",
+                                "type": "double"
+                            },
+                            {
+                                "name": "vbat",
+                                "type": "double"
+                            },
+                            {
+                                "name": "afr",
+                                "type": "double"
+                            },
+                            {
+                                "name": "gear",
+                                "type": "int"
+                            }
+                        ],
+                        "index": 43,
+                        "name": "applySample",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "arguments": [
+                            {
+                                "name": "gear",
+                                "type": "int"
+                            },
+                            {
+                                "name": "ratio",
+                                "type": "double"
+                            }
+                        ],
+                        "index": 44,
+                        "name": "setGearRatio",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "arguments": [
+                            {
+                                "name": "path",
+                                "type": "QString"
+                            }
+                        ],
+                        "index": 45,
+                        "name": "loadVehicleConfig",
+                        "returnType": "bool"
+                    },
+                    {
+                        "access": "public",
+                        "index": 46,
+                        "isCloned": true,
+                        "name": "loadVehicleConfig",
+                        "returnType": "bool"
+                    }
+                ],
+                "superClasses": [
+                    {
+                        "access": "public",
+                        "name": "QObject"
+                    }
+                ]
+            }
+        ],
+        "inputFile": "dashmodel.h",
+        "outputRevision": 69
+    },
+    {
+        "classes": [
+            {
+                "className": "EcuReader",
+                "lineNumber": 23,
+                "methods": [
+                    {
+                        "access": "public",
+                        "arguments": [
+                            {
+                                "name": "btAddr",
+                                "type": "QString"
+                            }
+                        ],
+                        "index": 25,
+                        "name": "setDeviceAddress",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "index": 26,
+                        "isConst": true,
+                        "name": "deviceAddress",
+                        "returnType": "QString"
+                    },
+                    {
+                        "access": "public",
+                        "index": 27,
+                        "name": "connectToDevice",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "index": 28,
+                        "name": "disconnectDevice",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "index": 29,
+                        "isConst": true,
+                        "name": "isConnected",
+                        "returnType": "bool"
+                    },
+                    {
+                        "access": "public",
+                        "arguments": [
+                            {
+                                "name": "urlOrPath",
+                                "type": "QString"
+                            }
+                        ],
+                        "index": 30,
+                        "name": "loadXmlMap",
+                        "returnType": "bool"
+                    },
+                    {
+                        "access": "public",
+                        "index": 31,
+                        "isConst": true,
+                        "name": "connectionError",
+                        "returnType": "QString"
+                    },
+                    {
+                        "access": "public",
+                        "index": 32,
+                        "name": "startScan",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "index": 33,
+                        "name": "stopScan",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "arguments": [
+                            {
+                                "name": "nameOrSubstring",
+                                "type": "QString"
+                            }
+                        ],
+                        "index": 34,
+                        "name": "connectToName",
+                        "returnType": "void"
+                    }
+                ],
+                "object": true,
+                "properties": [
+                    {
+                        "constant": false,
+                        "designable": true,
+                        "final": false,
+                        "index": 0,
+                        "name": "rpm",
+                        "notify": "rpmChanged",
+                        "read": "rpm",
+                        "required": false,
+                        "scriptable": true,
+                        "stored": true,
+                        "type": "int",
+                        "user": false
+                    },
+                    {
+                        "constant": false,
+                        "designable": true,
+                        "final": false,
+                        "index": 1,
+                        "name": "map",
+                        "notify": "mapChanged",
+                        "read": "map",
+                        "required": false,
+                        "scriptable": true,
+                        "stored": true,
+                        "type": "int",
+                        "user": false
+                    },
+                    {
+                        "constant": false,
+                        "designable": true,
+                        "final": false,
+                        "index": 2,
+                        "name": "tps",
+                        "notify": "tpsChanged",
+                        "read": "tps",
+                        "required": false,
+                        "scriptable": true,
+                        "stored": true,
+                        "type": "int",
+                        "user": false
+                    },
+                    {
+                        "constant": false,
+                        "designable": true,
+                        "final": false,
+                        "index": 3,
+                        "name": "batt",
+                        "notify": "battChanged",
+                        "read": "batt",
+                        "required": false,
+                        "scriptable": true,
+                        "stored": true,
+                        "type": "double",
+                        "user": false
+                    },
+                    {
+                        "constant": false,
+                        "designable": true,
+                        "final": false,
+                        "index": 4,
+                        "name": "iat",
+                        "notify": "iatChanged",
+                        "read": "iat",
+                        "required": false,
+                        "scriptable": true,
+                        "stored": true,
+                        "type": "int",
+                        "user": false
+                    },
+                    {
+                        "constant": false,
+                        "designable": true,
+                        "final": false,
+                        "index": 5,
+                        "name": "clt",
+                        "notify": "cltChanged",
+                        "read": "clt",
+                        "required": false,
+                        "scriptable": true,
+                        "stored": true,
+                        "type": "int",
+                        "user": false
+                    },
+                    {
+                        "constant": false,
+                        "designable": true,
+                        "final": false,
+                        "index": 6,
+                        "name": "afr",
+                        "notify": "afrChanged",
+                        "read": "afr",
+                        "required": false,
+                        "scriptable": true,
+                        "stored": true,
+                        "type": "double",
+                        "user": false
+                    },
+                    {
+                        "constant": false,
+                        "designable": true,
+                        "final": false,
+                        "index": 7,
+                        "name": "lambda",
+                        "notify": "lambdaChanged",
+                        "read": "lambda",
+                        "required": false,
+                        "scriptable": true,
+                        "stored": true,
+                        "type": "double",
+                        "user": false
+                    },
+                    {
+                        "constant": false,
+                        "designable": true,
+                        "final": false,
+                        "index": 8,
+                        "name": "baro",
+                        "notify": "baroChanged",
+                        "read": "baro",
+                        "required": false,
+                        "scriptable": true,
+                        "stored": true,
+                        "type": "int",
+                        "user": false
+                    },
+                    {
+                        "constant": false,
+                        "designable": true,
+                        "final": false,
+                        "index": 9,
+                        "name": "connected",
+                        "notify": "connectionChanged",
+                        "read": "isConnected",
+                        "required": false,
+                        "scriptable": true,
+                        "stored": true,
+                        "type": "bool",
+                        "user": false,
+                        "write": "setConnected"
+                    },
+                    {
+                        "constant": false,
+                        "designable": true,
+                        "final": false,
+                        "index": 10,
+                        "name": "scanning",
+                        "notify": "scanningChanged",
+                        "read": "scanning",
+                        "required": false,
+                        "scriptable": true,
+                        "stored": true,
+                        "type": "bool",
+                        "user": false
+                    },
+                    {
+                        "constant": false,
+                        "designable": true,
+                        "final": false,
+                        "index": 11,
+                        "name": "devices",
+                        "notify": "devicesChanged",
+                        "read": "devices",
+                        "required": false,
+                        "scriptable": true,
+                        "stored": true,
+                        "type": "QStringList",
+                        "user": false
+                    }
+                ],
+                "qualifiedClassName": "EcuReader",
+                "signals": [
+                    {
+                        "access": "public",
+                        "index": 0,
+                        "name": "rpmChanged",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "index": 1,
+                        "name": "mapChanged",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "index": 2,
+                        "name": "tpsChanged",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "index": 3,
+                        "name": "battChanged",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "index": 4,
+                        "name": "iatChanged",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "index": 5,
+                        "name": "cltChanged",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "index": 6,
+                        "name": "afrChanged",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "index": 7,
+                        "name": "lambdaChanged",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "index": 8,
+                        "name": "baroChanged",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "arguments": [
+                            {
+                                "name": "connected",
+                                "type": "bool"
+                            }
+                        ],
+                        "index": 9,
+                        "name": "connectionChanged",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "index": 10,
+                        "name": "connectedLegacy",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "index": 11,
+                        "name": "disconnectedLegacy",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "arguments": [
+                            {
+                                "name": "msg",
+                                "type": "QString"
+                            },
+                            {
+                                "name": "code",
+                                "type": "QVariant"
+                            }
+                        ],
+                        "index": 12,
+                        "name": "errorChanged",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "arguments": [
+                            {
+                                "name": "msg",
+                                "type": "QString"
+                            }
+                        ],
+                        "index": 13,
+                        "isCloned": true,
+                        "name": "errorChanged",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "index": 14,
+                        "name": "scanningChanged",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "index": 15,
+                        "name": "devicesChanged",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "arguments": [
+                            {
+                                "name": "message",
+                                "type": "QString"
+                            }
+                        ],
+                        "index": 16,
+                        "name": "info",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "arguments": [
+                            {
+                                "name": "message",
+                                "type": "QString"
+                            }
+                        ],
+                        "index": 17,
+                        "name": "warn",
+                        "returnType": "void"
+                    }
+                ],
+                "slots": [
+                    {
+                        "access": "private",
+                        "index": 18,
+                        "name": "onReadyRead",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "private",
+                        "arguments": [
+                            {
+                                "type": "QBluetoothSocket::SocketState"
+                            }
+                        ],
+                        "index": 19,
+                        "name": "onStateChanged",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "private",
+                        "arguments": [
+                            {
+                                "type": "QBluetoothSocket::SocketError"
+                            }
+                        ],
+                        "index": 20,
+                        "name": "onErrorOccurred",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "private",
+                        "arguments": [
+                            {
+                                "name": "v",
+                                "type": "bool"
+                            }
+                        ],
+                        "index": 21,
+                        "name": "setConnected",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "private",
+                        "arguments": [
+                            {
+                                "name": "info",
+                                "type": "QBluetoothDeviceInfo"
+                            }
+                        ],
+                        "index": 22,
+                        "name": "onDeviceFound",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "private",
+                        "index": 23,
+                        "name": "onScanFinished",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "private",
+                        "arguments": [
+                            {
+                                "name": "error",
+                                "type": "QBluetoothDeviceDiscoveryAgent::Error"
+                            }
+                        ],
+                        "index": 24,
+                        "name": "onScanError",
+                        "returnType": "void"
+                    }
+                ],
+                "superClasses": [
+                    {
+                        "access": "public",
+                        "name": "QObject"
+                    }
+                ]
+            }
+        ],
+        "inputFile": "ecu_reader.h",
+        "outputRevision": 69
+    },
+    {
+        "classes": [
+            {
+                "className": "DemoProtocol",
+                "lineNumber": 5,
+                "object": true,
+                "qualifiedClassName": "DemoProtocol",
+                "slots": [
+                    {
+                        "access": "private",
+                        "index": 0,
+                        "name": "gen",
+                        "returnType": "void"
+                    }
+                ],
+                "superClasses": [
+                    {
+                        "access": "public",
+                        "name": "IECUProtocol"
+                    }
+                ]
+            }
+        ],
+        "inputFile": "demo_protocol.h",
+        "outputRevision": 69
+    },
+    {
+        "classes": [
+            {
+                "className": "EcuMasterClassicProtocol",
+                "lineNumber": 6,
+                "object": true,
+                "qualifiedClassName": "EcuMasterClassicProtocol",
+                "slots": [
+                    {
+                        "access": "private",
+                        "arguments": [
+                            {
+                                "name": "buf",
+                                "type": "QByteArray"
+                            }
+                        ],
+                        "index": 0,
+                        "name": "onSerial",
+                        "returnType": "void"
+                    }
+                ],
+                "superClasses": [
+                    {
+                        "access": "public",
+                        "name": "IECUProtocol"
+                    }
+                ]
+            }
+        ],
+        "inputFile": "ecumaster_classic.h",
+        "outputRevision": 69
+    },
+    {
+        "classes": [
+            {
+                "className": "OBD2Elm327Protocol",
+                "lineNumber": 8,
+                "object": true,
+                "qualifiedClassName": "OBD2Elm327Protocol",
+                "slots": [
+                    {
+                        "access": "private",
+                        "arguments": [
+                            {
+                                "name": "buf",
+                                "type": "QByteArray"
+                            }
+                        ],
+                        "index": 0,
+                        "name": "onSerial",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "private",
+                        "arguments": [
+                            {
+                                "name": "line",
+                                "type": "QByteArray"
+                            },
+                            {
+                                "name": "pid",
+                                "type": "QString&"
+                            },
+                            {
+                                "name": "value",
+                                "type": "int&"
+                            }
+                        ],
+                        "index": 1,
+                        "name": "parseLine",
+                        "returnType": "bool"
+                    }
+                ],
+                "superClasses": [
+                    {
+                        "access": "public",
+                        "name": "IECUProtocol"
+                    }
+                ]
+            }
+        ],
+        "inputFile": "obd2_elm327.h",
+        "outputRevision": 69
+    },
+    {
+        "classes": [
+            {
+                "className": "EcuManager",
+                "lineNumber": 8,
+                "object": true,
+                "qualifiedClassName": "EcuManager",
+                "signals": [
+                    {
+                        "access": "public",
+                        "arguments": [
+                            {
+                                "name": "update",
+                                "type": "SignalUpdate"
+                            }
+                        ],
+                        "index": 0,
+                        "name": "sig",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "arguments": [
+                            {
+                                "type": "QString"
+                            }
+                        ],
+                        "index": 1,
+                        "name": "statusChanged",
+                        "returnType": "void"
+                    }
+                ],
+                "superClasses": [
+                    {
+                        "access": "public",
+                        "name": "QObject"
+                    }
+                ]
+            }
+        ],
+        "inputFile": "ecu_manager.h",
+        "outputRevision": 69
+    },
+    {
+        "classes": [
+            {
+                "className": "IECUProtocol",
+                "lineNumber": 7,
+                "object": true,
+                "qualifiedClassName": "IECUProtocol",
+                "signals": [
+                    {
+                        "access": "public",
+                        "arguments": [
+                            {
+                                "name": "update",
+                                "type": "SignalUpdate"
+                            }
+                        ],
+                        "index": 0,
+                        "name": "sig",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "arguments": [
+                            {
+                                "name": "status",
+                                "type": "QString"
+                            }
+                        ],
+                        "index": 1,
+                        "name": "statusChanged",
+                        "returnType": "void"
+                    }
+                ],
+                "superClasses": [
+                    {
+                        "access": "public",
+                        "name": "QObject"
+                    }
+                ]
+            }
+        ],
+        "inputFile": "iecuprotocol.h",
+        "outputRevision": 69
+    },
+    {
+        "classes": [
+            {
+                "className": "ITransport",
+                "lineNumber": 5,
+                "object": true,
+                "qualifiedClassName": "ITransport",
+                "signals": [
+                    {
+                        "access": "public",
+                        "arguments": [
+                            {
+                                "name": "buf",
+                                "type": "QByteArray"
+                            }
+                        ],
+                        "index": 0,
+                        "name": "bytesIn",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "arguments": [
+                            {
+                                "name": "id",
+                                "type": "quint32"
+                            },
+                            {
+                                "name": "dlc",
+                                "type": "QByteArray"
+                            }
+                        ],
+                        "index": 1,
+                        "name": "canIn",
+                        "returnType": "void"
+                    }
+                ],
+                "superClasses": [
+                    {
+                        "access": "public",
+                        "name": "QObject"
+                    }
+                ]
+            }
+        ],
+        "inputFile": "itransport.h",
+        "outputRevision": 69
+    },
+    {
+        "classes": [
+            {
+                "className": "CanTransport",
+                "lineNumber": 8,
+                "object": true,
+                "qualifiedClassName": "CanTransport",
+                "slots": [
+                    {
+                        "access": "private",
+                        "index": 0,
+                        "name": "onFramesReceived",
+                        "returnType": "void"
+                    }
+                ],
+                "superClasses": [
+                    {
+                        "access": "public",
+                        "name": "ITransport"
+                    }
+                ]
+            }
+        ],
+        "inputFile": "can_transport.h",
+        "outputRevision": 69
+    },
+    {
+        "classes": [
+            {
+                "className": "SerialTransport",
+                "lineNumber": 5,
+                "object": true,
+                "qualifiedClassName": "SerialTransport",
+                "slots": [
+                    {
+                        "access": "private",
+                        "index": 0,
+                        "name": "onReadyRead",
+                        "returnType": "void"
+                    }
+                ],
+                "superClasses": [
+                    {
+                        "access": "public",
+                        "name": "ITransport"
+                    }
+                ]
+            }
+        ],
+        "inputFile": "serial_transport.h",
+        "outputRevision": 69
+    }
+]
