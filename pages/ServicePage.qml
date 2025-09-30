@@ -436,7 +436,7 @@ Page {
             anchors.centerIn: parent
             text: (ecu && ecu.isConnected && ecu.isConnected(
                        )) ? "" : "ECU DISCONNECTED"
-            color: "#ffcc00"
+            color: theme.secondaryColor
             font.family: dashFontName()
             font.pixelSize: 28
         }
@@ -779,8 +779,8 @@ Page {
         Rectangle {
             anchors.fill: parent
             radius: 14
-            color: "#0b151a"
-            border.color: "#28424d"
+            color: theme.bgStart
+            border.color: theme.primaryColor
         }
 
         Column {
@@ -790,7 +790,7 @@ Page {
 
             Text {
                 text: "Enter Bluetooth Address"
-                color: "#ffcc00"
+                color: theme.secondaryColor
                 font.family: dashFontName()
                 font.pixelSize: 26
                 horizontalAlignment: Text.AlignHCenter
@@ -801,8 +801,8 @@ Page {
                 width: parent.width
                 height: 54
                 radius: 8
-                color: "#0f232b"
-                border.color: "#2f4b57"
+                color: theme.bgStart
+                border.color: theme.primaryColor
                     Text {
                     anchors.centerIn: parent
                     text: macPad.value.length ? macPad.value : "AA:BB:CC:DD:EE:FF"
@@ -902,8 +902,8 @@ Page {
         Rectangle {
             anchors.fill: parent
             radius: 14
-            color: "#0b151a"
-            border.color: "#28424d"
+            color: theme.bgStart
+            border.color: theme.primaryColor
         }
 
         Column {
@@ -913,7 +913,7 @@ Page {
 
             Text {
                 text: timePad.label
-                color: "#ffcc00"
+                color: theme.secondaryColor
                 font.family: dashFontName()
                 font.pixelSize: 26
                 horizontalAlignment: Text.AlignHCenter
@@ -939,8 +939,8 @@ Page {
                         width: 90
                         height: 50
                         radius: 8
-                        color: "#0f232b"
-                        border.color: "#2f4b57"
+                        color: theme.bgStart
+                        border.color: theme.primaryColor
                         Text {
                             anchors.centerIn: parent
                             text: ("0" + timePad.hour).slice(-2)
@@ -980,8 +980,8 @@ Page {
                         width: 90
                         height: 50
                         radius: 8
-                    color: "#0f232b"
-                        border.color: "#2f4b57"
+                        color: theme.bgStart
+                        border.color: theme.primaryColor
                         Text {
                             anchors.centerIn: parent
                             text: ("0" + timePad.minute).slice(-2)
@@ -1083,8 +1083,8 @@ Page {
         Rectangle {
             anchors.fill: parent
             radius: 14
-            color: "#0b151a"
-            border.color: "#28424d"
+            color: theme.bgStart
+            border.color: theme.primaryColor
         }
 
         // To enable auto-scroll when content is clamped, wrap this Column in a Flickable.
@@ -1096,7 +1096,7 @@ Page {
 
             Text {
                 text: numPad.label
-                color: "#ffcc00"
+                color: theme.secondaryColor
                 font.family: dashFontName()
                 font.pixelSize: 26
                 horizontalAlignment: Text.AlignHCenter
@@ -1107,8 +1107,8 @@ Page {
                 width: parent.width
                 height: 64
                 radius: 8
-                color: "#0f232b"
-                border.color: "#2f4b57"
+                color: theme.bgStart
+                border.color: theme.primaryColor
                 Row {
                     anchors.centerIn: parent
                     spacing: 4
@@ -1837,8 +1837,8 @@ Page {
                                  ? tabs.currentItem.x + (tabs.currentItem.width - width) / 2
                                  : 0)
 
-                        Behavior on x { NumberAnimation { duration: 160; easing.type: Easing.OutCubic } }
-                        Behavior on width { NumberAnimation { duration: 160; easing.type: Easing.OutCubic } }
+                        Behavior on x { NumberAnimation { duration: 100; easing.type: Easing.OutCubic } }
+                        Behavior on width { NumberAnimation { duration: 100; easing.type: Easing.OutCubic } }
                     }
                 }
 
@@ -1899,7 +1899,7 @@ Page {
                 width: Math.min(safe.width - 48, 1480)
                 height: Math.min(safe.height - 160, 500)
                 radius: 18
-                color: "#081418AA"
+                color: "transparent"
                 clip: true
 
                 StackLayout {
@@ -1937,7 +1937,7 @@ Page {
                                             text: "Device"
                                             font.family: dashFontName()
                                             font.pixelSize: 32
-                                            color: "#ffcc00"
+                                            color: theme.secondaryColor
                                         }
                                         Rectangle {
                                             radius: 6
@@ -1954,7 +1954,7 @@ Page {
                                                        && ecu.isConnected(
                                                            )) ? "CONNECTED" : (ecu
                                                                                && ecu.scanning ? "SCANNING…" : "DISCONNECTED")
-                                                color: "#ffcc00"
+                                                color: theme.secondaryColor
                                                 font.family: dashFontName()
                                                 font.pixelSize: 18
                                             }
@@ -2060,8 +2060,8 @@ Page {
                                                 width: parent.width
                                                 height: 52
                                                 radius: 8
-                                                color: "#0f232b"
-                                                border.color: "#2f4b57"
+                                                color: theme.bgStart
+                                                border.color: theme.primaryColor
                                                 Row {
                                                     anchors.fill: parent
                                                     anchors.margins: 12
@@ -2081,7 +2081,7 @@ Page {
                                                     }
                                                     Text {
                                                         text: "✎"
-                                                        color: "#ffcc00"
+                                                        color: theme.secondaryColor
                                                         font.pixelSize: 22
                                                         verticalAlignment: Text.AlignVCenter
                                                     }

@@ -33,7 +33,7 @@ Page {
 
     // Intro animation controls
     property bool introEnable: true
-    property bool skipIntro: true
+    property bool skipIntro: false
     property real introFactor: 1.8   // scales intro animation durations
 
     // Over-rev flash settings
@@ -1398,16 +1398,23 @@ Page {
             }
         }
 
-          // ECU connection banner
+        // Status banner: ECU connection state
         Rectangle {
             id: statusBar
             anchors.top: parent.top
-            width: parent.width; height: 28
-            color: (dashController && dashController.connected) ? "#0b2a0b" : "#2a0b0b"
-            opacity: (dashController && dashController.connected) ? 0 : 0.9
+            width: parent.width
+            height: 36
+            color: (ecu && ecu.isConnected && ecu.isConnected()) ? "#0b2a0b" : "#2a0b0b"
+            opacity: (ecu && ecu.isConnected && ecu.isConnected()) ? 0 : 0.9
             visible: opacity > 0
-            z: 9999
-            Text { anchors.centerIn: parent; text: (dashController && dashController.connected) ? "" : "ECU DISCONNECTED"; color: theme.secondaryColor; font.family: neu.name; font.pixelSize: 20 }
+            Text {
+                anchors.centerIn: parent
+                text: (ecu && ecu.isConnected && ecu.isConnected(
+                           )) ? "" : "ECU DISCONNECTED"
+                color: theme.secondaryColor
+                font.family: neu.name
+                font.pixelSize: 28
+            }
         }
 
           // Intro overlay (curtain, title, sweep, reveal)
@@ -1427,23 +1434,39 @@ Page {
             }
 
             // Animation durations scaled by persisted factor
-            property real factor: prefs.introFactor
+            property real factor: 3.0
 
             // curtain
             Rectangle { id: curtain; anchors.fill: parent; color: "black"; opacity: 1 }
 
-            // title
-            Text {
+            // title (auto-fits like the badge)
+            AutoFitText {
                 id: introTitle
-                text: "KeyDash"
+                // uses same text as the badge, with a fallback
+                text: (prefs && prefs.badgeText && prefs.badgeText.length) ? prefs.badgeText : "KeyDash"
+
+                // layout/position
+                width: parent.width
+                height: 180
                 anchors.horizontalCenter: parent.horizontalCenter
-                y: 330
+                y: 270
                 opacity: 0
+
+                // styling
                 color: theme.secondaryColor
-                font.family: neu.name                 // common family
-                font.italic: neu_italic.status === FontLoader.Ready
-                font.pixelSize: 130
-                transform: Scale { id: titleScale; origin.x: introTitle.width / 2; origin.y: introTitle.height / 2; xScale: 1; yScale: 1 }
+                family: neu_italic.name // common family
+                minPx: 48
+                maxPx: 150
+                padding: 8
+
+                // keep your intro animation scale target
+                transform: Scale {
+                    id: titleScale
+                    origin.x: introTitle.width / 2
+                    origin.y: introTitle.height / 2
+                    xScale: 1
+                    yScale: 1
+                }
             }
 
             // Utility to set initial UI opacity for main groups
