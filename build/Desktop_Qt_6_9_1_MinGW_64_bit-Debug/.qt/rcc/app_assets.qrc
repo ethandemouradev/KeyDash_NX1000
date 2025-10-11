@@ -1,0 +1,26 @@
+<RCC>
+  <qresource prefix="/KeyDash_Assets">
+    <file alias="assets/DashFrame.png">D:/QtProjects/KeyDash_NX1000/assets/DashFrame.png</file>
+    <file alias="assets/BlankFrame.png">D:/QtProjects/KeyDash_NX1000/assets/BlankFrame.png</file>
+    <file alias="assets/Decor_Gear.png">D:/QtProjects/KeyDash_NX1000/assets/Decor_Gear.png</file>
+    <file alias="assets/TachometerEmpty.png">D:/QtProjects/KeyDash_NX1000/assets/TachometerEmpty.png</file>
+    <file alias="assets/Tachometer_Full.png">D:/QtProjects/KeyDash_NX1000/assets/Tachometer_Full.png</file>
+    <file alias="assets/ShiftIcon.png">D:/QtProjects/KeyDash_NX1000/assets/ShiftIcon.png</file>
+    <file alias="assets/CEL_On.png">D:/QtProjects/KeyDash_NX1000/assets/CEL_On.png</file>
+    <file alias="assets/TractionControl_On.png">D:/QtProjects/KeyDash_NX1000/assets/TractionControl_On.png</file>
+    <file alias="assets/Headlight_On.png">D:/QtProjects/KeyDash_NX1000/assets/Headlight_On.png</file>
+    <file alias="assets/LeftTurnSignal_On.png">D:/QtProjects/KeyDash_NX1000/assets/LeftTurnSignal_On.png</file>
+    <file alias="assets/RightTurnSignal_On.png">D:/QtProjects/KeyDash_NX1000/assets/RightTurnSignal_On.png</file>
+    <file alias="assets/icons/boost.png">D:/QtProjects/KeyDash_NX1000/assets/icons/boost.png</file>
+    <file alias="assets/icons/lambda.png">D:/QtProjects/KeyDash_NX1000/assets/icons/lambda.png</file>
+    <file alias="assets/icons/coolant.png">D:/QtProjects/KeyDash_NX1000/assets/icons/coolant.png</file>
+    <file alias="assets/icons/battery.png">D:/QtProjects/KeyDash_NX1000/assets/icons/battery.png</file>
+    <file alias="assets/icons/therm.png">D:/QtProjects/KeyDash_NX1000/assets/icons/therm.png</file>
+    <file alias="assets/icons/tps.png">D:/QtProjects/KeyDash_NX1000/assets/icons/tps.png</file>
+    <file alias="fonts/NeuropolX_Lite.ttf">D:/QtProjects/KeyDash_NX1000/fonts/NeuropolX_Lite.ttf</file>
+    <file alias="fonts/NeuropolX_Italic.ttf">D:/QtProjects/KeyDash_NX1000/fonts/NeuropolX_Italic.ttf</file>
+    <file alias="fonts/NissanOpti.otf">D:/QtProjects/KeyDash_NX1000/fonts/NissanOpti.otf</file>
+    <file alias="proto/version1_218.xml">D:/QtProjects/KeyDash_NX1000/proto/version1_218.xml</file>
+  </qresource>
+</RCC>
+

@@ -1,0 +1,195 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"jsonFile" : "directory-.-Debug-d0094a50bb2071803777.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.16"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6,
+						7,
+						8,
+						9,
+						10,
+						11,
+						12,
+						13,
+						14,
+						15
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "KeyDash_NX1000",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6,
+						7,
+						8,
+						9,
+						10,
+						11,
+						12,
+						13,
+						14,
+						15
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "all_aotstats::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-all_aotstats-Debug-3a2877f257c72152774e.json",
+					"name" : "all_aotstats",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "all_qmllint::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-all_qmllint-Debug-40dd7fff934415e2c78b.json",
+					"name" : "all_qmllint",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "all_qmllint_json::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-all_qmllint_json-Debug-eb918801dcc404b70734.json",
+					"name" : "all_qmllint_json",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "all_qmllint_module::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-all_qmllint_module-Debug-25c84b26885d47a96dfb.json",
+					"name" : "all_qmllint_module",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "all_qmltyperegistrations::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-all_qmltyperegistrations-Debug-244b90964f56c1721058.json",
+					"name" : "all_qmltyperegistrations",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "appKeyDash_NX1000::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-appKeyDash_NX1000-Debug-78e7a35788f8b797f7d8.json",
+					"name" : "appKeyDash_NX1000",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "appKeyDash_NX1000_autogen::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-appKeyDash_NX1000_autogen-Debug-c411f1c053007eeffcc1.json",
+					"name" : "appKeyDash_NX1000_autogen",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "appKeyDash_NX1000_autogen_timestamp_deps::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-appKeyDash_NX1000_autogen_timestamp_deps-Debug-cc302c9210718b2996c0.json",
+					"name" : "appKeyDash_NX1000_autogen_timestamp_deps",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "appKeyDash_NX1000_copy_qml::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-appKeyDash_NX1000_copy_qml-Debug-6fea88fb66bbe53ce334.json",
+					"name" : "appKeyDash_NX1000_copy_qml",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "appKeyDash_NX1000_copy_res::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-appKeyDash_NX1000_copy_res-Debug-12bf1e051c7597182d5a.json",
+					"name" : "appKeyDash_NX1000_copy_res",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "appKeyDash_NX1000_qmlimportscan::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-appKeyDash_NX1000_qmlimportscan-Debug-2f13dff3276c35e03041.json",
+					"name" : "appKeyDash_NX1000_qmlimportscan",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "appKeyDash_NX1000_qmllint::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-appKeyDash_NX1000_qmllint-Debug-126e1b629b71e557adc0.json",
+					"name" : "appKeyDash_NX1000_qmllint",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "appKeyDash_NX1000_qmllint_json::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-appKeyDash_NX1000_qmllint_json-Debug-b311b304aa470732fc81.json",
+					"name" : "appKeyDash_NX1000_qmllint_json",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "appKeyDash_NX1000_qmllint_module::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-appKeyDash_NX1000_qmllint_module-Debug-1d97f2d48979196b5065.json",
+					"name" : "appKeyDash_NX1000_qmllint_module",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "appKeyDash_NX1000_qmltyperegistration::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-appKeyDash_NX1000_qmltyperegistration-Debug-4e899c93223bd188b129.json",
+					"name" : "appKeyDash_NX1000_qmltyperegistration",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "module_appKeyDash_NX1000_aotstats_target::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-module_appKeyDash_NX1000_aotstats_target-Debug-6040a00a9bb5ac75f086.json",
+					"name" : "module_appKeyDash_NX1000_aotstats_target",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "D:/QtProjects/KeyDash_NX1000/build/Desktop_Qt_6_9_1_MinGW_64_bit-Debug",
+		"source" : "D:/QtProjects/KeyDash_NX1000"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 7
+	}
+}
