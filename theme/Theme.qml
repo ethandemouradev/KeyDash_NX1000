@@ -6,14 +6,15 @@ Item {
     id: root
 
     // Expose the values from Settings as normal properties
-    property alias primaryColor:   settings.primaryColor
-    property alias secondaryColor: settings.secondaryColor
-    property alias bgStart:        settings.bgStart
-    property alias bgEnd:          settings.bgEnd
+    property alias primaryColor:   themeSettings.primaryColor
+    property alias secondaryColor: themeSettings.secondaryColor
+    property alias bgStart:        themeSettings.bgStart
+    property alias bgEnd:          themeSettings.bgEnd
 
     Settings {
-        id: settings
+        id: themeSettings
         category: "Theme"
+        fileName: "theme.ini"
         property color primaryColor:   "#7ee6ff"
         property color secondaryColor: "#ffcc00"
         property color bgStart:        "#052229"

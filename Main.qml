@@ -28,14 +28,17 @@ Window {
     Settings {
         id: appSettings
         category: "KeyDash"
+        fileName: "appsettings.ini"
 
         property string badgeText: "KEYDASH"
+
+        property bool firstStart: true
 
         // Core preferences
         property bool useMph: true
         property real brightness: 1.0
         property bool introEnable: true
-        property real introFactor: 5.0
+        property real introFactor: 3.0
         property int rpmMax: 8000
         property int shiftShowThreshold: 4500
         property int shiftBlinkThreshold: 5500
@@ -56,13 +59,13 @@ Window {
         property bool clock24: false
 
     // Smoothing settings (0..1)
-        property real smoothRpm: 0.35
-        property real smoothBoost: 0.25
-        property real smoothClt: 0.25
-        property real smoothIat: 0.25
-        property real smoothVbat: 0.30
-        property real smoothAfr: 0.30
-        property real smoothSpeed: 0.35
+        property real smoothRpm: 0.0
+        property real smoothBoost: 0.0
+        property real smoothClt: 0.0
+        property real smoothIat: 0.0
+        property real smoothVbat: 0.0
+        property real smoothAfr: 0.0
+        property real smoothSpeed: 0.0
 
     // 0–60 timing
         property real z60Best: 0 // already persisted elsewhere, mirroring here ok
@@ -78,7 +81,7 @@ Window {
         property int nudgePeriodMin: 2
 
         // Gauges smoothing
-        property bool nudgeAntiBurn: false
+        property bool nudgeAntiBurn: true
 
         // Performance settings
         property bool keepZ60: true
@@ -88,9 +91,9 @@ Window {
     StackView {
         id: nav
         anchors.fill: parent
-        initialItem: dashboardComponent
+        //initialItem: appSettings.firstStart ? introWizardComponent : dashboardComponent
 
-    // Navigation transitions (slide)
+        // Navigation transitions (slide)
         pushEnter: Transition {
             NumberAnimation {
                 properties: "x"
@@ -126,6 +129,16 @@ Window {
                 duration: 180
                 easing.type: Easing.OutCubic
             }
+        }
+    }
+
+    function startApp() {
+        // Safety: clear any existing stack content if hot-reloading
+        while (nav.depth > 0) nav.pop(null)
+        if (appSettings.firstStart) {
+            nav.push(introWizardComponent)
+        } else {
+            nav.push(dashboardComponent)
         }
     }
 
@@ -183,6 +196,31 @@ Window {
                     }
                 );
             }
+        }
+    }
+
+    Component {
+        id: introWizardComponent
+        Pages.IntroWizard {
+            id: introWizard
+            prefs: appSettings
+            theme: appTheme
+            onFinished: {
+                appSettings.firstStart = false
+                if (appSettings.sync) appSettings.sync()
+                nav.replace(dashboardComponent) // replace Intro with Dashboard
+            }
+        }
+    }
+
+    Component.onCompleted: {
+        Qt.callLater(startApp)
+    }
+
+    Connections {
+        target: Qt.application
+        onAboutToQuit: {
+            try { appSettings.sync(); } catch(e) {}
         }
     }
 }

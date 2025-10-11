@@ -341,6 +341,8 @@ int main(int argc, char *argv[]) {
   prefsPoll.start();
   updateLogTimer();
 
+  qputenv("QT_QUICK_CONTROLS_STYLE", "Basic");
+
   // ==========================================================
   //                     QML Engine
   // ==========================================================

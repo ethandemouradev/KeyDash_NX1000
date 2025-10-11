@@ -213,7 +213,7 @@ Page {
                             width: scrub.width
                             height: 14
                             radius: 7
-                            color: "#163041"
+                            color: reTheme.bgStart
                         }
 
                         // Progress fill

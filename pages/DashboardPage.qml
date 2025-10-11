@@ -306,6 +306,12 @@ Page {
             }
         }
 
+        Image {
+            id: frameImg
+            source: "qrc:/KeyDash_Assets/assets/DashFrame.png"
+            visible: false   // preload only
+        }
+
         // 3) Frame (lines, tach scale, etc.) — tint with secondaryColor, keep PNG alpha
         Canvas {
             id: frameTint
@@ -314,37 +320,31 @@ Page {
             anchors.bottomMargin: 32
             z: 3
 
-            property string src: "qrc:/KeyDash_Assets/assets/DashFrame.png"
-            property color  tint: theme.secondaryColor
-
+            property color tint: theme.secondaryColor
             renderTarget: Canvas.FramebufferObject
-
-            Component.onCompleted: loadImage(src)
-            onSrcChanged: { loadImage(src); requestPaint() }
-            onWidthChanged:  requestPaint()
-            onHeightChanged: requestPaint()
-            onTintChanged:   requestPaint()
 
             onPaint: {
                 const ctx = getContext("2d")
-                const w = width, h = height
-                ctx.clearRect(0, 0, w, h)
+                ctx.clearRect(0, 0, width, height)
 
-                if (!isImageLoaded(src)) {      // <- no getImage()
-                    requestPaint()              // try again next frame
+                if (!frameImg.status === Image.Ready) {
+                    requestPaint()
                     return
                 }
 
-                // 1) draw original (with alpha)
-                ctx.drawImage(src, 0, 0, w, h)  // <- pass URL
+                // draw the preloaded image
+                ctx.drawImage(frameImg, 0, 0, width, height)
 
-                // 2) colorize only non-transparent pixels
+                // apply tint
                 ctx.globalCompositeOperation = "source-in"
                 ctx.fillStyle = tint
-                ctx.fillRect(0, 0, w, h)
-
+                ctx.fillRect(0, 0, width, height)
                 ctx.globalCompositeOperation = "source-over"
             }
+
+            onTintChanged: requestPaint()
+            onWidthChanged: requestPaint()
+            onHeightChanged: requestPaint()
         }
 
         // --- remove the baked-in "NISSAN" with a transparent patch ---
@@ -570,7 +570,7 @@ Page {
                 case "Boost": return ({dec:1})
                 case "CLT":   return ({dec:0, errorHigh:100})
                 case "IAT":   return ({dec:0, errorHigh:50})
-                case "VBat":  return ({dec:1, dy:0, errorLow:14.0, errorHigh:16.0})
+                case "VBat":  return ({dec:1, dy:0, errorLow:13.0, errorHigh:16.0})
                 case "AFR":   return ({dec:1, dy:0, warnLow:11.5, warnHigh:15.1, errorLow:11.0, errorHigh:16.0})
                 case "TPS":   return ({dec:0})
                 default:      return ({dec:0})
@@ -1256,7 +1256,7 @@ Page {
                 property real __tripKm: isNaN(__tripKmLive) ? Number(prefs.tripBackupKm || 0) : __tripKmLive
 
                 text: prefs.useMph
-                      ? (numFmt(kmToMiles(__tripKm), 1) + " mi.")
+                      ? (numFmt(kmToMiles(__tripKm), 1) + " mi")
                       : (numFmt(__tripKm, 1)           + " km")
 
                 color: theme.primaryColor; font.family: neu.name; font.pixelSize: 50

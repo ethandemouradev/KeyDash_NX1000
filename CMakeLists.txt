@@ -68,6 +68,10 @@ target_sources(appKeyDash_NX1000 PRIVATE
     # controllers/
     controllers/connection_controller.cpp
     controllers/connection_controller.h
+    controllers/telemetry_router.h
+    controllers/telemetry_router.cpp
+    controllers/io_bridge.h
+    controllers/io_bridge.cpp
 )
 
 # Include dirs for the new subfolders
@@ -82,13 +86,13 @@ target_include_directories(appKeyDash_NX1000 PRIVATE
 qt_add_qml_module(appKeyDash_NX1000
   URI KeyDash_NX1000
   VERSION 1.0
-  # RESOURCE_PREFIX  <-- remove this line entirely
   QML_FILES
     Main.qml
     pages/DashboardPage.qml
     pages/ServicePage.qml
     pages/ReplayPage.qml
     pages/SettingsECUPage.qml
+    pages/IntroWizard.qml
     components/LogReplayController.qml
     components/LeftInfoColumn.qml
     style/ThemedButton.qml
